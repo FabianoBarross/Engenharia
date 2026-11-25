@@ -6,6 +6,12 @@ O app inteiro é o arquivo `public/index.html`.
 O site https://projetos-vv.pages.dev/rdo/ busca a versão publicada aqui; ele lê os RDOs (coleção `rdos`)
 no Reporte Semanal. Não mude os nomes dos campos gravados no Firestore.
 
+## Publicar pelo GitHub (sem instalar nada)
+
+Aba **Actions** do repositório → **Publicar RDO** → **Run workflow**. Publica a pasta `rdo/` do branch escolhido.
+Precisa uma vez do segredo `FIREBASE_SERVICE_ACCOUNT_RDO_CVV` (Settings → Secrets and variables → Actions):
+a chave JSON de uma conta de serviço do projeto `rdo-cvv` com o papel "Administrador do Firebase Hosting".
+
 ## Publicar (do seu computador)
 
 Precisa do Node.js (https://nodejs.org, versão LTS) e de uma conta Google com acesso ao projeto `rdo-cvv`.
