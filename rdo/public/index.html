@@ -835,6 +835,11 @@ function vHome() {
     <div class="field"><label for="h-data">Data do RDO</label><input type="date" id="h-data" value="${S.data}" max="${hoje()}"></div>
     <button class="btn big" data-act="abrir" data-d="">Abrir RDO de ${diaSemana(S.data)}, ${dataCurta(S.data)}</button>
     ${S.diaStatus ? cartaoDia() : ""}
+    ${S.frente ? `<div class="box" style="margin-top:18px"><b>RDO compilado</b>
+      <p class="nota" style="margin:4px 0 10px">Um PDF só com os RDOs de ${nomeFrente(S.frente)} no período: resumo do período na primeira página e, depois, o RDO completo de cada dia (com as fotos).</p>
+      <div class="grid2"><div class="field"><label for="cmp-de">De</label><input type="date" id="cmp-de" value="${S.cmpDe || addDias(hoje(), -6)}" max="${hoje()}"></div>
+        <div class="field"><label for="cmp-ate">Até</label><input type="date" id="cmp-ate" value="${S.cmpAte || hoje()}" max="${hoje()}"></div></div>
+      <button class="btn sec" data-act="compilado">Gerar RDO compilado (PDF)</button></div>` : ""}
     <h3>RDOs da frente</h3>
     <ul class="lista">${S.lista.length ? S.lista.map(row).join("") : `<li class="vazio">Nenhum RDO desta frente ainda. Abra o de hoje para começar.</li>`}</ul>`;
 }
@@ -1275,6 +1280,7 @@ const ACT = {
   },
   reabrir: async () => { S.rdo.status = "rascunho"; try { await salvar(); toast("RDO reaberto."); } catch (e) { } render(); },
   pdf: () => gerarPDF(),
+  compilado: () => gerarCompilado(),
   // Cadastros
   "cad-grupo": b => { S.cadGrupo = b.dataset.g; S.impCad = null; go("cad"); },
   "cad-del": b => cadExcluir(b.dataset.id),
@@ -1311,6 +1317,7 @@ function setPath(o, path, v) { const k = path.split("."); let x = o; for (let i 
 function onCampo(e) {
   const el = e.target;
   if (el.id === "h-data") { S.data = el.value || hoje(); if (e.type === "change") { if (isPlan()) go("home"); else render(); } return; }
+  if (el.id === "cmp-de" || el.id === "cmp-ate") { S[el.id === "cmp-de" ? "cmpDe" : "cmpAte"] = el.value; return; }
   if (el.id === "busca") { S.busca = el.value; $("#lista-ef").innerHTML = listaEfetivo(); return; }
   if (el.id === "cadimp-file" && e.type === "change") return cadImpLer(el.files[0]);
   if (S.impCad && e.type === "change" && el.id === "ci-emp") { S.impCad.empresaPadrao = el.value; return render(); }
@@ -1372,8 +1379,8 @@ async function addFotos(files) {
 }
 
 /* ================= PDF ================= */
-function pdfHTML() {
-  const r = S.rdo, c = S.ctx, rs = resumo(r), h = horas(r), j = r.jornada, st = stNorm(r.status);
+function pdfHTML(r = S.rdo, c = S.ctx) {
+  const rs = resumo(r), h = horas(r), j = r.jornada, st = stNorm(r.status);
   const presentes = c.colabs.filter(p => r.presenca[p.id]);
   const lid = lideranca(presentes);
   const encs = presentes.filter(p => papel(p.funcao) === "enc");
@@ -1473,6 +1480,42 @@ function recortarFoto(src, W = 900, H = 675) {
   });
 }
 const nomePDF = r => `RDO_${nomeFrente(r.frente).replace(/[^\w-]/g, "")}_${r.data}.pdf`;
+// desenha um bloco HTML (um #pdf-doc) em páginas A4 do jsPDF, quebrando entre linhas/blocos; cada bloco começa numa página nova
+async function htmlNoPDF(pdf, palco, html, est) {
+  palco.innerHTML = html;
+  const el = palco.firstElementChild;
+  await Promise.all([...el.querySelectorAll("img")].map(im => im.complete ? 0 : new Promise(ok => { im.onload = im.onerror = ok; })));
+  const total = el.scrollHeight, topo = el.getBoundingClientRect().top;
+  // pontos onde a página pode quebrar sem cortar linha, bloco ou foto
+  const quebras = [...new Set([...el.querySelectorAll(".avoid, tr, section, .p-head, .p-lid, .p-kpis")].map(n => Math.round(n.getBoundingClientRect().bottom - topo)))].sort((a, b) => a - b);
+  // escala limitada para não estourar o limite de tamanho de canvas do iPhone
+  const escala = Math.max(1, Math.min(2, Math.sqrt(14e6 / (794 * total))));
+  const canvas = await window.html2canvas(el, { scale: escala, backgroundColor: "#ffffff", useCORS: true, logging: false, scrollX: 0, scrollY: 0, windowWidth: 794, width: 794, height: total });
+  const pxPorMm = 794 / 210;
+  const margemTopo = 8, margemBase = 11;
+  let ini = 0, pag = 0;
+  while (ini < total - 2) {
+    const mTopo = pag === 0 ? 0 : margemTopo;
+    const util = (297 - mTopo - margemBase) * pxPorMm;
+    let fim = ini + util;
+    if (fim >= total) fim = total;
+    else { const q = quebras.filter(b => b > ini + util * 0.35 && b <= fim); if (q.length) fim = q.at(-1); }
+    const hPx = Math.max(1, Math.round((fim - ini) * escala));
+    const pc = document.createElement("canvas"); pc.width = canvas.width; pc.height = hPx;
+    const ctx = pc.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, pc.width, pc.height);
+    ctx.drawImage(canvas, 0, Math.round(ini * escala), canvas.width, hPx, 0, 0, canvas.width, hPx);
+    if (est.paginas > 0) pdf.addPage();
+    pdf.addImage(pc.toDataURL("image/jpeg", 0.9), "JPEG", 0, mTopo, 210, (fim - ini) / pxPorMm);
+    pc.width = pc.height = 0;
+    ini = fim; pag++; est.paginas++;
+  }
+  canvas.width = canvas.height = 0;
+  palco.innerHTML = "";
+}
+function rodapePDF(pdf, texto) {
+  const n = pdf.internal.getNumberOfPages();
+  for (let i = 1; i <= n; i++) { pdf.setPage(i); pdf.setFontSize(7.5); pdf.setTextColor(110, 122, 114); pdf.text(`${texto}   |   página ${i} de ${n}`, 105, 292, { align: "center" }); }
+}
 async function gerarPDF() {
   const r = S.rdo; const nome = nomePDF(r);
   const y0 = window.scrollY;
@@ -1485,38 +1528,10 @@ async function gerarPDF() {
     await document.fonts.ready;
     window.scrollTo(0, 0);
     document.body.appendChild(ov);
-    const palco = ov.querySelector(".pdf-palco"); palco.innerHTML = pdfHTML();
-    const el = palco.firstElementChild;
-    await Promise.all([...el.querySelectorAll("img")].map(im => im.complete ? 0 : new Promise(ok => { im.onload = im.onerror = ok; })));
-    const total = el.scrollHeight, topo = el.getBoundingClientRect().top;
-    // pontos onde a página pode quebrar sem cortar linha, bloco ou foto
-    const quebras = [...new Set([...el.querySelectorAll(".avoid, tr, section, .p-head, .p-lid, .p-kpis")].map(n => Math.round(n.getBoundingClientRect().bottom - topo)))].sort((a, b) => a - b);
-    // escala limitada para não estourar o limite de tamanho de canvas do iPhone
-    const escala = Math.max(1, Math.min(2, Math.sqrt(14e6 / (794 * total))));
-    const canvas = await window.html2canvas(el, { scale: escala, backgroundColor: "#ffffff", useCORS: true, logging: false, scrollX: 0, scrollY: 0, windowWidth: 794, width: 794, height: total });
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait", compress: true });
-    const pxPorMm = 794 / 210;
-    const margemTopo = 8, margemBase = 11;
-    let ini = 0, pag = 0;
-    while (ini < total - 2) {
-      const mTopo = pag === 0 ? 0 : margemTopo;
-      const util = (297 - mTopo - margemBase) * pxPorMm;
-      let fim = ini + util;
-      if (fim >= total) fim = total;
-      else { const q = quebras.filter(b => b > ini + util * 0.35 && b <= fim); if (q.length) fim = q.at(-1); }
-      const hPx = Math.max(1, Math.round((fim - ini) * escala));
-      const pc = document.createElement("canvas"); pc.width = canvas.width; pc.height = hPx;
-      const ctx = pc.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, pc.width, pc.height);
-      ctx.drawImage(canvas, 0, Math.round(ini * escala), canvas.width, hPx, 0, 0, canvas.width, hPx);
-      if (pag > 0) pdf.addPage();
-      pdf.addImage(pc.toDataURL("image/jpeg", 0.9), "JPEG", 0, mTopo, 210, (fim - ini) / pxPorMm);
-      pc.width = pc.height = 0;
-      ini = fim; pag++;
-    }
-    const n = pdf.internal.getNumberOfPages();
-    for (let i = 1; i <= n; i++) { pdf.setPage(i); pdf.setFontSize(7.5); pdf.setTextColor(110, 122, 114); pdf.text(`RDO ${nomeFrente(r.frente)} ${dataBR(r.data)}   |   página ${i} de ${n}`, 105, 292, { align: "center" }); }
-    canvas.width = canvas.height = 0;
+    await htmlNoPDF(pdf, ov.querySelector(".pdf-palco"), pdfHTML(), { paginas: 0 });
+    rodapePDF(pdf, `RDO ${nomeFrente(r.frente)} ${dataBR(r.data)}`);
     const blob = pdf.output("blob");
     ov.remove(); window.scrollTo(0, y0);
     await entregarArquivo(blob, nome, "application/pdf");
@@ -1526,6 +1541,113 @@ async function gerarPDF() {
     if (v === "s") imprimirPDF();
   }
 }
+
+/* ================= RDO COMPILADO (vários dias num PDF só) ================= */
+// contexto de um RDO já gravado, só para o PDF: cadastro do grupo + quem saiu do cadastro mas está no RDO
+function ctxDoRDO(r, colabs, equips, fotos) {
+  const c = { colabs: colabs.map(p => ({ ...p })), equips: equips.map(e => ({ ...e })), fotos };
+  const ids = new Set(c.colabs.map(p => p.id)), eqIds = new Set(c.equips.map(e => e.id));
+  Object.entries(r.pessoas || {}).forEach(([id, p]) => { if (!ids.has(id) && (r.presenca[id] || (r.previstoIds || []).includes(id))) c.colabs.push({ id, ...p, antigo: true }); });
+  Object.entries(r.equipInfo || {}).forEach(([id, e]) => { if (!eqIds.has(id) && r.equipamentos[id]) c.equips.push({ id, ...e, antigo: true }); });
+  c.colabs.sort((a, b) => String(a.nome).localeCompare(String(b.nome), "pt-BR"));
+  return c;
+}
+const numBR = v => { const n = parseFloat(String(v ?? "").replace(",", ".")); return isFinite(n) ? n : 0; };
+function compiladoHTML(frente, de, ate, itens, semRDO) {
+  const dias = itens.map(({ r }) => {
+    const rs = resumo(r), h = horas(r), cl = r.clima || {};
+    return { r, rs, h, st: stNorm(r.status), chuva: cl.chuva === "sim", mm: numBR(cl.mm), prat: cl.praticabilidade || "" };
+  });
+  const soma = f => dias.reduce((a, d) => a + (f(d) || 0), 0);
+  const n = dias.length, atvProg = soma(d => d.rs.atvProg), ppc = atvProg ? soma(d => (d.rs.ppc || 0) * d.rs.atvProg) / atvProg : null;
+  const efMed = n ? soma(d => d.rs.efetivo) / n : 0, prevMed = n ? soma(d => d.rs.previsto) / n : 0;
+  const tot = { prod: soma(d => d.h.prod), perdas: soma(d => d.h.perdas), perdaInicio: soma(d => d.h.perdaInicio), almocoExc: soma(d => d.h.almocoExc), parado: soma(d => d.h.parado), paradoChuva: soma(d => d.h.paradoChuva), paradoAlerta: soma(d => d.h.paradoAlerta), paradoOutras: soma(d => d.h.paradoOutras) };
+  const imprat = dias.filter(d => d.prat === "Impraticável").length, parcial = dias.filter(d => d.prat === "Parcialmente praticável").length;
+  const ppcCls = ppc == null ? "" : ppc < 0.6 ? "ruim" : ppc < 0.9 ? "alerta" : "";
+  const fmtN = v => (Math.round(v * 10) / 10).toLocaleString("pt-BR");
+  const causas = {};
+  dias.forEach(({ r }) => atvLista(r).filter(contaPPC).forEach(a => { if (statusAtv(a) === "abaixo" || statusAtv(a) === "zero") { const k = a.causa || "Sem causa informada"; causas[k] = (causas[k] || 0) + 1; } }));
+  const linhas = dias.map(d => `<tr class="avoid"><td><b>${dataCurta(d.r.data)}</b> <span class="sub" style="display:inline">${diaSemana(d.r.data).slice(0, 3)}</span></td><td>${d.st === "fechado" ? "Validado" : "Em preenchimento"}</td>
+      <td class="n">${d.rs.efetivo}/${d.rs.previsto || "–"}</td><td class="n">${fmtH(d.h.prod)}</td><td class="n">${fmtH(d.h.perdas)}</td>
+      <td class="n">${d.h.paradoChuva ? fmtH(d.h.paradoChuva) : "–"}</td><td class="n">${d.h.paradoAlerta ? fmtH(d.h.paradoAlerta) : "–"}</td><td class="n">${d.h.paradoOutras ? fmtH(d.h.paradoOutras) : "–"}</td>
+      <td class="n">${fmtPct(d.rs.ppc)}</td><td>${esc(d.prat || "–")}${d.chuva ? `, chuva${d.mm ? ` ${fmtN(d.mm)} mm` : ""}` : ""}</td></tr>`).join("");
+  const ocorr = dias.filter(({ r }) => r.ocorrencias || r.restricoes || (r.paralisacoes || []).length || (r.clima?.motivo));
+  return `<div id="pdf-doc">
+  <div class="p-head"><div class="p-brand"><span>CONSTRUTORA</span><b>Vale Verde</b><em>Rio Tanque</em></div>
+    <div class="p-tit"><h1>RDO compilado</h1><p>${nomeFrente(frente)}, ${dataBR(de)} a ${dataBR(ate)}</p><span class="p-st">${n} RDO${n === 1 ? "" : "s"} no período</span></div></div>
+  <div class="p-body">
+    <div class="p-kpis">
+      <div class="p-kpi"><b>${fmtN(efMed)}/${prevMed ? fmtN(prevMed) : "–"}</b><span>efetivo médio por dia, real / previsto</span></div>
+      <div class="p-kpi"><b>${fmtH(tot.prod)}</b><span>de produção, ${fmtH(tot.perdas)} de perda gerencial, ${fmtH(tot.parado)} de paralisações</span></div>
+      <div class="p-kpi ${ppcCls}"><b>${fmtPct(ppc)}</b><span>PPC do período (ponderado), ${soma(d => d.rs.atvOk)} de ${atvProg} atividades 100%</span></div>
+      <div class="p-kpi ${imprat ? "ruim" : parcial ? "alerta" : ""}"><b style="font-size:14px;padding:6px 0 3px">${n - imprat - parcial} de ${n} praticáveis</b><span>${dias.filter(d => d.chuva).length} dia(s) com chuva${soma(d => d.mm) ? `, ${fmtN(soma(d => d.mm))} mm` : ""}${imprat ? `, ${imprat} impraticável(is)` : ""}${parcial ? `, ${parcial} parcial(is)` : ""}</span></div>
+    </div>
+    <div class="p-perdas"><div>Perda gerencial<br><b>${fmtH(tot.perdas)}</b></div><div>Chegada até o início<br><b>${fmtH(tot.perdaInicio)}</b></div><div>Almoço acima de 1h<br><b>${fmtH(tot.almocoExc)}</b></div></div>
+    <div class="p-perdas par">${TIPOS_PAR.map(([k, l]) => `<div>${l}<br><b style="color:${COR_PAR[k]}">${fmtH(tot["parado" + k[0].toUpperCase() + k.slice(1)])}</b></div>`).join("")}<div>Total de paralisações<br><b>${fmtH(tot.parado)}</b></div></div>
+    <section><h2>Dia a dia</h2>
+      <table class="p-tab"><thead><tr><th>Dia</th><th>Status</th><th style="text-align:right">Efetivo</th><th style="text-align:right">Produção</th><th style="text-align:right">Perda ger.</th><th style="text-align:right">Chuva</th><th style="text-align:right">Alerta</th><th style="text-align:right">Demais</th><th style="text-align:right">PPC</th><th>Praticabilidade</th></tr></thead><tbody>${linhas}</tbody></table>
+      ${semRDO.length ? `<p class="obs-t" style="margin-top:4px">Sem RDO no período: ${semRDO.map(d => `${dataCurta(d)} (${diaSemana(d).slice(0, 3)})`).join(", ")}.</p>` : ""}</section>
+    ${Object.keys(causas).length ? `<section class="avoid"><h2>Causas das atividades abaixo do previsto</h2><table class="p-tab"><tbody>${Object.entries(causas).sort((a, b) => b[1] - a[1]).map(([c, k]) => `<tr><td>${esc(c)}</td><td class="n">${k} atividade${k === 1 ? "" : "s"}</td></tr>`).join("")}</tbody></table></section>` : ""}
+    ${ocorr.length ? `<section><h2>Paralisações, ocorrências e restrições</h2><table class="p-tab"><tbody>${ocorr.map(({ r }) => `<tr class="avoid"><td style="width:11%"><b>${dataCurta(r.data)}</b></td><td>${[
+      ...(r.paralisacoes || []).map(p => `${esc(p.inicio)} às ${esc(p.fim)}: ${esc(p.motivo)} (${fmtH(dur(p.inicio, p.fim))})`),
+      r.clima?.motivo ? `<b>Impedimento:</b> ${esc(r.clima.motivo)}` : "",
+      r.ocorrencias ? `<b>Ocorrências:</b> ${esc(r.ocorrencias)}` : "", r.restricoes ? `<b>Restrições:</b> ${esc(r.restricoes)}` : ""].filter(Boolean).join("<br>")}</td></tr>`).join("")}</tbody></table></section>` : ""}
+    <p class="obs-t">Nas páginas seguintes, o RDO completo de cada dia, na ordem das datas.</p>
+  </div></div>`;
+}
+async function gerarCompilado() {
+  const frente = S.frente, de = S.cmpDe || addDias(hoje(), -6), ate = S.cmpAte || hoje();
+  if (!frente) return toast("Escolha a frente.");
+  if (!de || !ate || de > ate) return toast("Confira as datas: o início tem que ser antes do fim.");
+  const y0 = window.scrollY;
+  const ov = document.createElement("div"); ov.className = "pdf-overlay";
+  ov.innerHTML = `<div class="pdf-palco"></div><div class="pdf-msg">Lendo os RDOs…</div>`;
+  const msg = t => { ov.querySelector(".pdf-msg").textContent = t; };
+  window.scrollTo(0, 0); document.body.appendChild(ov);
+  try {
+    const g = GRUPOS[grupoDe(frente)].chaves;
+    const [qs, cSnap, eSnap] = await Promise.all([
+      getDocs(query(collection(db, "rdos"), where(documentId(), ">=", `${frente}_${de}`), where(documentId(), "<=", `${frente}_${ate}`))),
+      getDocs(query(collection(db, "colaboradores"), where("frente", "in", g))),
+      getDocs(query(collection(db, "equipamentos"), where("frente", "in", g)))
+    ]);
+    const rdos = qs.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.frente === frente && r.data >= de && r.data <= ate).sort((a, b) => a.data.localeCompare(b.data));
+    if (!rdos.length) { ov.remove(); window.scrollTo(0, y0); return toast(`Nenhum RDO de ${nomeFrente(frente)} entre ${dataCurta(de)} e ${dataCurta(ate)}.`); }
+    const colabs = cSnap.docs.map(d => ({ id: d.id, ...d.data() })), equips = eSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => a.codigo.localeCompare(b.codigo));
+    await Promise.all([loadScript(H2C_URL), loadScript(JSPDF_URL)]);
+    const itens = [];
+    for (const r0 of rdos) {
+      msg(`Preparando ${dataCurta(r0.data)} (${itens.length + 1} de ${rdos.length})…`);
+      const base = novoRDO(frente, r0.data), r = { ...base, ...r0 };
+      r.clima = { ...base.clima, ...r0.clima }; r.jornada = { ...base.jornada, ...r0.jornada }; r.encarregados = r0.encarregados || {};
+      const fSnap = await getDocs(query(collection(db, "fotos"), where("rdoId", "==", r0.id)));
+      const fotos = fSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
+      for (const f of fotos) f.pdfUrl = await recortarFoto(f.dataUrl);
+      itens.push({ r, c: ctxDoRDO(r, colabs, equips, fotos) });
+    }
+    const comRDO = new Set(rdos.map(r => r.data)), semRDO = [];
+    for (let d = de; d <= ate; d = addDias(d, 1)) if (!comRDO.has(d)) semRDO.push(d);
+    await document.fonts.ready;
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait", compress: true });
+    const palco = ov.querySelector(".pdf-palco"), est = { paginas: 0 };
+    msg("Montando o resumo do período…");
+    await htmlNoPDF(pdf, palco, compiladoHTML(frente, de, ate, itens, semRDO), est);
+    for (let i = 0; i < itens.length; i++) {
+      msg(`Montando o PDF: ${dataCurta(itens[i].r.data)} (${i + 1} de ${itens.length})…`);
+      await htmlNoPDF(pdf, palco, pdfHTML(itens[i].r, itens[i].c), est);
+    }
+    rodapePDF(pdf, `RDO compilado ${nomeFrente(frente)} ${dataBR(de)} a ${dataBR(ate)}`);
+    msg("Gerando o arquivo…");
+    const blob = pdf.output("blob");
+    ov.remove(); window.scrollTo(0, y0);
+    await entregarArquivo(blob, `RDO_compilado_${nomeFrente(frente).replace(/[^\w-]/g, "")}_${de}_a_${ate}.pdf`, "application/pdf", `${rdos.length} RDO(s), ${est.paginas} páginas, ${(blob.size / 1048576).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} MB`);
+  } catch (e) {
+    console.error(e); ov.remove(); window.scrollTo(0, y0);
+    dialogo("Não deu para montar o RDO compilado", `<p>${esc(msgErro(e))}</p><p>Com muitos dias e fotos o navegador pode ficar sem memória: tente um período menor.</p>`);
+  }
+}
+
 async function entregarArquivo(blob, nome, tipo, info = "") {
   const file = new File([blob], nome, { type: tipo });
   const podeCompartilhar = !!(navigator.canShare && navigator.canShare({ files: [file] }));
