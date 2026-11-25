@@ -13,7 +13,7 @@ Precisa do Node.js (https://nodejs.org, versão LTS) e de uma conta Google com a
 ```
 npm install -g firebase-tools
 firebase login
-git clone https://github.com/FabianoBarross/Engenharia.git
+git clone -b claude/relaxed-ride-xo4dxf https://github.com/FabianoBarross/Engenharia.git
 cd Engenharia/rdo
 firebase deploy --only hosting
 ```
