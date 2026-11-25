@@ -1,0 +1,1938 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#006838">
+<title>RDO Rio Tanque</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700;1,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --vv:#006838; --vv2:#39B54A; --vv-sombra:#004a28; --vv-palido:#E4F2E6;
+  --tinta:#17271E; --suave:#5E6E63; --papel:#F2F5F1; --branco:#FFFFFF; --linha:#D3DDD5;
+  --ambar:#C98A00; --ambar-p:#FFF3D6; --verm:#C0392B; --verm-p:#FBE4E1; --azul:#2F6FB0; --azul-p:#E3EDF8;
+  --r-painel:12px; --r-campo:8px;
+}
+*{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{margin:0;background:var(--papel);color:var(--tinta);font-family:Montserrat,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.45;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--vv2);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+/* barra do app */
+.bar{background:var(--vv);color:#fff;position:sticky;top:0;z-index:20}
+.bar-in{max-width:880px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 16px}
+.marca{display:flex;align-items:baseline;gap:8px;margin-right:auto}
+.marca b{font-weight:800;font-style:italic;font-size:22px;letter-spacing:-.5px}
+.marca span{font-weight:500;opacity:.85;font-size:14px}
+.bar nav{max-width:880px;margin:0 auto;display:flex;gap:4px;padding:0 10px;overflow-x:auto}
+.bar nav button{background:none;border:0;color:#fff;opacity:.75;padding:8px 10px 10px;font-weight:600;font-size:14px;border-bottom:3px solid transparent;white-space:nowrap}
+.bar nav button.on{opacity:1;border-bottom-color:var(--vv2)}
+.eu{background:none;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600}
+
+.wrap{max-width:880px;margin:0 auto;padding:18px 16px 120px}
+h2{font-size:22px;font-weight:800;margin:6px 0 14px;letter-spacing:-.3px}
+h3{font-size:16px;font-weight:700;margin:26px 0 10px}
+p.nota{color:var(--suave);font-size:13.5px;margin:4px 0 12px}
+
+.btn{background:var(--vv);color:#fff;border:0;border-radius:var(--r-campo);padding:12px 18px;font-weight:700;font-size:15px}
+.btn:hover{background:var(--vv-sombra)}
+.btn.sec{background:var(--branco);color:var(--vv);border:1.5px solid var(--vv)}
+.btn.perigo{background:var(--branco);color:var(--verm);border:1.5px solid var(--verm)}
+.btn.big{width:100%;padding:16px;font-size:16px}
+.btn:disabled{opacity:.5;cursor:default}
+.lnk{background:none;border:0;color:var(--vv);font-weight:700;padding:6px 4px;font-size:13.5px}
+.lnk.perigo{color:var(--verm)}
+
+.field{margin:0 0 14px}
+.field>label,.lbl{display:block;font-size:13px;font-weight:600;color:var(--suave);margin:0 0 5px}
+input[type=text],input[type=email],input[type=number],input[type=date],input[type=time],select,textarea{
+  width:100%;background:var(--branco);border:1.5px solid var(--linha);border-radius:var(--r-campo);padding:10px 11px;font-size:15px;min-height:44px}
+textarea{min-height:84px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--vv2);outline:none}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+fieldset:disabled input,fieldset:disabled select,fieldset:disabled textarea{background:#F7F9F7;color:var(--suave)}
+
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button,.seg label{border:1.5px solid var(--linha);background:var(--branco);border-radius:999px;padding:8px 14px;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px}
+.seg button.on,.seg label.on{background:var(--vv);border-color:var(--vv);color:#fff}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+
+.chip{display:inline-block;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;white-space:nowrap}
+.st-rascunho{background:#E6EAE7;color:#4A5850}
+.st-enviado{background:var(--ambar-p);color:#8A5E00}
+.st-aprovado,.st-fechado{background:var(--vv-palido);color:var(--vv)}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 12px}
+@media (max-width:560px){.grid3{grid-template-columns:1fr 1fr}}
+
+/* login */
+.login{min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--vv);color:#fff}
+.login-in{max-width:420px;width:100%}
+.login h1{font-size:88px;line-height:.9;margin:0;font-weight:800;font-style:italic;letter-spacing:-4px}
+.login h1 small{display:block;font-size:22px;letter-spacing:0;font-style:normal;font-weight:600;margin-top:14px;opacity:.9}
+.login p{opacity:.85;margin:18px 0 30px}
+.login .btn{background:#fff;color:var(--vv);width:100%;padding:15px}
+.login .regua-deco{margin:28px 0 0;opacity:.9}
+
+/* home */
+.lista{list-style:none;margin:0;padding:0;background:var(--branco);border:1px solid var(--linha);border-radius:var(--r-painel);overflow:hidden}
+.lista li+li{border-top:1px solid var(--linha)}
+.lista li>button{display:grid;grid-template-columns:62px 1fr auto;gap:2px 12px;align-items:center;width:100%;text-align:left;background:none;border:0;padding:12px 14px}
+.lista .d{font-weight:800;font-size:17px;grid-row:span 2}
+.lista .w{font-size:13px;color:var(--suave)}
+.lista .k{font-size:13px;color:var(--suave);grid-column:2}
+.lista .chip{grid-column:3;grid-row:1/span 2}
+.vazio{padding:18px 14px;color:var(--suave)}
+
+/* RDO */
+.rdo-top{background:var(--branco);border-bottom:1px solid var(--linha);position:sticky;top:0;z-index:15}
+.rdo-top .in{max-width:880px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:10px 12px}
+.rdo-top h1{font-size:18px;margin:0;font-weight:800;line-height:1.1}
+.rdo-top p{margin:2px 0 0;font-size:13px;color:var(--suave)}
+.rdo-top .tit{margin-right:auto;flex:1;min-width:0}
+.rdo-top h1{white-space:nowrap}
+.st-box{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.voltar{background:none;border:0;font-size:26px;line-height:1;padding:4px 8px;color:var(--vv);font-weight:700}
+.salvo{font-size:11.5px;color:var(--suave);text-align:right;white-space:nowrap}
+.salvo.erro{color:var(--verm);font-weight:700}
+.salvo.off{color:#8A5E00;font-weight:600}
+
+.aviso-copia{background:var(--ambar-p);border:1.5px solid #E8C35C;border-radius:var(--r-painel);padding:12px 14px;margin:0 0 14px;font-size:14px}
+.aviso-copia label{display:flex;gap:8px;align-items:center;font-weight:700;margin-top:8px}
+.aviso-copia input{width:20px;height:20px}
+
+.panel{background:var(--branco);border:1px solid var(--linha);border-radius:var(--r-painel);margin:0 0 12px}
+.panel>summary{list-style:none;display:flex;align-items:center;gap:10px;padding:15px 16px;cursor:pointer}
+.panel>summary::-webkit-details-marker{display:none}
+.panel>summary .t{font-weight:700;font-size:16px;margin-right:auto}
+.panel>summary .s{font-size:13px;font-weight:600;color:var(--suave);text-align:right}
+.panel>summary::after{content:"";width:9px;height:9px;border-right:2.5px solid var(--suave);border-bottom:2.5px solid var(--suave);transform:rotate(45deg);margin:-4px 2px 0 4px;transition:transform .15s}
+.panel[open]>summary::after{transform:rotate(-135deg);margin-top:4px}
+.panel .body{padding:2px 16px 18px;border-top:1px solid var(--linha)}
+.panel .body>.field:first-child,.panel .body>.grid2:first-child,.panel .body>.grid3:first-child{margin-top:14px}
+
+/* régua da jornada */
+.regua{margin:16px 0 6px}
+.regua svg{width:100%;height:auto;display:block}
+.leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--suave)}
+.leg i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+.horas{display:flex;gap:18px;flex-wrap:wrap;margin:12px 0 0;font-size:14px}
+.horas b{font-size:20px;font-weight:800;display:block}
+.horas .perda b{color:#B8621B}
+.horas .total{border-left:3px solid #E08A2E;padding-left:10px}
+.grp-h em{font-style:normal;font-weight:700}.grp-h em.neg{color:var(--verm)}.grp-h em.pos{color:var(--azul)}
+.encs{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.enc{border:1.5px solid var(--linha);border-left:6px solid var(--c);border-radius:var(--r-campo);background:#fff;overflow:hidden}
+.enc.on{border-color:var(--vv2);border-left-color:var(--c)}
+.enc-top{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:11px 12px;text-align:left}
+.enc-top i{width:22px;height:22px;border-radius:6px;border:2px solid #AAB7AE;flex:none;position:relative;background:#fff}
+.enc.on .enc-top i{background:var(--vv);border-color:var(--vv)}
+.enc.on .enc-top i::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.enc-top span{flex:1;min-width:0}
+.enc-top b{display:block;font-size:15px;line-height:1.2}
+.enc-top small{color:var(--suave);font-size:12px}
+.enc-top em{font-style:normal;font-size:12px;font-weight:700;color:var(--suave)}
+.enc.on .enc-top em{color:var(--vv)}
+.enc input{border:0;border-top:1px solid var(--linha);border-radius:0;min-height:44px;font-size:14px}
+.enc:not(.on) input{background:#F7F9F7}
+
+/* efetivo */
+.ef-top{display:flex;gap:10px;align-items:center;margin:14px 0 10px;flex-wrap:wrap}
+.ef-top input{flex:1;min-width:180px}
+.grp{margin:14px 0 0}
+.grp-h{display:flex;align-items:center;gap:10px;padding:0 0 6px;border-bottom:2px solid var(--vv-palido);margin-bottom:6px}
+.grp-h b{font-size:15px}
+.grp-h span{font-size:13px;color:var(--suave);margin-right:auto}
+.pessoas{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px}
+.pessoa{display:grid;grid-template-columns:24px 1fr;gap:0 10px;align-items:center;text-align:left;background:var(--papel);border:1.5px solid transparent;border-radius:var(--r-campo);padding:8px 10px;min-height:48px}
+.pessoa i{grid-row:span 2;width:22px;height:22px;border-radius:6px;border:2px solid #AAB7AE;background:#fff}
+.pessoa span{font-weight:600;font-size:14px;line-height:1.2}
+.pessoa small{color:var(--suave);font-size:12px}
+.pessoa.on{background:var(--vv-palido);border-color:var(--vv2)}
+.pessoa.outra{opacity:.55;background:#fff;border:1.5px dashed var(--linha)}
+.pessoa.outra i{background:#E6EAE7;border-color:#C9D2CC}
+.pessoa.on i{background:var(--vv);border-color:var(--vv);position:relative}
+.pessoa.on i::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.addbox{margin-top:16px;border:1.5px dashed var(--linha);border-radius:var(--r-painel);padding:4px 14px}
+.addbox summary{font-weight:700;color:var(--vv);padding:10px 0;cursor:pointer}
+
+/* equipamentos */
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:12px 0;border-bottom:1px solid var(--linha)}
+.eq .id{min-width:140px;margin-right:auto}
+.eq .id b{display:block;font-size:15px}
+.eq .id small{color:var(--suave)}
+.seg.sm button{padding:6px 11px;font-size:12.5px}
+.seg button.on.st-op{background:var(--vv);border-color:var(--vv)}
+.seg button.on.st-semop{background:var(--azul);border-color:var(--azul)}
+.seg button.on.st-man{background:var(--verm);border-color:var(--verm)}
+.seg button.on.st-fora{background:#6B7770;border-color:#6B7770}
+
+/* atividades */
+.prog-info{font-size:13px;color:var(--suave);margin:14px 0 4px}
+.area-h{font-size:13px;font-weight:800;color:var(--vv);margin:18px 0 8px;letter-spacing:.2px}
+.atv{border:1.5px solid var(--linha);border-left:6px solid #C7D1CA;border-radius:var(--r-campo);padding:12px 12px 10px;margin:0 0 10px;background:var(--branco)}
+.atv.ok{border-left-color:var(--vv2)}
+.atv.abaixo{border-left-color:var(--ambar)}
+.atv.zero{border-left-color:var(--verm)}
+.atv header{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--suave);font-weight:600}
+.atv .cod{color:#8A968E;font-weight:500}
+.atv h4{margin:3px 0 10px;font-size:15px;font-weight:700;line-height:1.3}
+.qtd{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:end}
+.qtd small{display:block;font-size:12px;color:var(--suave);font-weight:600}
+.qtd .prev b{font-size:19px;font-weight:800}
+.inp{display:flex;align-items:center;border:1.5px solid var(--linha);border-radius:var(--r-campo);background:#fff;max-width:190px}
+.inp:focus-within{border-color:var(--vv2)}
+.inp input{border:0;min-height:42px;font-size:17px;font-weight:700;padding:8px 10px}
+.inp em{font-style:normal;color:var(--suave);font-weight:600;padding:0 10px 0 2px;font-size:13px}
+.pct{font-size:19px;font-weight:800;min-width:56px;text-align:right}
+.atv.ok .pct{color:var(--vv)}
+.atv.abaixo .pct{color:var(--ambar)}
+.atv.zero .pct{color:var(--verm)}
+.rapidos{display:flex;gap:4px;margin:6px 0 0}
+.causa{display:none;margin:8px 0 0}
+.atv.abaixo .causa,.atv.zero .causa{display:block}
+.causa select{border-color:#E8C35C;background:var(--ambar-p)}
+.causa label{font-size:12.5px;font-weight:700;color:#8A5E00;display:block;margin-bottom:4px}
+.atv .obs{margin-top:8px;min-height:38px;font-size:14px;padding:7px 10px}
+.linha-np{display:grid;grid-template-columns:1fr 90px 70px auto;gap:8px;align-items:center;margin:0 0 8px}
+.linha-par{display:grid;grid-template-columns:100px 100px 1fr auto;gap:8px;align-items:center;margin:0 0 8px}
+@media (max-width:560px){
+  .linha-np{grid-template-columns:1fr 1fr 70px;}
+  .linha-np .desc{grid-column:1/-1}
+  .linha-par{grid-template-columns:1fr 1fr auto}
+  .linha-par select{grid-column:1/-1}
+}
+
+/* fotos */
+.fotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:12px}
+.foto{border:1px solid var(--linha);border-radius:var(--r-campo);overflow:hidden;background:var(--papel)}
+.foto img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.foto input{border:0;border-radius:0;min-height:38px;font-size:13px}
+.foto .lnk{width:100%}
+.upl{display:inline-flex;margin-top:14px}
+.upl input{display:none}
+
+.acoes{position:fixed;left:0;right:0;bottom:0;background:var(--branco);border-top:1px solid var(--linha);z-index:15;padding-bottom:env(safe-area-inset-bottom,0px)}
+.acoes .in{max-width:880px;margin:0 auto;display:flex;gap:8px;padding:10px 12px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.acoes .btn{flex:1 1 auto;padding:12px 14px}
+.acoes .msg:empty{display:none}
+.acoes .msg{flex:1 1 100%;font-size:13px;color:var(--suave);font-weight:600}
+
+/* tabelas de cadastro */
+.cad-row{display:grid;grid-template-columns:1.6fr 1.2fr 1fr auto;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--linha)}
+.cad-row input,.cad-row select{min-height:40px;padding:7px 9px;font-size:14px}
+.cad-row.inativo{opacity:.5}
+.cad-row .at{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--suave)}
+@media (max-width:620px){.cad-row{grid-template-columns:1fr 1fr}.cad-row>:first-child{grid-column:1/-1}}
+.box{background:var(--branco);border:1px solid var(--linha);border-radius:var(--r-painel);padding:14px 16px;margin:0 0 14px}
+.tabs{display:flex;gap:6px;margin:0 0 14px}
+.prev-tab{width:100%;border-collapse:collapse;font-size:13px;background:var(--branco)}
+.prev-tab th,.prev-tab td{border-bottom:1px solid var(--linha);padding:6px 8px;text-align:left;vertical-align:top}
+.prev-tab th{font-size:12px;color:var(--suave)}
+.scroll{overflow-x:auto}
+.kv{display:flex;gap:22px;flex-wrap:wrap;margin:6px 0 12px}
+.kv div b{display:block;font-size:22px;font-weight:800}
+.kv div span{font-size:12.5px;color:var(--suave);font-weight:600}
+.erro-box{background:var(--verm-p);color:#7E2419;border-radius:var(--r-campo);padding:10px 12px;font-size:14px;margin:0 0 12px}
+
+#toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);background:var(--tinta);color:#fff;padding:11px 16px;border-radius:10px;font-size:14px;font-weight:600;max-width:92vw;z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.show{opacity:1}
+dialog{border:0;border-radius:var(--r-painel);padding:20px;max-width:460px;width:92vw}
+dialog::backdrop{background:rgba(10,30,18,.45)}
+dialog h3{margin:0 0 10px}
+dialog ul{margin:0 0 16px;padding-left:18px}
+dialog li{margin:4px 0}
+.loading{padding:60px 0;text-align:center;color:var(--suave);font-weight:600}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ===== PDF ===== */
+#pdf-root{display:none}
+.pdf-overlay{position:fixed;inset:0;z-index:100;overflow:hidden;background:var(--papel)}
+.pdf-overlay .pdf-palco{position:absolute;left:0;top:0;width:794px}
+.pdf-overlay .pdf-msg{position:fixed;inset:0;z-index:2;display:grid;place-items:center;background:rgba(242,245,241,.96);font-weight:700;font-size:16px;color:var(--vv)}
+@media print{
+  @page{size:A4;margin:8mm 0 10mm}
+  body.imprimindo>*:not(#pdf-print){display:none!important}
+  body.imprimindo{background:#fff}
+  body.imprimindo #pdf-print{display:block!important}
+  #pdf-doc *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+#pdf-print{display:none}
+#pdf-doc{width:794px;background:#fff;color:#17271E;font-family:Montserrat,sans-serif;font-size:10.5px;line-height:1.4}
+#pdf-doc .p-head{background:#006838;color:#fff;padding:18px 26px 16px;display:flex;align-items:flex-end;gap:18px}
+#pdf-doc .p-brand{display:flex;flex-direction:column;line-height:1;margin-right:auto}
+#pdf-doc .p-brand span{font-size:8.5px;letter-spacing:3px;font-weight:600;opacity:.9}
+#pdf-doc .p-brand b{font-size:19px;font-style:italic;font-weight:800;margin-top:3px}
+#pdf-doc .p-brand em{font-style:normal;font-size:10px;font-weight:500;margin-top:10px;opacity:.9}
+#pdf-doc .p-tit{text-align:right}
+#pdf-doc .p-tit h1{font-size:17px;margin:0;font-weight:800}
+#pdf-doc .p-tit p{margin:3px 0 0;font-size:11px;opacity:.92}
+#pdf-doc .p-tit .p-st{display:inline-block;margin-top:7px;background:#fff;color:#006838;border-radius:20px;padding:2px 10px;font-weight:800;font-size:9.5px}
+#pdf-doc .p-tit .p-st.rascunho{color:#8A5E00}
+#pdf-doc .p-body{padding:14px 26px 10px}
+#pdf-doc .p-lid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;border-bottom:1px solid #D3DDD5;padding:0 0 10px;margin:0 0 12px}
+#pdf-doc .p-lid span{display:block;font-size:8.5px;color:#5E6E63;font-weight:600}
+#pdf-doc .p-lid b{font-size:10.5px}
+#pdf-doc .p-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 14px}
+#pdf-doc .p-kpi{border:1px solid #D3DDD5;border-top:4px solid #39B54A;border-radius:6px;padding:8px 10px}
+#pdf-doc .p-kpi b{display:block;font-size:22px;font-weight:800;line-height:1.1}
+#pdf-doc .p-kpi span{font-size:9px;color:#5E6E63;font-weight:600}
+#pdf-doc .p-kpi.alerta{border-top-color:#C98A00}
+#pdf-doc .p-kpi.ruim{border-top-color:#C0392B}
+#pdf-doc h2{font-size:12.5px;font-weight:800;color:#006838;margin:14px 0 7px;padding-bottom:4px;border-bottom:2px solid #E4F2E6}
+#pdf-doc .p-horas{display:flex;gap:22px;margin:6px 0 0;font-size:9.5px;color:#5E6E63}
+#pdf-doc .p-horas b{color:#17271E;font-size:11px}
+#pdf-doc table{width:100%;border-collapse:collapse}
+#pdf-doc .p-tab th{font-size:8.5px;color:#5E6E63;text-align:left;font-weight:700;padding:4px 5px;border-bottom:1.5px solid #17271E}
+#pdf-doc .p-tab td{padding:5px 5px;border-bottom:1px solid #E1E8E2;vertical-align:top}
+#pdf-doc .p-tab td.n{text-align:right;white-space:nowrap;font-weight:600}
+#pdf-doc .p-tab .sub{display:block;font-size:8.5px;color:#5E6E63}
+#pdf-doc .p-tab .ar{background:#F2F5F1;font-weight:800;color:#006838;font-size:9.5px}
+#pdf-doc .pbar{height:9px;background:#E6EAE7;border-radius:5px;width:90px;position:relative;margin-top:2px;overflow:hidden}
+#pdf-doc .pbar i{position:absolute;left:0;top:0;bottom:0;border-radius:5px}
+#pdf-doc .pc{font-weight:800;font-size:10px}
+#pdf-doc .causa-t{font-size:9px;color:#8A5E00;font-weight:600}
+#pdf-doc .obs-t{font-size:9px;color:#5E6E63}
+#pdf-doc .emp-barra{display:flex;height:14px;border-radius:4px;overflow:hidden;margin:4px 0 8px}
+#pdf-doc .emp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 16px}
+#pdf-doc .emp{border-left:4px solid #006838;padding:2px 0 2px 8px}
+#pdf-doc .emp b{font-size:11px}
+#pdf-doc .emp .fx{font-size:9px;color:#5E6E63;margin:2px 0}
+#pdf-doc .emp .nm{font-size:8.5px;color:#17271E}
+#pdf-doc .eqs{display:flex;flex-wrap:wrap;gap:5px}
+#pdf-doc .eqs span{border-radius:12px;padding:2px 9px;font-weight:700;font-size:9.5px;color:#fff}
+#pdf-doc .txt{white-space:pre-wrap;font-size:10px;margin:0 0 6px}
+#pdf-doc .dup{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+#pdf-doc .p-fotos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#pdf-doc .p-foto img{width:100%;height:auto;display:block;border-radius:4px}
+#pdf-doc .p-foto p{margin:3px 0 0;font-size:9px;color:#5E6E63}
+#pdf-doc .p-ass{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin:26px 0 6px}
+#pdf-doc .p-ass div{border-top:1px solid #17271E;padding-top:5px;font-size:9.5px}
+#pdf-doc .p-ass span{display:block;color:#5E6E63;font-size:8.5px}
+#pdf-doc .avoid{page-break-inside:avoid}
+#pdf-doc .p-lid{grid-template-columns:repeat(3,1fr)}
+#pdf-doc .p-encs{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 12px;margin:0 0 12px}
+#pdf-doc .p-enc{border-left:4px solid #006838;background:#F2F5F1;border-radius:0 5px 5px 0;padding:5px 9px}
+#pdf-doc .p-enc b{font-size:10.5px;display:block}
+#pdf-doc .p-enc span{font-size:9px;color:#5E6E63}
+#pdf-doc .p-enc p{margin:2px 0 0;font-size:10px;font-weight:600}
+#pdf-doc .p-perdas{display:flex;gap:18px;margin:6px 0 0;padding:6px 9px;background:#FDF1E4;border-left:4px solid #E08A2E;font-size:9.5px}
+#pdf-doc .p-perdas b{font-size:11px}
+#pdf-doc .p-efe td.n,#pdf-doc .p-efe th.n{text-align:right}
+#pdf-doc .neg{color:#C0392B;font-weight:800}#pdf-doc .pos{color:#2F6FB0;font-weight:800}
+#pdf-doc .leg{font-size:8.5px;gap:4px 12px}
+#pdf-doc .leg i{width:9px;height:9px}
+#pdf-doc svg{display:block;margin:4px 0 6px}
+</style>
+</head>
+<body>
+<div id="app"><div class="loading">Carregando…</div></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<dialog id="dlg"></dialog>
+<div id="pdf-root" aria-hidden="true"></div><div id="pdf-print"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, collection, query, where, orderBy, limit, documentId, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* ================= CONFIGURAÇÃO ================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyC5TpjbdcLBqOJ94Zt9AK5DIdE7n2UfTeo",
+  // fora do Firebase Hosting o login abre no próprio site (functions/__ repassa para o rdo-cvv)
+  authDomain: /(^|\.)(web\.app|firebaseapp\.com)$|^localhost$/.test(location.hostname) ? "rdo-cvv.firebaseapp.com" : location.host,
+  projectId: "rdo-cvv",
+  storageBucket: "rdo-cvv.firebasestorage.app",
+  messagingSenderId: "510402451763",
+  appId: "1:510402451763:web:959ac4cdcdf416fdca0646"
+};
+// E-mail(s) com acesso total desde o primeiro login. Use o mesmo e-mail em firestore.rules.
+const ADMINS = ["lukasbarross@gmail.com"].map(e => e.toLowerCase());
+
+const FRENTES = {
+  EEAB01: { nome: "EEAB-01", areas: ["EEAB01"], apontador: "Bruno", engenheiro: "Sara Guimarães" },
+  EEAB02: { nome: "EEAB-02", areas: ["EEAB02"], apontador: "Silvia Mara Perdigão Albino", engenheiro: "Vinicius Batista" },
+  EEAB03: { nome: "EEAB-03", areas: ["EEAB03"], apontador: "Heberth Rodrigues Soares", engenheiro: "Natanael de Almeida Solza" }
+};
+const LEGADO = "EEAB0102"; // frente antiga EEA-B01/B02, mantida só para migrar cadastros
+const AREAS = ["EEAB01", "EEAB02", "EEAB03"];
+// EEAB01 e EEAB02 ficam no mesmo local e dividem o mesmo efetivo e equipamentos; EEAB03 tem cadastro próprio
+const GRUPOS = {
+  EEAB0102: { nome: "EEAB-01 e EEAB-02", frentes: ["EEAB01", "EEAB02"], chaves: ["EEAB0102", "EEAB01", "EEAB02"] },
+  EEAB03: { nome: "EEAB-03", frentes: ["EEAB03"], chaves: ["EEAB03"] }
+};
+const grupoDe = f => f === "EEAB03" ? "EEAB03" : "EEAB0102";
+const irmaoDe = f => f === "EEAB01" ? "EEAB02" : f === "EEAB02" ? "EEAB01" : null;
+const areaToFrente = a => a;
+const nomeFrente = f => FRENTES[f]?.nome || (f === LEGADO ? "EEA-B01/B02" : f);
+const EMPRESAS = ["Vale Verde", "MOB", "Aquasolis (ARN)", "MP", "Outra"];
+const FUNCOES = ["Engenheiro civil","Supervisor de obras","Encarregado de obras","Encarregado de terraplanagem","Encarregado de andaimes","Apontador","Técnico de segurança","Técnica de enfermagem","Motorista de ambulância","Topógrafo","Auxiliar de topografia","Laboratorista","Almoxarife","Auxiliar de almoxarife","Eletricista","Oficial","Ajudante","Servente","Auxiliar de serviços gerais","Montador","Montador de andaimes","Rigger","Operador de escavadeira","Operador de rolo compactador","Operador de pá-carregadeira","Operador de guindaste","Operador","Motorista de caminhão basculante","Motorista de caminhão-pipa","Sinaleiro","Pedreiro","Auxiliar administrativo"];
+const CAUSAS = ["Chuva / condição climática","Acesso / trafegabilidade","Atraso na atividade predecessora","Falta de material","Falta ou quebra de equipamento","Falta de mão de obra / operador","Projeto ou liberação técnica","Liberação de segurança (PT/APR/rigging)","Interferência com outra atividade","Equipe remanejada para outra prioridade","Fornecedor / terceiro","Produtividade abaixo do planejado","Outros"];
+const MOTIVOS_PAR = ["Chuva","Acesso / estrada","Aguardando liberação","Falta de material","Equipamento","Segurança","Limpeza / higiene","Outros"];
+const EQ_ST = { fora: "Fora da obra", op: "Operante", semop: "Sem operador", man: "Manutenção" };
+const EQ_COR = { op: "#006838", semop: "#2F6FB0", man: "#C0392B", fora: "#6B7770" };
+const STATUS = { rascunho: "Em preenchimento", fechado: "Fechado e validado" };
+const STATUS_CURTO = { rascunho: "Rascunho", fechado: "Validado" };
+const stNorm = s => (!s || s === "rascunho") ? "rascunho" : "fechado";
+const EMP_COR = { "Vale Verde": "#006838", "MOB": "#39B54A", "Aquasolis (ARN)": "#2F6FB0", "MP": "#C98A00", "Outra": "#8A968E" };
+const XLSX_URL = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
+const H2C_URL = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+const JSZIP_URL = "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";
+const JSPDF_URL = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+
+// Base inicial do efetivo previsto, montada a partir dos RDOs de setembro/2026 (nome|função|empresa)
+const SEED = {
+  EEAB01: {
+    colabs: `Bruno|Apontador|Vale Verde
+Sara Guimarães|Engenheiro civil|Vale Verde
+Dewyson Araujo Tavares|Supervisor de obras|Vale Verde
+Anderson Douglas|Encarregado de obras|Vale Verde
+Cristiano Nogueira|Encarregado de terraplanagem|Vale Verde
+Gilmar Viana|Encarregado de andaimes|Vale Verde
+Bárbara Dias|Técnico de segurança|Vale Verde
+Edson Lucas|Oficial|Vale Verde
+Vanderci dos Santos|Oficial|Vale Verde
+José Geraldo|Oficial|Vale Verde
+Sebastião Eustáquio|Oficial|Vale Verde
+Miqueias Alfredo|Operador de escavadeira|Vale Verde
+Valter José da Silva|Operador|Vale Verde
+Fabio Geraldo|Operador de rolo compactador|Vale Verde
+Joao Viana|Operador de pá-carregadeira|Vale Verde
+Marcelo Mateus dos Santos|Motorista de caminhão basculante|Vale Verde
+Roberto Luciano|Motorista de caminhão-pipa|Vale Verde
+Cleydson Silva|Sinaleiro|Vale Verde
+Derverson Ricardo|Sinaleiro|Vale Verde
+Jaiton de Sousa|Montador de andaimes|Vale Verde
+Fernando Nascimento|Montador de andaimes|Vale Verde
+Tiago Silva|Montador de andaimes|Vale Verde
+Paulo Ribeiro|Montador de andaimes|Vale Verde
+Daniel Larceda|Montador de andaimes|Vale Verde
+Moaci Oliveira|Montador de andaimes|Vale Verde
+Wagner Vidal|Montador de andaimes|Vale Verde`,
+    equips: `EH-100|Escavadeira hidráulica
+CB-168|Caminhão basculante
+LCP-30|Caminhão-pipa
+TE-35|Trator de esteira
+LRC-07|Rolo compactador
+LPC-06|Pá-carregadeira`
+  },
+  EEAB02: {
+    colabs: `Silvia Mara Perdigão Albino|Apontador|Vale Verde
+Ludymilla|Apontador|Vale Verde
+Vinicius Batista|Engenheiro civil|Vale Verde
+Ausenir Pedro|Encarregado de obras|Vale Verde
+Mislene Santos|Técnico de segurança|Vale Verde
+Valdez Linhares|Técnico de segurança|Vale Verde
+Ítalo Maia|Técnico de segurança|Vale Verde
+Rosagela Aparecida|Técnica de enfermagem|Vale Verde
+Marconi Gonsalves Morais|Motorista de ambulância|Vale Verde
+Franklin Francisco|Topógrafo|Vale Verde
+Geraldo Pedro|Auxiliar de topografia|Vale Verde
+Critian Lucas|Auxiliar de topografia|Vale Verde
+Wallas Gualberto|Laboratorista|Vale Verde
+Diego Lucio|Almoxarife|Vale Verde
+Valter Silva Torres|Auxiliar de almoxarife|Vale Verde
+Wevert Sandro|Eletricista|Vale Verde
+Leopoldo Ferreira|Oficial|Vale Verde
+Dilson Pedro|Oficial|Vale Verde
+José Maurício da Silva|Oficial|Vale Verde
+Mauricio José Domingos|Oficial|Vale Verde
+Vander Júnior|Oficial|Vale Verde
+Leomar Vinicius|Oficial|Vale Verde
+Mizael Santos|Oficial|Vale Verde
+Felipe Alberto|Oficial|Vale Verde
+Lucas Gabriel|Oficial|Vale Verde
+Edemilson Jose|Oficial|Vale Verde
+Pablo Flavio|Oficial|Vale Verde
+Jose Luiz Gonsalves|Oficial|Vale Verde
+Joao Paulo|Ajudante|Vale Verde
+Otávio Douglas|Ajudante|Vale Verde
+Raimundo Luiz|Ajudante|Vale Verde
+José Almeida|Ajudante|Vale Verde
+Rian Jeferson|Ajudante|Vale Verde
+André Lucas|Ajudante|Vale Verde
+Powllielem Seno Viana|Auxiliar de serviços gerais|Vale Verde
+Matheus Teixeira|Auxiliar de serviços gerais|Vale Verde
+Simone Adriana|Auxiliar de serviços gerais|Vale Verde
+Erli Alves|Encarregado de obras|MOB
+Jailton Silvano|Encarregado de obras|MOB
+Gilberto Manuel|Encarregado de obras|MOB
+Alessandro Costa Silva|Oficial|MOB
+Anderson Ferreira|Oficial|MOB
+Eduardo da Conceição|Oficial|MOB
+Jean Braga|Oficial|MOB
+Jony Henrique|Oficial|MOB
+Leonardo Santos|Oficial|MOB
+Luan Braga|Oficial|MOB
+Marlon Fabricio|Oficial|MOB
+Thallyson Gomes|Oficial|MOB
+Aricio Carlos|Oficial|MOB
+Eramos dos Santos|Oficial|MOB
+Francisco das Chagas|Oficial|MOB
+Francisco José Soares|Oficial|MOB
+John Erick|Oficial|MOB
+Rafael Moraes|Oficial|MOB
+Joel Braga|Ajudante|MOB
+Carlos Henrique de Sousa|Ajudante|MOB
+Carlos Alberto|Ajudante|MOB
+Devison|Supervisor de obras|Aquasolis (ARN)
+Thiago Gomes|Sinaleiro|Aquasolis (ARN)
+Antônival Luiz|Pedreiro|Aquasolis (ARN)
+Wilson Amaro|Montador|Aquasolis (ARN)
+Leiri de Almeida|Operador de guindaste|Aquasolis (ARN)`,
+    equips: ``
+  },
+  EEAB03: {
+    colabs: `Natanael de Almeida Solza|Engenheiro civil|Vale Verde
+João Luiz|Supervisor de obras|Vale Verde
+Ricardo Gilberto|Encarregado de obras|Vale Verde
+Wenderson Brandão|Encarregado de obras|Vale Verde
+Roberto Sebastião|Encarregado de obras|Vale Verde
+Heberth Rodrigues Soares|Apontador|Vale Verde
+Karina Almeida|Técnico de segurança|Vale Verde
+Paloma da Silva|Auxiliar administrativo|Vale Verde
+Daniel Moreira|Topógrafo|Vale Verde
+Marcos Piciano|Topógrafo|Vale Verde
+Adair Félix|Operador|Vale Verde
+Antônio Marcus Gonçalves|Oficial|Vale Verde
+Arlindo Gomes|Oficial|Vale Verde
+Josué Anjos da Silva|Oficial|Vale Verde
+Waldir da Costa|Oficial|Vale Verde
+Helvécio Cardoso|Oficial|Vale Verde
+Ronei Brás|Oficial|Vale Verde
+Evangelista de Souza|Oficial|Vale Verde
+Paulo Antônio de Carvalho|Oficial|Vale Verde
+José Geraldo Gorino|Oficial|Vale Verde
+Osvaldo Aparecido|Oficial|Vale Verde
+José Aparecido|Oficial|Vale Verde
+Felipe Gonçalves|Servente|Vale Verde
+Daniel Teixeira|Servente|Vale Verde
+Paulo Henrique|Rigger|MP
+Gilson Freitas|Rigger|MP
+Tailander Solidade|Operador|MP
+Adilson José de Oliveira|Montador|Aquasolis (ARN)
+Paulo Marques de Oliveira|Montador|Aquasolis (ARN)
+Antônio Roberto Pereira|Montador|Aquasolis (ARN)
+Edipo Marcelo de Almeida|Montador|Aquasolis (ARN)
+Adilson José|Montador|Aquasolis (ARN)
+Sidnei Cláudio da Silva|Montador|Aquasolis (ARN)`,
+    equips: `TDC-9137|
+LPTA-01|Plataforma de trabalho aéreo
+LRE-09|
+EH-66|Escavadeira hidráulica`
+  }
+};
+
+/* ================= FIREBASE ================= */
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+let db;
+try {
+  db = initializeFirestore(app, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }), ignoreUndefinedProperties: true });
+} catch (e) {
+  db = initializeFirestore(app, { ignoreUndefinedProperties: true });
+}
+
+/* ================= UTILITÁRIOS ================= */
+const $ = s => document.querySelector(s);
+const APP = $("#app");
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const norm = s => String(s ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim().toUpperCase();
+const pad = n => String(n).padStart(2, "0");
+const hoje = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+const isoToDate = iso => { const [y, m, d] = iso.split("-").map(Number); return new Date(y, m - 1, d); };
+const SEMANA = ["domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira", "sexta-feira", "sábado"];
+const MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+const dataCurta = iso => { const d = isoToDate(iso); return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}`; };
+const dataBR = iso => { const d = isoToDate(iso); return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`; };
+const diaSemana = iso => SEMANA[isoToDate(iso).getDay()];
+const dataLonga = iso => { const d = isoToDate(iso); return `${SEMANA[d.getDay()]}, ${d.getDate()} de ${MESES[d.getMonth()]}`; };
+const addDias = (iso, n) => { const d = isoToDate(iso); d.setDate(d.getDate() + n); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+const toMin = t => { if (!t || !/^\d{1,2}:\d{2}$/.test(t)) return null; const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+const dur = (a, b) => { const x = toMin(a), y = toMin(b); return x != null && y != null && y > x ? y - x : 0; };
+const fmtH = m => `${Math.floor(m / 60)}h${pad(Math.round(m % 60))}`;
+const fmtN = (v, d = 2) => Number(v).toLocaleString("pt-BR", { maximumFractionDigits: d });
+const fmtQ = (v, un) => v == null ? "–" : un === "%" ? `${fmtN(v * 100, 1)}%` : `${fmtN(v)} ${un}`;
+const dispVal = (v, un) => v == null ? "" : un === "%" ? Math.round(v * 10000) / 100 : v;
+const readVal = (s, un) => { if (s === "" || s == null) return null; const n = Number(String(s).replace(",", ".")); if (!isFinite(n)) return null; return un === "%" ? n / 100 : n; };
+const primeiroNome = n => String(n || "").split(" ")[0];
+const clone = o => JSON.parse(JSON.stringify(o));
+
+let toastT;
+function toast(msg, ms = 3200) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), ms); }
+function msgErro(e) {
+  const c = String(e?.code || "");
+  if (c.includes("permission-denied")) return "Sem permissão para esta ação. Confira seu perfil de acesso com o planejamento.";
+  if (c.includes("unavailable")) return "Sem conexão com o servidor. Os dados ficam no aparelho e sobem quando tiver sinal.";
+  return "Erro: " + (e?.message || e);
+}
+function dialogo(titulo, html, botoes = [{ t: "Entendi", v: "ok" }]) {
+  const d = $("#dlg");
+  d.innerHTML = `<h3>${esc(titulo)}</h3>${html}<div style="display:flex;gap:8px;justify-content:flex-end">${botoes.map(b => `<button class="btn ${b.sec ? "sec" : ""}" value="${b.v}">${esc(b.t)}</button>`).join("")}</div>`;
+  return new Promise(res => {
+    d.querySelectorAll("button").forEach(b => b.onclick = () => { d.close(); res(b.value); });
+    d.showModal();
+  });
+}
+const scripts = {};
+function loadScript(url) {
+  if (!scripts[url]) scripts[url] = new Promise((res, rej) => { const s = document.createElement("script"); s.src = url; s.onload = res; s.onerror = () => rej(new Error("Falha ao carregar " + url)); document.head.appendChild(s); });
+  return scripts[url];
+}
+
+/* ================= ESTADO ================= */
+const S = {
+  user: null, me: null, view: "boot", frente: null, data: hoje(), lista: [],
+  rdo: null, ctx: null, busca: "", open: new Set(["lider", "jornada", "atividades"]), salvo: "",
+  cadFrente: null, cadTab: "colabs", cad: { colabs: [], equips: [] },
+  progs: [], imp: null, users: []
+};
+const perfil = () => ADMINS.includes(S.user?.email?.toLowerCase()) ? "planejamento" : (S.me?.perfil || "");
+const isPlan = () => perfil() === "planejamento";
+const isEng = () => ["planejamento", "engenheiro"].includes(perfil());
+const frentesPermitidas = () => {
+  if (isPlan()) return Object.keys(FRENTES);
+  const f = new Set(S.me?.frentes || []);
+  if (f.has(LEGADO)) { f.add("EEAB01"); f.add("EEAB02"); }
+  return Object.keys(FRENTES).filter(k => f.has(k));
+};
+
+/* ================= LOGIN ================= */
+onAuthStateChanged(auth, async u => {
+  if (!u) { S.user = null; S.view = "login"; return render(); }
+  S.user = u;
+  const email = u.email.toLowerCase();
+  try {
+    const snap = await getDoc(doc(db, "usuarios", email));
+    if (snap.exists()) S.me = snap.data();
+    else if (ADMINS.includes(email)) {
+      S.me = { nome: u.displayName || email, email, perfil: "planejamento", frentes: Object.keys(FRENTES) };
+      await setDoc(doc(db, "usuarios", email), { ...S.me, criadoEm: serverTimestamp() });
+    } else { S.view = "semacesso"; return render(); }
+  } catch (e) { console.error(e); S.view = "semacesso"; S.erroAcesso = msgErro(e); return render(); }
+  S.frente = frentesPermitidas()[0] || null;
+  S.cadFrente = S.frente;
+  go("home");
+});
+
+async function entrar() {
+  const p = new GoogleAuthProvider();
+  p.setCustomParameters({ prompt: "select_account" });
+  try { await signInWithPopup(auth, p); }
+  catch (e) {
+    if (["auth/popup-blocked", "auth/operation-not-supported-in-this-environment"].includes(e.code)) await signInWithRedirect(auth, p);
+    else if (e.code !== "auth/popup-closed-by-user") toast(msgErro(e));
+  }
+}
+
+/* ================= RÉGUA DA JORNADA ================= */
+// Perda gerencial = da chegada ao início das atividades + almoço acima de 1h + paralisações
+function segmentosJornada(j, pars) {
+  const seg = [];
+  const addM = (x, y, tipo) => { if (x != null && y != null && y > x) seg.push({ x, y, tipo }); };
+  const c = toMin(j.chegada), i = toMin(j.inicio), ai = toMin(j.almocoInicio), af = toMin(j.almocoFim), f = toMin(j.fim);
+  if (i == null) { addM(c, f, "perda"); if (ai != null && af != null) addM(ai, af, "almoco"); }
+  else {
+    addM(c, i, "perda");
+    if (ai != null && af != null) {
+      addM(i, ai, "prod"); addM(ai, Math.min(af, ai + 60), "almoco"); addM(ai + 60, af, "perda"); addM(af, f, "prod");
+    } else addM(i, f, "prod");
+  }
+  (pars || []).forEach(p => addM(toMin(p.inicio), toMin(p.fim), "parada"));
+  return seg;
+}
+const COR_SEG = { prod: "#006838", perda: "#E08A2E", almoco: "#D5DDD8", parada: "#C0392B" };
+function reguaSVG(j, pars, W = 600) {
+  const seg = segmentosJornada(j, pars);
+  const tempos = seg.flatMap(s => [s.x, s.y]);
+  let ini = Math.min(6 * 60, ...tempos), fim = Math.max(18 * 60, ...tempos);
+  ini = Math.floor(ini / 60) * 60; fim = Math.ceil(fim / 60) * 60;
+  const L = 14, R = W - 14, top = 16, H = 30;
+  const X = m => L + (m - ini) / (fim - ini) * (R - L);
+  let s = `<svg viewBox="0 0 ${W} 72" width="${W}" height="72" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Régua da jornada">`;
+  s += `<rect x="${L}" y="${top}" width="${R - L}" height="${H}" rx="5" fill="#F2F5F1" stroke="#D3DDD5"/>`;
+  seg.filter(g => g.tipo !== "parada").forEach(g => { s += `<rect x="${X(g.x)}" y="${top}" width="${Math.max(1, X(g.y) - X(g.x))}" height="${H}" fill="${COR_SEG[g.tipo]}"/>`; });
+  seg.filter(g => g.tipo === "parada").forEach(g => { s += `<rect x="${X(g.x)}" y="${top - 3}" width="${Math.max(2, X(g.y) - X(g.x))}" height="${H + 6}" fill="${COR_SEG.parada}" opacity=".9"/>`; });
+  const ai = toMin(j.almocoInicio);
+  if (ai != null) { const x = X(ai + 60); s += `<line x1="${x}" x2="${x}" y1="${top - 5}" y2="${top + H + 3}" stroke="#17271E" stroke-width="1.5" stroke-dasharray="3 2"/><text x="${x}" y="${top - 7}" font-size="10" font-family="Montserrat,sans-serif" font-weight="700" fill="#17271E" text-anchor="middle">1h</text>`; }
+  for (let m = ini; m <= fim; m += 60) {
+    const x = X(m);
+    s += `<line x1="${x}" x2="${x}" y1="${top + H}" y2="${top + H + 5}" stroke="#8A968E"/>`;
+    s += `<text x="${x}" y="${top + H + 18}" font-size="11" font-family="Montserrat,sans-serif" font-weight="600" fill="#5E6E63" text-anchor="middle">${pad(m / 60)}h</text>`;
+  }
+  if (!seg.length) s += `<text x="${W / 2}" y="${top + 20}" font-size="12" font-family="Montserrat,sans-serif" fill="#8A968E" text-anchor="middle">Preencha os horários para montar a régua</text>`;
+  return s + "</svg>";
+}
+const legendaRegua = () => `<div class="leg">${[["prod", "Produção"], ["perda", "Perda gerencial"], ["almoco", "Almoço (1h prevista)"], ["parada", "Paralisação"]].map(([k, l]) => `<span><i style="background:${COR_SEG[k]}"></i>${l}</span>`).join("")}</div>`;
+
+function horas(r) {
+  const j = r.jornada;
+  const almoco = dur(j.almocoInicio, j.almocoFim);
+  const almocoExc = Math.max(0, almoco - 60);
+  const parado = (r.paralisacoes || []).reduce((a, p) => a + dur(p.inicio, p.fim), 0);
+  let perdaInicio, prod;
+  if (j.inicio) {
+    perdaInicio = dur(j.chegada, j.inicio);
+    prod = j.almocoInicio && j.almocoFim ? dur(j.inicio, j.almocoInicio) + dur(j.almocoFim, j.fim) : dur(j.inicio, j.fim);
+  } else { perdaInicio = Math.max(0, dur(j.chegada, j.fim) - almoco); prod = 0; }
+  prod = Math.max(0, prod - parado);
+  return { prod, perdaInicio, almoco, almocoExc, parado, perdas: perdaInicio + almocoExc + parado };
+}
+
+/* ================= RESUMO / REGRAS ================= */
+function efetivoTotal(r) { return Object.values(r.presenca || {}).filter(Boolean).length; }
+function efetivoResumo(r) {
+  const prev = new Set(r.previstoIds || []);
+  const pres = Object.keys(r.presenca || {}).filter(id => r.presenca[id]);
+  return { previsto: prev.size, real: pres.length, ausentes: [...prev].filter(id => !r.presenca[id]), extras: pres.filter(id => !prev.has(id)) };
+}
+function atvLista(r) {
+  return Object.entries(r.atividades || {}).map(([id, a]) => ({ id, ...a }))
+    .sort((a, b) => (a.area + a.subarea + String(a.item).padStart(4, "0")).localeCompare(b.area + b.subarea + String(b.item).padStart(4, "0"), "pt-BR"));
+}
+function statusAtv(a) {
+  if (a.realizado == null) return "pend";
+  if (!(a.previsto > 0)) return a.realizado > 0 ? "ok" : "zero";
+  if (a.realizado <= 0) return "zero";
+  return a.realizado >= a.previsto - 1e-9 ? "ok" : "abaixo";
+}
+// PPC ponderado do dia: média da aderência de cada atividade programada (realizado / previsto, limitado a 100%)
+function ppcDia(r) {
+  const atvs = atvLista(r).filter(a => a.previsto > 0);
+  if (!atvs.length) return null;
+  return atvs.reduce((s, a) => s + Math.min(1, Math.max(0, (a.realizado || 0) / a.previsto)), 0) / atvs.length;
+}
+const fmtPct = v => v == null ? "–" : `${Math.round(v * 100)}%`;
+function resumo(r) {
+  const atvs = atvLista(r).filter(a => a.previsto > 0);
+  const ok = atvs.filter(a => statusAtv(a) === "ok").length;
+  const h = horas(r), ef = efetivoResumo(r);
+  return { efetivo: ef.real, previsto: ef.previsto, ppc: ppcDia(r), atvProg: atvs.length, atvOk: ok, horasProd: h.prod, perdas: h.perdas, praticabilidade: r.clima?.praticabilidade || "" };
+}
+function papel(funcao) {
+  const f = norm(funcao);
+  if (f.includes("ENGENHEIR")) return "eng";
+  if (f.startsWith("SUPERVISOR")) return "sup";
+  if (f.startsWith("ENCARREGAD")) return "enc";
+  if (f.startsWith("APONTADOR")) return "apo";
+  return "";
+}
+function lideranca(presentes) {
+  const by = k => presentes.filter(p => papel(p.funcao) === k).map(p => p.nome);
+  return { eng: by("eng"), sup: by("sup"), enc: by("enc"), apo: by("apo") };
+}
+function novoRDO(frente, data) {
+  return {
+    frente, data, status: "rascunho",
+    apontador: FRENTES[frente]?.apontador || "", engenheiro: FRENTES[frente]?.engenheiro || "", criadoPor: S.user.email.toLowerCase(),
+    clima: { manha: "", tarde: "", chuva: "nao", periodos: [], mm: "", praticabilidade: "", motivo: "" },
+    jornada: { chegada: "", inicio: "", almocoInicio: "", almocoFim: "", fim: "", ddsTema: "" },
+    presenca: {}, encarregados: {}, previstoIds: [], equipamentos: {}, atividades: {}, naoProgramadas: [], paralisacoes: [], ocorrencias: "", restricoes: "",
+    progId: null, progNome: "", copiadoDe: null, conferido: false
+  };
+}
+
+/* ================= NAVEGAÇÃO ================= */
+async function go(v) {
+  S.view = "loading"; render();
+  try {
+    if (v === "home") await loadHome();
+    if (v === "prog") await loadProg();
+    if (v === "cad") await loadCad();
+    if (v === "users") await loadUsers();
+  } catch (e) { console.error(e); toast(msgErro(e)); }
+  S.view = v; render(); window.scrollTo(0, 0);
+}
+async function loadHome() {
+  if (!S.frente) { S.lista = []; return; }
+  const de = addDias(hoje(), -90);
+  const qs = await getDocs(query(collection(db, "rdos"), where(documentId(), ">=", `${S.frente}_${de}`), where(documentId(), "<=", `${S.frente}_9999`)));
+  S.lista = qs.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.frente === S.frente).sort((a, b) => b.data.localeCompare(a.data)).slice(0, 40);
+  S.diaStatus = isPlan() ? await statusDia(S.data) : null;
+}
+
+function render() {
+  const v = S.view;
+  if (v === "boot" || v === "loading") { APP.innerHTML = S.user && S.me ? shell(`<div class="loading">Carregando…</div>`) : `<div class="loading">Carregando…</div>`; return; }
+  if (v === "login") { APP.innerHTML = vLogin(); return; }
+  if (v === "semacesso") { APP.innerHTML = vSemAcesso(); return; }
+  if (v === "rdo") { APP.innerHTML = vRDO(); pintaSalvo(); return; }
+  const corpo = { home: vHome, prog: vProg, cad: vCad, users: vUsers }[v];
+  APP.innerHTML = shell(corpo ? corpo() : "");
+}
+function shell(conteudo) {
+  const tabs = [["home", "Início", true], ["cad", "Cadastros", isEng()], ["prog", "Programação", isPlan()], ["users", "Usuários", isPlan()]].filter(t => t[2]);
+  return `<header class="bar"><div class="bar-in"><div class="marca"><b>RDO</b><span>Rio Tanque</span></div>
+    <button class="eu" data-act="sair" title="Sair">${esc(primeiroNome(S.me?.nome))} · sair</button></div>
+    ${tabs.length > 1 ? `<nav>${tabs.map(t => `<button data-act="nav" data-v="${t[0]}" class="${S.view === t[0] ? "on" : ""}">${t[1]}</button>`).join("")}</nav>` : ""}
+  </header><main class="wrap">${conteudo}</main>`;
+}
+
+/* ================= TELAS SIMPLES ================= */
+function vLogin() {
+  const demo = { chegada: "07:00", inicio: "07:35", almocoInicio: "11:40", almocoFim: "12:55", fim: "16:50" };
+  return `<section class="login"><div class="login-in">
+    <h1>RDO<small>Relatório diário de obra, Rio Tanque</small></h1>
+    <p>EEAB01, EEAB02 e EEAB03. Efetivo, equipamentos e produção do dia comparada com a programação semanal.</p>
+    <button class="btn" data-act="entrar">Entrar com Google</button>
+    <div class="regua-deco">${reguaSVG(demo, [{ inicio: "14:40", fim: "15:10" }], 380).replaceAll("#5E6E63", "#ffffff").replaceAll("#F2F5F1", "rgba(255,255,255,.12)").replaceAll("#D3DDD5", "rgba(255,255,255,.3)")}</div>
+  </div></section>`;
+}
+function vSemAcesso() {
+  return `<section class="login"><div class="login-in">
+    <h1 style="font-size:54px">Acesso<small>ainda não liberado</small></h1>
+    <p>Envie o e-mail abaixo para o planejamento liberar seu acesso e sua frente de serviço.</p>
+    <p style="font-weight:800;font-size:18px;opacity:1">${esc(S.user?.email)}</p>
+    ${S.erroAcesso ? `<p style="font-size:13px">${esc(S.erroAcesso)}</p>` : ""}
+    <button class="btn" data-act="sair">Sair</button>
+  </div></section>`;
+}
+function vHome() {
+  const fr = frentesPermitidas();
+  if (!fr.length) return `<h2>Olá, ${esc(primeiroNome(S.me?.nome))}</h2><p class="nota">Nenhuma frente liberada para você. Fale com o planejamento.</p>`;
+  const row = r => {
+    const rs = r.resumo || {};
+    const ader = rs.atvProg ? `PPC ${fmtPct(rs.ppc)}` : "sem atividades programadas";
+    const st = stNorm(r.status);
+    return `<li><button data-act="abrir" data-d="${r.data}"><span class="d num">${dataCurta(r.data)}</span><span class="w">${diaSemana(r.data)}</span><span class="k">${rs.efetivo ?? 0}${rs.previsto ? ` de ${rs.previsto}` : ""} pessoas, ${ader}</span><span class="chip st-${st}">${STATUS_CURTO[st]}</span></button></li>`;
+  };
+  return `<h2>Olá, ${esc(primeiroNome(S.me?.nome))}</h2>
+    ${fr.length > 1 ? `<div class="field"><span class="lbl">Frente</span><div class="seg">${fr.map(f => `<button data-act="set-frente" data-f="${f}" class="${S.frente === f ? "on" : ""}">${nomeFrente(f)}</button>`).join("")}</div></div>` : `<p class="nota">Frente ${FRENTES[fr[0]].nome}</p>`}
+    <div class="field"><label for="h-data">Data do RDO</label><input type="date" id="h-data" value="${S.data}" max="${hoje()}"></div>
+    <button class="btn big" data-act="abrir" data-d="">Abrir RDO de ${diaSemana(S.data)}, ${dataCurta(S.data)}</button>
+    ${S.diaStatus ? cartaoDia() : ""}
+    <h3>RDOs da frente</h3>
+    <ul class="lista">${S.lista.length ? S.lista.map(row).join("") : `<li class="vazio">Nenhum RDO desta frente ainda. Abra o de hoje para começar.</li>`}</ul>`;
+}
+
+function cartaoDia() {
+  const st = S.diaStatus, ok = diaCompleto(st);
+  return `<div class="box" style="margin-top:18px"><b>Programação com o realizado de ${dataCurta(S.data)}</b>
+    <div class="seg" style="margin:10px 0 12px">${Object.keys(FRENTES).map(f => { const r = st[f]; const s2 = !r ? "sem" : stNorm(r.status); return `<span class="chip ${s2 === "fechado" ? "st-fechado" : s2 === "rascunho" ? "st-enviado" : "st-rascunho"}">${nomeFrente(f)}: ${s2 === "fechado" ? "validado" : s2 === "rascunho" ? "em preenchimento" : "sem RDO"}</span>`; }).join("")}</div>
+    <button class="btn ${ok ? "" : "sec"}" data-act="baixar-prog" ${ok ? "" : "disabled"}>Baixar programação preenchida</button>
+    <p class="nota" style="margin:8px 0 0">${ok ? "Sai no mesmo arquivo que foi importado, com o realizado nas linhas R de todos os dias da semana que já têm os três RDOs validados." : "Libera quando os RDOs de EEAB-01, EEAB-02 e EEAB-03 deste dia estiverem fechados."}</p></div>`;
+}
+
+/* ================= ABRIR RDO ================= */
+async function abrirRDO(frente, data) {
+  S.view = "loading"; render();
+  try {
+    const id = `${frente}_${data}`;
+    const [rSnap, cSnap, eSnap, pSnap, fSnap] = await Promise.all([
+      getDoc(doc(db, "rdos", id)),
+      getDocs(query(collection(db, "colaboradores"), where("frente", "in", GRUPOS[grupoDe(frente)].chaves))),
+      getDocs(query(collection(db, "equipamentos"), where("frente", "in", GRUPOS[grupoDe(frente)].chaves))),
+      getDocs(query(collection(db, "programacoes"), where("dias", "array-contains", data))),
+      getDocs(query(collection(db, "fotos"), where("rdoId", "==", id)))
+    ]);
+    const rdo = rSnap.exists() ? rSnap.data() : novoRDO(frente, data);
+    const base = novoRDO(frente, data);
+    for (const k of Object.keys(base)) if (rdo[k] === undefined) rdo[k] = base[k];
+    rdo.clima = { ...base.clima, ...rdo.clima }; rdo.jornada = { ...base.jornada, ...rdo.jornada };
+    if (!rdo.apontador) rdo.apontador = base.apontador;
+    if (!rdo.engenheiro) rdo.engenheiro = base.engenheiro;
+    rdo.encarregados = rdo.encarregados || {};
+
+    const progs = pSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.importadoEm?.toMillis?.() || 0) - (a.importadoEm?.toMillis?.() || 0));
+    const prog = (rdo.progId && progs.find(p => p.id === rdo.progId)) || progs[0] || null;
+    let atvHoje = [], atvSemana = [];
+    if (prog) {
+      const aSnap = await getDocs(query(collection(db, "atividades"), where("progId", "==", prog.id), where("area", "==", FRENTES[frente].areas[0])));
+      const todas = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      atvHoje = todas.filter(a => (a.prev?.[data] || 0) > 0);
+      atvSemana = todas.filter(a => !((a.prev?.[data] || 0) > 0));
+      if (stNorm(rdo.status) === "rascunho") {
+        rdo.progId = prog.id; rdo.progNome = prog.nome;
+        atvHoje.forEach(a => {
+          if (!rdo.atividades[a.id]) rdo.atividades[a.id] = { area: a.area, subarea: a.subarea, item: a.item, idCronog: a.idCronog, atividade: a.atividade, un: a.un, previsto: a.prev[data], realizado: null, causa: "", obs: "", origem: "hoje" };
+          else rdo.atividades[a.id].previsto = a.prev[data];
+        });
+      }
+    }
+    S.rdo = rdo; S.rdoId = id; S.novo = !rSnap.exists(); S.busca = "";
+    S.ctx = {
+      colabs: cSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR")),
+      equips: eSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => a.codigo.localeCompare(b.codigo)),
+      fotos: fSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.ordem || 0) - (b.ordem || 0)),
+      prog, atvSemana
+    };
+    const aberto = stNorm(rdo.status) === "rascunho";
+    // quem está no RDO mas não existe mais no cadastro (efetivo substituído): reaproveita pelo nome ou mantém a foto salva no RDO
+    const snap = rdo.pessoas || {};
+    if (aberto) {
+      const porNome = new Map(S.ctx.colabs.map(p => [norm(p.nome), p.id]));
+      const ids = new Set(S.ctx.colabs.map(p => p.id));
+      const troca = id => { if (ids.has(id) || !snap[id]) return id; return porNome.get(norm(snap[id].nome)) || id; };
+      const pres = {}; Object.keys(rdo.presenca || {}).forEach(id => { if (rdo.presenca[id]) pres[troca(id)] = true; }); rdo.presenca = pres;
+      const enc = {}; Object.entries(rdo.encarregados || {}).forEach(([id, v]) => enc[troca(id)] = v); rdo.encarregados = enc;
+    }
+    const conhecidos = new Set(S.ctx.colabs.map(p => p.id));
+    Object.entries(snap).forEach(([id, p]) => { if (!conhecidos.has(id) && (rdo.presenca[id] || (rdo.previstoIds || []).includes(id))) S.ctx.colabs.push({ id, ...p, antigo: true }); });
+    const eqSnap = rdo.equipInfo || {}, eqIds = new Set(S.ctx.equips.map(e => e.id));
+    Object.entries(eqSnap).forEach(([id, e]) => { if (!eqIds.has(id) && rdo.equipamentos[id]) S.ctx.equips.push({ id, ...e, antigo: true }); });
+    S.ctx.colabs.sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+    // EEAB01 e EEAB02: quem já foi marcado no RDO da outra frente no mesmo dia não entra no previsto desta
+    S.ctx.irmao = null;
+    const ir = irmaoDe(frente);
+    if (ir) {
+      try { const sn = await getDoc(doc(db, "rdos", `${ir}_${data}`)); const pr = sn.exists() ? sn.data().presenca || {} : {}; S.ctx.irmao = { frente: ir, pres: new Set(Object.keys(pr).filter(k => pr[k])) }; } catch (e) { }
+    }
+    const naOutra = id => S.ctx.irmao?.pres.has(id) && !rdo.presenca[id];
+    // efetivo previsto = cadastro do grupo (congelado quando o RDO é fechado)
+    if (aberto) rdo.previstoIds = S.ctx.colabs.filter(p => !p.antigo && !naOutra(p.id)).map(p => p.id);
+    S.salvo = S.novo ? "Ainda não salvo" : "Salvo";
+    S.view = "rdo"; render(); window.scrollTo(0, 0);
+  } catch (e) { console.error(e); toast(msgErro(e)); go("home"); }
+}
+
+/* ================= SALVAR ================= */
+let saveT;
+function agendarSalvar() { if (!podeEditar()) return; S.salvo = "Salvando…"; pintaSalvo(); clearTimeout(saveT); saveT = setTimeout(salvar, 900); }
+async function salvar() {
+  clearTimeout(saveT);
+  const r = S.rdo;
+  r.resumo = resumo(r);
+  const ids = new Set([...(r.previstoIds || []), ...Object.keys(r.presenca || {}).filter(k => r.presenca[k])]);
+  r.pessoas = Object.fromEntries(S.ctx.colabs.filter(p => ids.has(p.id)).map(p => [p.id, { nome: p.nome, funcao: p.funcao || "", empresa: p.empresa || "" }]));
+  r.equipInfo = Object.fromEntries(S.ctx.equips.filter(e => r.equipamentos[e.id]).map(e => [e.id, { codigo: e.codigo, descricao: e.descricao || "" }]));
+  r.atualizadoEm = serverTimestamp(); r.atualizadoPor = S.user.email.toLowerCase();
+  const p = setDoc(doc(db, "rdos", S.rdoId), r);
+  S.novo = false;
+  let ok = false;
+  p.then(() => { ok = true; if (S.rdoId && S.rdo === r) { S.salvo = "Salvo"; pintaSalvo(); } })
+   .catch(e => { console.error(e); S.salvo = "Erro ao salvar"; pintaSalvo("erro"); toast(msgErro(e)); });
+  // Sem sinal (ou sinal fraco): a gravação fica no aparelho e sobe sozinha depois
+  await Promise.race([p.catch(e => { throw e; }), new Promise(res => setTimeout(res, navigator.onLine ? 5000 : 50))]);
+  if (!ok) { S.salvo = "Salvo no aparelho"; pintaSalvo("off"); }
+}
+function pintaSalvo(cls = "") { const el = $("#salvo"); if (el) { el.textContent = S.salvo; el.className = "salvo " + cls; } }
+function podeEditar() {
+  const r = S.rdo; if (!r) return false;
+  if (!frentesPermitidas().includes(r.frente)) return false;
+  return stNorm(r.status) === "rascunho";
+}
+
+/* ================= TELA DO RDO ================= */
+function painel(id, titulo, corpo, resumoTxt) {
+  return `<details class="panel" id="p-${id}" data-panel="${id}" ${S.open.has(id) ? "open" : ""}><summary><span class="t">${titulo}</span><span class="s" id="sum-${id}">${resumoTxt}</span></summary><div class="body" id="sec-${id}">${corpo}</div></details>`;
+}
+function vRDO() {
+  const r = S.rdo, ed = podeEditar(), st = stNorm(r.status);
+  const acoes = [`<button class="btn sec" data-act="pdf">Gerar PDF</button>`];
+  if (st === "rascunho" && ed) acoes.push(`<button class="btn" data-act="fechar">Fechar e validar</button>`);
+  if (st === "fechado" && isPlan()) acoes.push(`<button class="btn sec" data-act="reabrir">Reabrir</button>`);
+  const msg = st === "fechado" ? `Validado por ${esc(r.fechadoPor || r.apontador || "")}. Pronto para envio.` : "";
+  return `<header class="rdo-top"><div class="in">
+      <button class="voltar" data-act="voltar" aria-label="Voltar">‹</button>
+      <div class="tit"><h1>${nomeFrente(r.frente)}</h1><p>${dataLonga(r.data)}</p></div>
+      <div class="st-box"><span class="chip st-${st}">${STATUS_CURTO[st]}</span><span class="salvo" id="salvo"></span></div>
+    </div></header>
+    <main class="wrap">
+    ${r.copiadoDe && !r.conferido && ed ? `<div class="aviso-copia">Efetivo e equipamentos copiados do RDO de ${dataCurta(r.copiadoDe)}. Confira quem realmente está na frente hoje antes de fechar.<label><input type="checkbox" data-bind="conferido"> Conferi efetivo e equipamentos</label></div>` : ""}
+    <fieldset ${ed ? "" : "disabled"}>
+      ${painel("lider", "Liderança", secLideranca(), resumoLider())}
+      ${painel("jornada", "Horários", secJornada(), resumoJornada())}
+      ${painel("clima", "Clima e praticabilidade", secClima(), resumoClima())}
+      ${painel("efetivo", "Efetivo previsto x real", secEfetivo(), resumoEfetivo())}
+      ${painel("equip", "Equipamentos", secEquip(), resumoEquip())}
+      ${painel("atividades", "Atividades programadas", secAtv(), resumoAtv())}
+      ${painel("np", "Atividades não programadas", secNP(), `${r.naoProgramadas.length || "nenhuma"}`)}
+      ${painel("ocorr", "Paralisações e ocorrências", secOcorr(), resumoOcorr())}
+      ${painel("fotos", "Fotos", secFotos(), `${S.ctx.fotos.length || "nenhuma"}`)}
+    </fieldset>
+    </main>
+    <footer class="acoes"><div class="in"><span class="msg">${msg}</span>${acoes.join("")}</div></footer>`;
+}
+
+// Liderança
+const naOutraFrente = id => !!(S.ctx.irmao?.pres.has(id) && !S.rdo.presenca[id]);
+function encarregadosDaFrente() { const r = S.rdo, prev = new Set(r.previstoIds || []); return S.ctx.colabs.filter(p => papel(p.funcao) === "enc" && (prev.has(p.id) || r.presenca[p.id])); }
+function secLideranca() {
+  const r = S.rdo, encs = encarregadosDaFrente();
+  return `<div class="grid2" style="margin-top:14px"><div class="field"><label for="l-apo">Apontador</label><input type="text" id="l-apo" data-bind="apontador" value="${esc(r.apontador)}"></div>
+    <div class="field"><label for="l-eng">Engenheiro responsável</label><input type="text" id="l-eng" data-bind="engenheiro" value="${esc(r.engenheiro)}"></div></div>
+    <span class="lbl">Encarregados e frentes de serviço</span>
+    <div class="encs">${encs.map(p => { const on = !!r.presenca[p.id]; return `<div class="enc ${on ? "on" : ""}" style="--c:${EMP_COR[p.empresa] || "#8A968E"}">
+      <button type="button" class="enc-top" data-act="pres" data-id="${p.id}" aria-pressed="${on}"><i></i><span><b>${esc(p.nome)}</b><small>${esc(p.empresa || "")}</small></span><em>${on ? "Presente" : "Ausente"}</em></button>
+      <input type="text" aria-label="Frente de serviço de ${esc(p.nome)}" placeholder="Frente de serviço (ex.: armação das paredes do poço)" data-enc="${p.id}" value="${esc(r.encarregados?.[p.id] || "")}" ${on ? "" : "disabled"}>
+    </div>`; }).join("") || `<p class="nota">Nenhum encarregado no cadastro desta frente. Cadastre com uma função que comece com "Encarregado".</p>`}</div>`;
+}
+function resumoLider() { const r = S.rdo; const n = encarregadosDaFrente().filter(p => r.presenca[p.id]).length; return `${primeiroNome(r.apontador) || "sem apontador"}, ${n} encarregado${n === 1 ? "" : "s"}`; }
+
+// Horários
+const CAMPOS_J = [["chegada", "Chegada ao canteiro"], ["inicio", "Início das atividades"], ["almocoInicio", "Início do almoço"], ["almocoFim", "Fim do almoço"], ["fim", "Fim das atividades"]];
+function secJornada() {
+  const j = S.rdo.jornada;
+  return `<div class="grid2" style="margin-top:14px">${CAMPOS_J.map(([k, l]) => `<div class="field"><label for="j-${k}">${l}</label><input type="time" id="j-${k}" data-bind="jornada.${k}" value="${esc(j[k])}"></div>`).join("")}</div>
+    <div class="field"><label for="j-tema">Tema do DDS / ordem unida</label><input type="text" id="j-tema" data-bind="jornada.ddsTema" value="${esc(j.ddsTema)}" placeholder="Ex.: movimentação de carga"></div>
+    <div class="regua" id="regua">${reguaSVG(j, S.rdo.paralisacoes, 380)}</div>${legendaRegua()}
+    <div class="horas num" id="horas">${blocoHoras()}</div>`;
+}
+function blocoHoras() {
+  const h = horas(S.rdo);
+  return `<div><b>${fmtH(h.prod)}</b>produção</div>
+    <div class="perda"><b>${fmtH(h.perdaInicio)}</b>da chegada ao início</div>
+    <div class="${h.almocoExc ? "perda" : ""}"><b>${h.almoco ? (h.almocoExc ? "+" + fmtH(h.almocoExc) : "dentro de 1h") : "–"}</b>almoço${h.almoco ? ` de ${fmtH(h.almoco)}` : ""}</div>
+    ${h.parado ? `<div class="perda"><b>${fmtH(h.parado)}</b>paralisações</div>` : ""}
+    <div class="perda total"><b>${fmtH(h.perdas)}</b>perda gerencial total</div>`;
+}
+function resumoJornada() { const j = S.rdo.jornada; const h = horas(S.rdo); return j.chegada || j.fim ? `${fmtH(h.prod)} produção, ${fmtH(h.perdas)} perda` : "preencher"; }
+function atualizaJornada() {
+  $("#regua") && ($("#regua").innerHTML = reguaSVG(S.rdo.jornada, S.rdo.paralisacoes, 380));
+  $("#horas") && ($("#horas").innerHTML = blocoHoras());
+  $("#sum-jornada") && ($("#sum-jornada").textContent = resumoJornada());
+  $("#sum-ocorr") && ($("#sum-ocorr").textContent = resumoOcorr());
+}
+
+// Clima
+function segRadio(path, val, opts) {
+  return `<div class="seg">${opts.map(o => `<label class="${val === o[0] ? "on" : ""}"><input type="radio" name="${path}" value="${o[0]}" data-bind="${path}" ${val === o[0] ? "checked" : ""}>${o[1]}</label>`).join("")}</div>`;
+}
+function secClima() {
+  const c = S.rdo.clima; const T = [["", "–"], ["Ensolarado", "Ensolarado"], ["Nublado", "Nublado"], ["Chuvoso", "Chuvoso"]];
+  const sel = (p, v) => `<select data-bind="${p}">${T.map(t => `<option value="${t[0]}" ${v === t[0] ? "selected" : ""}>${t[1]}</option>`).join("")}</select>`;
+  return `<div class="grid2" style="margin-top:14px"><div class="field"><span class="lbl">Tempo de manhã</span>${sel("clima.manha", c.manha)}</div><div class="field"><span class="lbl">Tempo à tarde</span>${sel("clima.tarde", c.tarde)}</div></div>
+    <div class="field"><span class="lbl">Choveu nas últimas 24 h?</span>${segRadio("clima.chuva", c.chuva, [["nao", "Não"], ["sim", "Sim"]])}</div>
+    ${c.chuva === "sim" ? `<div class="field"><span class="lbl">Quando choveu</span><div class="seg">${["Madrugada", "Manhã", "Tarde", "Noite"].map(p => `<label class="${c.periodos.includes(p) ? "on" : ""}"><input type="checkbox" data-multi="clima.periodos" value="${p}" ${c.periodos.includes(p) ? "checked" : ""}>${p}</label>`).join("")}</div></div>
+    <div class="field" style="max-width:200px"><label for="c-mm">Pluviometria (mm)</label><input type="number" inputmode="decimal" id="c-mm" data-bind="clima.mm" value="${esc(c.mm)}"></div>` : ""}
+    <div class="field"><span class="lbl">Praticabilidade do dia</span>${segRadio("clima.praticabilidade", c.praticabilidade, [["Praticável", "Praticável"], ["Parcialmente praticável", "Parcial"], ["Impraticável", "Impraticável"]])}</div>
+    ${c.praticabilidade && c.praticabilidade !== "Praticável" ? `<div class="field"><label for="c-mot">O que impediu o trabalho</label><input type="text" id="c-mot" data-bind="clima.motivo" value="${esc(c.motivo)}" placeholder="Ex.: estrada sem condição de tráfego após chuva da madrugada"></div>` : ""}`;
+}
+function resumoClima() { const c = S.rdo.clima; return c.praticabilidade ? `${c.praticabilidade}${c.chuva === "sim" ? ", com chuva" : ""}` : "preencher"; }
+
+// Efetivo
+function secEfetivo() {
+  const c = S.ctx;
+  return `<div class="ef-top"><input type="text" id="busca" placeholder="Buscar nome ou função" value="${esc(S.busca)}" autocomplete="off">
+      <button class="lnk" data-act="copiar" type="button">Copiar do último RDO</button></div>
+    <div id="lista-ef">${listaEfetivo()}</div>
+    ${c.colabs.length ? "" : `<p class="nota">Nenhuma pessoa cadastrada nesta frente. Cadastre abaixo ou peça ao planejamento para carregar a base em Cadastros.</p>`}
+    <details class="addbox"><summary>Adicionar pessoa ao cadastro</summary>
+      <div class="grid3"><div class="field"><label for="np-nome">Nome</label><input type="text" id="np-nome"></div>
+      <div class="field"><label for="np-fun">Função</label><input type="text" id="np-fun" list="dl-funcoes"></div>
+      <div class="field"><label for="np-emp">Empresa</label><select id="np-emp">${EMPRESAS.map(e => `<option>${e}</option>`).join("")}</select></div></div>
+      <button class="btn sec" data-act="add-pessoa" type="button" style="margin-bottom:12px">Adicionar e marcar presente</button>
+    </details><datalist id="dl-funcoes">${FUNCOES.map(f => `<option value="${f}">`).join("")}</datalist>`;
+}
+function listaEfetivo() {
+  const r = S.rdo, q = norm(S.busca), prev = new Set(r.previstoIds || []);
+  const ativos = S.ctx.colabs.filter(p => prev.has(p.id) || r.presenca[p.id] || naOutraFrente(p.id));
+  const emps = [...EMPRESAS, ...new Set(ativos.map(p => p.empresa).filter(e => !EMPRESAS.includes(e)))];
+  return emps.map(emp => {
+    const todos = ativos.filter(p => (p.empresa || "Outra") === emp);
+    if (!todos.length) return "";
+    const vis = q ? todos.filter(p => norm(p.nome + " " + p.funcao).includes(q)) : todos;
+    if (!vis.length) return "";
+    const nPrev = todos.filter(p => prev.has(p.id)).length, pres = todos.filter(p => r.presenca[p.id]).length, outra = todos.filter(p => naOutraFrente(p.id)).length;
+    const dif = pres - nPrev;
+    return `<div class="grp"><div class="grp-h"><b>${esc(emp)}</b><span class="num">real ${pres} de ${nPrev} previstos${dif ? ` <em class="${dif < 0 ? "neg" : "pos"}">(${dif > 0 ? "+" : ""}${dif})</em>` : ""}${outra ? `, ${outra} na outra frente` : ""}</span><button class="lnk" type="button" data-act="pres-todos" data-emp="${esc(emp)}">${pres === todos.length ? "Desmarcar todos" : "Marcar todos"}</button></div>
+      <div class="pessoas">${vis.map(p => naOutraFrente(p.id)
+        ? `<button type="button" class="pessoa outra" data-act="pres" data-id="${p.id}"><i></i><span>${esc(p.nome)}</span><small>${esc(p.funcao)}, marcado na ${nomeFrente(S.ctx.irmao.frente)}</small></button>`
+        : `<button type="button" class="pessoa ${r.presenca[p.id] ? "on" : ""}" data-act="pres" data-id="${p.id}" aria-pressed="${!!r.presenca[p.id]}"><i></i><span>${esc(p.nome)}</span><small>${esc(p.funcao)}${prev.has(p.id) ? "" : ", fora do previsto"}</small></button>`).join("")}</div></div>`;
+  }).join("");
+}
+function resumoEfetivo() { const ef = efetivoResumo(S.rdo); return `${ef.real} de ${ef.previsto} previstos`; }
+function atualizaEfetivo() {
+  $("#lista-ef") && ($("#lista-ef").innerHTML = listaEfetivo());
+  $("#sum-efetivo") && ($("#sum-efetivo").textContent = resumoEfetivo());
+  $("#sec-lider") && ($("#sec-lider").innerHTML = secLideranca());
+  $("#sum-lider") && ($("#sum-lider").textContent = resumoLider());
+}
+
+// Equipamentos
+function secEquip() {
+  const r = S.rdo;
+  return `${S.ctx.equips.filter(e => e.ativo !== false || r.equipamentos[e.id]).map(e => {
+    const st = r.equipamentos[e.id]?.status || "fora";
+    return `<div class="eq"><div class="id"><b>${esc(e.codigo)}</b><small>${esc(e.descricao || "")}</small></div>
+      <div class="seg sm">${Object.entries(EQ_ST).map(([k, l]) => `<button type="button" data-act="eq" data-id="${e.id}" data-st="${k}" class="${st === k ? "on st-" + k : ""}">${l}</button>`).join("")}</div></div>`;
+  }).join("") || `<p class="nota" style="margin-top:14px">Nenhum equipamento cadastrado nesta frente.</p>`}
+    <details class="addbox"><summary>Adicionar equipamento</summary>
+      <div class="grid2"><div class="field"><label for="ne-cod">Código</label><input type="text" id="ne-cod" placeholder="EH-100"></div>
+      <div class="field"><label for="ne-desc">Descrição</label><input type="text" id="ne-desc" placeholder="Escavadeira hidráulica"></div></div>
+      <button class="btn sec" type="button" data-act="add-equip" style="margin-bottom:12px">Adicionar como operante</button>
+    </details>`;
+}
+function resumoEquip() {
+  const v = Object.values(S.rdo.equipamentos || {}).map(e => e.status);
+  const n = k => v.filter(s => s === k).length;
+  const t = [n("op") && `${n("op")} operantes`, n("semop") && `${n("semop")} sem operador`, n("man") && `${n("man")} em manutenção`].filter(Boolean);
+  return t.join(", ") || "nenhum na obra";
+}
+
+// Atividades
+function cardAtv(a) {
+  const st = statusAtv(a);
+  const pct = a.previsto > 0 && a.realizado != null ? `${Math.round(a.realizado / a.previsto * 100)}%` : "";
+  return `<article class="atv ${st}" id="atv-${a.id}">
+    <header><span>${esc(a.subarea || a.area)}</span>${a.idCronog ? `<span class="cod">${esc(a.idCronog)}</span>` : ""}</header>
+    <h4>${esc(a.atividade)}</h4>
+    <div class="qtd"><div class="prev"><small>Previsto hoje</small><b class="num">${a.previsto > 0 ? fmtQ(a.previsto, a.un) : "Adiantada"}</b></div>
+      <label><small>Realizado</small><span class="inp"><input type="number" inputmode="decimal" step="any" min="0" data-atv="${a.id}" data-f="realizado" value="${dispVal(a.realizado, a.un)}"><em>${a.un === "%" ? "%" : esc(a.un)}</em></span></label>
+      <div class="pct num" id="pct-${a.id}">${pct}</div></div>
+    <div class="rapidos">${a.previsto > 0 ? `<button type="button" class="lnk" data-act="atv-tudo" data-id="${a.id}">Fez o previsto</button>` : ""}<button type="button" class="lnk" data-act="atv-nada" data-id="${a.id}">Não executou</button>${a.origem === "semana" ? `<button type="button" class="lnk perigo" data-act="atv-rem" data-id="${a.id}">Remover</button>` : ""}</div>
+    <div class="causa"><label for="cz-${a.id}">Por que ficou abaixo do previsto?</label><select id="cz-${a.id}" data-atv="${a.id}" data-f="causa"><option value="">Escolha a causa</option>${CAUSAS.map(c => `<option ${a.causa === c ? "selected" : ""}>${c}</option>`).join("")}</select></div>
+    <input type="text" class="obs" placeholder="Observação (opcional)" data-atv="${a.id}" data-f="obs" value="${esc(a.obs)}">
+  </article>`;
+}
+function secAtv() {
+  const c = S.ctx, r = S.rdo;
+  const lista = atvLista(r);
+  if (!c.prog && !lista.length) return `<p class="nota" style="margin-top:14px">Nenhuma programação importada cobre ${dataCurta(r.data)}. O planejamento importa a programação semanal na aba Programação. Enquanto isso, lance o que foi feito em Atividades não programadas.</p>`;
+  let html = `<p class="prog-info">Programação: ${esc(r.progNome || c.prog?.nome || "")}</p>`;
+  if (!lista.length) html += `<p class="nota">Nada programado para esta frente neste dia.</p>`;
+  let areaAtual = "";
+  lista.forEach(a => { if (a.area !== areaAtual) { areaAtual = a.area; html += `<div class="area-h">${esc(a.area)}</div>`; } html += cardAtv(a); });
+  const outras = (c.atvSemana || []).filter(a => !r.atividades[a.id]);
+  if (outras.length) {
+    html += `<details class="addbox"><summary>Lançar atividade programada para outro dia</summary>
+      <div class="field"><select id="sel-adiantar">${outras.map(a => `<option value="${a.id}">${esc(a.area)}, ${esc(a.subarea)}: ${esc(a.atividade)} (${Object.keys(a.prev || {}).map(dataCurta).join(", ")})</option>`).join("")}</select></div>
+      <button class="btn sec" type="button" data-act="adiantar" style="margin-bottom:12px">Lançar no RDO de hoje</button></details>`;
+  }
+  return html;
+}
+function resumoAtv() { const rs = resumo(S.rdo); return rs.atvProg ? `PPC do dia ${fmtPct(rs.ppc)}` : "nenhuma hoje"; }
+function atualizaAtv(id) {
+  const a = { id, ...S.rdo.atividades[id] }, card = $("#atv-" + id);
+  if (card) { card.className = "atv " + statusAtv(a); $("#pct-" + id).textContent = a.previsto > 0 && a.realizado != null ? `${Math.round(a.realizado / a.previsto * 100)}%` : ""; }
+  $("#sum-atividades").textContent = resumoAtv();
+}
+
+// Não programadas
+function secNP() {
+  const l = S.rdo.naoProgramadas;
+  return `<div style="margin-top:14px">${l.map((n, i) => `<div class="linha-np"><input class="desc" type="text" placeholder="O que foi feito" data-np="${i}" data-f="descricao" value="${esc(n.descricao)}">
+    <input type="number" inputmode="decimal" placeholder="Qtd." data-np="${i}" data-f="qtd" value="${esc(n.qtd)}">
+    <input type="text" placeholder="Un." data-np="${i}" data-f="un" value="${esc(n.un)}">
+    <button type="button" class="lnk perigo" data-act="np-del" data-i="${i}">Remover</button></div>`).join("")}
+    <button class="btn sec" type="button" data-act="np-add">Adicionar atividade</button>
+    <p class="nota">Tudo o que não estava na programação da semana. Entra no PDF separado e não conta na aderência.</p></div>`;
+}
+
+// Ocorrências
+function secOcorr() {
+  const r = S.rdo;
+  return `<div style="margin-top:14px"><span class="lbl">Paralisações durante a jornada</span>
+    ${r.paralisacoes.map((p, i) => `<div class="linha-par"><input type="time" aria-label="Início" data-par="${i}" data-f="inicio" value="${esc(p.inicio)}"><input type="time" aria-label="Fim" data-par="${i}" data-f="fim" value="${esc(p.fim)}">
+      <select data-par="${i}" data-f="motivo">${MOTIVOS_PAR.map(m => `<option ${p.motivo === m ? "selected" : ""}>${m}</option>`).join("")}</select>
+      <button type="button" class="lnk perigo" data-act="par-del" data-i="${i}">Remover</button></div>`).join("")}
+    <button class="btn sec" type="button" data-act="par-add">Adicionar paralisação</button></div>
+    <div class="field" style="margin-top:16px"><label for="o-oc">Ocorrências e observações</label><textarea id="o-oc" data-bind="ocorrencias" placeholder="Fatos relevantes do dia: visitas, incidentes, entregas, interferências">${esc(r.ocorrencias)}</textarea></div>
+    <div class="field"><label for="o-re">Restrições para os próximos dias</label><textarea id="o-re" data-bind="restricoes" placeholder="Ex.: falta de flange, aguardando plano de rigging">${esc(r.restricoes)}</textarea></div>`;
+}
+function resumoOcorr() { const p = S.rdo.paralisacoes; const m = p.reduce((a, x) => a + dur(x.inicio, x.fim), 0); return p.length ? `${fmtH(m)} parado` : (S.rdo.ocorrencias ? "com ocorrências" : "nenhuma"); }
+
+// Fotos
+function secFotos() {
+  return `<label class="btn sec upl">Adicionar fotos<input type="file" id="foto-in" accept="image/*" multiple></label>
+    <div class="fotos">${S.ctx.fotos.map(f => `<div class="foto"><img src="${f.dataUrl}" alt="${esc(f.legenda || "Foto do RDO")}"><input type="text" placeholder="Legenda" data-foto="${f.id}" value="${esc(f.legenda)}"><button type="button" class="lnk perigo" data-act="foto-del" data-id="${f.id}">Remover</button></div>`).join("")}</div>`;
+}
+function comprimir(file, max = 1280, q = 0.6) {
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.onload = () => {
+      const s = Math.min(1, max / Math.max(img.width, img.height));
+      const cv = document.createElement("canvas"); cv.width = Math.round(img.width * s); cv.height = Math.round(img.height * s);
+      cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height); URL.revokeObjectURL(img.src);
+      let out = cv.toDataURL("image/jpeg", q);
+      if (out.length > 850000) out = cv.toDataURL("image/jpeg", 0.4);
+      res(out);
+    };
+    img.onerror = () => rej(new Error("Não foi possível ler a imagem"));
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+/* ================= VALIDAÇÃO / FLUXO ================= */
+function validar() {
+  const r = S.rdo, j = r.jornada, e = [];
+  if (!r.apontador) e.push("Informe o apontador (Liderança).");
+  if (!r.engenheiro) e.push("Informe o engenheiro responsável (Liderança).");
+  if (!r.clima.praticabilidade) e.push("Informe a praticabilidade do dia (Clima e praticabilidade).");
+  if (!j.chegada) e.push("Informe o horário de chegada ao canteiro.");
+  if (!j.fim) e.push("Informe o fim das atividades.");
+  if (r.clima.praticabilidade !== "Impraticável" && !j.inicio) e.push("Informe o início das atividades.");
+  if (!!j.almocoInicio !== !!j.almocoFim) e.push("Preencha início e fim do almoço.");
+  if (r.clima.praticabilidade && r.clima.praticabilidade !== "Praticável" && !r.clima.motivo) e.push("Descreva o que impediu o trabalho (praticabilidade).");
+  if (!efetivoTotal(r)) e.push("Marque o efetivo presente.");
+  if (r.copiadoDe && !r.conferido) e.push("Confirme que conferiu o efetivo e os equipamentos copiados.");
+  atvLista(r).forEach(a => {
+    if (a.origem === "hoje" && a.realizado == null) e.push(`Lance o realizado de "${a.atividade}".`);
+    else if (["abaixo", "zero"].includes(statusAtv(a)) && a.previsto > 0 && !a.causa) e.push(`Escolha a causa de "${a.atividade}" ter ficado abaixo do previsto.`);
+  });
+  r.paralisacoes.forEach((p, i) => { if (!dur(p.inicio, p.fim)) e.push(`Paralisação ${i + 1}: confira início e fim.`); });
+  return e;
+}
+
+/* ================= AÇÕES ================= */
+const ACT = {
+  entrar: () => entrar(),
+  sair: async () => { await signOut(auth); S.me = null; },
+  nav: b => { if (b.dataset.v === "cad") S.cadGrupo = S.cadGrupo || grupoDe(S.frente || "EEAB01"); go(b.dataset.v); },
+  "set-frente": b => { S.frente = b.dataset.f; go("home"); },
+  abrir: b => abrirRDO(S.frente, b.dataset.d || S.data),
+  voltar: async () => { if (podeEditar() && S.salvo === "Salvando…") { try { await salvar(); } catch (e) { return; } } go("home"); },
+  pres: b => { const id = b.dataset.id; if (naOutraFrente(id)) return toast(`Já marcado no RDO da ${nomeFrente(S.ctx.irmao.frente)} de hoje.`); S.rdo.presenca[id] = !S.rdo.presenca[id]; if (!S.rdo.presenca[id]) delete S.rdo.presenca[id]; atualizaEfetivo(); agendarSalvar(); },
+  "pres-todos": b => {
+    const emp = b.dataset.emp, prev = new Set(S.rdo.previstoIds || []); const lst = S.ctx.colabs.filter(p => (p.empresa || "Outra") === emp && (prev.has(p.id) || S.rdo.presenca[p.id]) && !naOutraFrente(p.id));
+    const todos = lst.every(p => S.rdo.presenca[p.id]);
+    lst.forEach(p => { if (todos) delete S.rdo.presenca[p.id]; else S.rdo.presenca[p.id] = true; });
+    atualizaEfetivo(); agendarSalvar();
+  },
+  copiar: async () => {
+    try {
+      const f = S.rdo.frente;
+      const qs = await getDocs(query(collection(db, "rdos"), where(documentId(), ">=", `${f}_`), where(documentId(), "<", `${f}_${S.rdo.data}`), orderBy(documentId(), "desc"), limit(1)));
+      if (qs.empty) return toast("Não há RDO anterior desta frente.");
+      const ant = qs.docs[0].data();
+      S.rdo.presenca = clone(ant.presenca || {}); S.rdo.equipamentos = clone(ant.equipamentos || {});
+      S.rdo.copiadoDe = ant.data; S.rdo.conferido = false;
+      render(); agendarSalvar(); toast(`Copiado do RDO de ${dataCurta(ant.data)}. Confira antes de enviar.`);
+    } catch (e) { toast(msgErro(e)); }
+  },
+  "add-pessoa": async () => {
+    const nome = $("#np-nome").value.trim(), funcao = $("#np-fun").value.trim(), empresa = $("#np-emp").value;
+    if (!nome || !funcao) return toast("Preencha nome e função.");
+    try {
+      const ref = await addDoc(collection(db, "colaboradores"), { nome, funcao, empresa, frente: grupoDe(S.rdo.frente), ativo: true, criadoPor: S.user.email });
+      S.ctx.colabs.push({ id: ref.id, nome, funcao, empresa, frente: grupoDe(S.rdo.frente), ativo: true });
+      S.ctx.colabs.sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+      S.rdo.presenca[ref.id] = true; $("#np-nome").value = ""; $("#np-fun").value = "";
+      atualizaEfetivo(); agendarSalvar();
+    } catch (e) { toast(msgErro(e)); }
+  },
+  eq: b => { S.rdo.equipamentos[b.dataset.id] = { status: b.dataset.st }; if (b.dataset.st === "fora") delete S.rdo.equipamentos[b.dataset.id]; $("#sec-equip").innerHTML = secEquip(); $("#sum-equip").textContent = resumoEquip(); agendarSalvar(); },
+  "add-equip": async () => {
+    const codigo = normCodigo($("#ne-cod").value), descricao = $("#ne-desc").value.trim();
+    if (!codigo) return toast("Informe o código do equipamento.");
+    try {
+      const ref = await addDoc(collection(db, "equipamentos"), { codigo, descricao, frente: grupoDe(S.rdo.frente), ativo: true });
+      S.ctx.equips.push({ id: ref.id, codigo, descricao, frente: grupoDe(S.rdo.frente), ativo: true });
+      S.rdo.equipamentos[ref.id] = { status: "op" };
+      $("#sec-equip").innerHTML = secEquip(); $("#sum-equip").textContent = resumoEquip(); agendarSalvar();
+    } catch (e) { toast(msgErro(e)); }
+  },
+  "atv-tudo": b => { const a = S.rdo.atividades[b.dataset.id]; a.realizado = a.previsto; a.causa = ""; syncAtvInput(b.dataset.id); },
+  "atv-nada": b => { const a = S.rdo.atividades[b.dataset.id]; a.realizado = 0; syncAtvInput(b.dataset.id); },
+  "atv-rem": b => { delete S.rdo.atividades[b.dataset.id]; $("#sec-atividades").innerHTML = secAtv(); $("#sum-atividades").textContent = resumoAtv(); agendarSalvar(); },
+  adiantar: () => {
+    const id = $("#sel-adiantar").value; const a = S.ctx.atvSemana.find(x => x.id === id); if (!a) return;
+    S.rdo.atividades[id] = { area: a.area, subarea: a.subarea, item: a.item, idCronog: a.idCronog, atividade: a.atividade, un: a.un, previsto: 0, realizado: null, causa: "", obs: `Programada para ${Object.keys(a.prev || {}).map(dataCurta).join(", ")}`, origem: "semana" };
+    $("#sec-atividades").innerHTML = secAtv(); agendarSalvar();
+  },
+  "np-add": () => { S.rdo.naoProgramadas.push({ descricao: "", qtd: "", un: "", obs: "" }); refazSec("np", secNP, () => `${S.rdo.naoProgramadas.length}`); },
+  "np-del": b => { S.rdo.naoProgramadas.splice(+b.dataset.i, 1); refazSec("np", secNP, () => `${S.rdo.naoProgramadas.length || "nenhuma"}`); agendarSalvar(); },
+  "par-add": () => { S.rdo.paralisacoes.push({ inicio: "", fim: "", motivo: MOTIVOS_PAR[0] }); refazSec("ocorr", secOcorr, resumoOcorr); },
+  "par-del": b => { S.rdo.paralisacoes.splice(+b.dataset.i, 1); refazSec("ocorr", secOcorr, resumoOcorr); atualizaJornada(); agendarSalvar(); },
+  "foto-del": async b => {
+    if (await dialogo("Remover foto?", "<p>A foto sai do RDO e do PDF.</p>", [{ t: "Cancelar", v: "n", sec: true }, { t: "Remover", v: "s" }]) !== "s") return;
+    try { await deleteDoc(doc(db, "fotos", b.dataset.id)); S.ctx.fotos = S.ctx.fotos.filter(f => f.id !== b.dataset.id); refazSec("fotos", secFotos, () => `${S.ctx.fotos.length || "nenhuma"}`); } catch (e) { toast(msgErro(e)); }
+  },
+  fechar: async () => {
+    const e = validar();
+    if (e.length) return dialogo("Faltam alguns itens", `<ul>${e.slice(0, 12).map(x => `<li>${esc(x)}</li>`).join("")}</ul>${e.length > 12 ? `<p>E mais ${e.length - 12}.</p>` : ""}`);
+    if (await dialogo("Fechar o RDO?", "<p>O RDO fica validado e pronto para envio. Depois de fechado, só o planejamento consegue reabrir.</p>", [{ t: "Voltar", v: "n", sec: true }, { t: "Fechar e validar", v: "s" }]) !== "s") return;
+    S.rdo.status = "fechado"; S.rdo.fechadoEm = new Date().toISOString(); S.rdo.fechadoPor = S.rdo.apontador || S.me?.nome || S.user.email;
+    try {
+      await salvar(); render();
+      if (await dialogo("RDO validado", "<p>Quer gerar o PDF agora?</p>", [{ t: "Depois", v: "n", sec: true }, { t: "Gerar PDF", v: "s" }]) === "s") gerarPDF();
+    } catch (err) { S.rdo.status = "rascunho"; render(); }
+  },
+  reabrir: async () => { S.rdo.status = "rascunho"; try { await salvar(); toast("RDO reaberto."); } catch (e) { } render(); },
+  pdf: () => gerarPDF(),
+  // Cadastros
+  "cad-grupo": b => { S.cadGrupo = b.dataset.g; S.impCad = null; go("cad"); },
+  "cad-del": b => cadExcluir(b.dataset.id),
+  "cad-limpar": () => limparEfetivo(),
+  "cad-tab": b => { S.cadTab = b.dataset.t; render(); },
+  "cad-colar": () => cadColar(),
+  // Programação
+  "prog-conf": () => progConfirmar(),
+  "prog-cancel": () => { S.imp = null; render(); },
+  "prog-del": b => progExcluir(b.dataset.id),
+  "baixar-prog": () => baixarProgramacao(S.data),
+  "cadimp-conf": () => cadImpAplicar(),
+  "cadimp-cancel": () => { S.impCad = null; render(); },
+  // Usuários
+  "user-add": () => userAdd(),
+  "user-del": b => userDel(b.dataset.id)
+};
+function refazSec(id, fn, sumFn) { $("#sec-" + id).innerHTML = fn(); $("#sum-" + id).textContent = sumFn(); }
+function syncAtvInput(id) { const a = S.rdo.atividades[id]; const inp = document.querySelector(`[data-atv="${id}"][data-f="realizado"]`); if (inp) inp.value = dispVal(a.realizado, a.un); atualizaAtv(id); agendarSalvar(); }
+const normCodigo = s => String(s || "").toUpperCase().replace(/\s*-\s*/g, "-").replace(/\s+/g, "").trim();
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-act]");
+  if (!b) return;
+  if (b.closest("fieldset:disabled") && !["pdf", "voltar"].includes(b.dataset.act)) return;
+  const f = ACT[b.dataset.act]; if (f) { e.preventDefault(); f(b, e); }
+});
+document.addEventListener("toggle", e => { const p = e.target.dataset?.panel; if (p) { e.target.open ? S.open.add(p) : S.open.delete(p); } }, true);
+
+function setPath(o, path, v) { const k = path.split("."); let x = o; for (let i = 0; i < k.length - 1; i++) x = x[k[i]]; x[k.at(-1)] = v; }
+function onCampo(e) {
+  const el = e.target;
+  if (el.id === "h-data") { S.data = el.value || hoje(); if (e.type === "change") { if (isPlan()) go("home"); else render(); } return; }
+  if (el.id === "busca") { S.busca = el.value; $("#lista-ef").innerHTML = listaEfetivo(); return; }
+  if (el.id === "cadimp-file" && e.type === "change") return cadImpLer(el.files[0]);
+  if (S.impCad && e.type === "change" && el.id === "ci-emp") { S.impCad.empresaPadrao = el.value; return render(); }
+  if (S.view === "cad" && el.dataset.cad) return cadCampo(el, e.type);
+  if (S.view === "users" && el.dataset.user) return userCampo(el, e.type);
+  if (el.id === "prog-file" && e.type === "change") return progLer(el.files[0]);
+  if (el.id === "prog-nome") { if (S.imp) S.imp.nome = el.value; return; }
+  if (S.view !== "rdo" || !podeEditar()) return;
+  if (el.id === "foto-in" && e.type === "change") return addFotos(el.files);
+  if (el.dataset.bind) {
+    const v = el.type === "checkbox" ? el.checked : el.value;
+    if (el.type === "radio" && !el.checked) return;
+    setPath(S.rdo, el.dataset.bind, v);
+    const p = el.dataset.bind;
+    if (p.startsWith("jornada")) atualizaJornada();
+    if (p.startsWith("clima")) { if (el.type === "radio" || el.tagName === "SELECT") refazSec("clima", secClima, resumoClima); else $("#sum-clima").textContent = resumoClima(); }
+    if (p === "conferido" && v) { $(".aviso-copia")?.remove(); }
+    if (p === "ocorrencias") $("#sum-ocorr").textContent = resumoOcorr();
+    if (p === "apontador" || p === "engenheiro") $("#sum-lider").textContent = resumoLider();
+    return agendarSalvar();
+  }
+  if (el.dataset.multi && e.type === "change") {
+    const arr = el.dataset.multi.split(".").reduce((o, k) => o[k], S.rdo);
+    const i = arr.indexOf(el.value); if (el.checked && i < 0) arr.push(el.value); if (!el.checked && i >= 0) arr.splice(i, 1);
+    refazSec("clima", secClima, resumoClima); return agendarSalvar();
+  }
+  if (el.dataset.atv) {
+    const a = S.rdo.atividades[el.dataset.atv]; const f = el.dataset.f;
+    a[f] = f === "realizado" ? readVal(el.value, a.un) : el.value;
+    if (f === "realizado") atualizaAtv(el.dataset.atv);
+    return agendarSalvar();
+  }
+  if (el.dataset.enc) { S.rdo.encarregados[el.dataset.enc] = el.value; return agendarSalvar(); }
+  if (el.dataset.np) { S.rdo.naoProgramadas[+el.dataset.np][el.dataset.f] = el.value; $("#sum-np").textContent = `${S.rdo.naoProgramadas.length}`; return agendarSalvar(); }
+  if (el.dataset.par) { S.rdo.paralisacoes[+el.dataset.par][el.dataset.f] = el.value; atualizaJornada(); return agendarSalvar(); }
+  if (el.dataset.foto && e.type === "change") { const f = S.ctx.fotos.find(x => x.id === el.dataset.foto); if (f) { f.legenda = el.value; updateDoc(doc(db, "fotos", f.id), { legenda: el.value }).catch(err => toast(msgErro(err))); } }
+}
+document.addEventListener("input", onCampo);
+document.addEventListener("change", onCampo);
+
+async function addFotos(files) {
+  for (const file of files) {
+    try {
+      toast("Processando foto…");
+      const dataUrl = await comprimir(file);
+      const d = { rdoId: S.rdoId, frente: S.rdo.frente, data: S.rdo.data, dataUrl, legenda: "", ordem: Date.now(), criadoPor: S.user.email };
+      const ref = await addDoc(collection(db, "fotos"), d);
+      S.ctx.fotos.push({ id: ref.id, ...d });
+    } catch (e) { toast(msgErro(e)); }
+  }
+  refazSec("fotos", secFotos, () => `${S.ctx.fotos.length || "nenhuma"}`);
+  if (S.novo) agendarSalvar();
+}
+
+/* ================= PDF ================= */
+function pdfHTML() {
+  const r = S.rdo, c = S.ctx, rs = resumo(r), h = horas(r), j = r.jornada, st = stNorm(r.status);
+  const presentes = c.colabs.filter(p => r.presenca[p.id]);
+  const lid = lideranca(presentes);
+  const encs = presentes.filter(p => papel(p.funcao) === "enc");
+  const prevSet = new Set(r.previstoIds || []);
+  const lista = atvLista(r);
+  const prog = lista.filter(a => a.previsto > 0), adiant = lista.filter(a => !(a.previsto > 0));
+  const corSt = { ok: "#39B54A", abaixo: "#C98A00", zero: "#C0392B", pend: "#AAB7AE" };
+  const linhaAtv = a => {
+    const sa = statusAtv(a); const p = a.previsto > 0 && a.realizado != null ? a.realizado / a.previsto : null;
+    return `<tr class="avoid"><td><span class="sub">${esc(a.subarea)}${a.idCronog ? ` / ${esc(a.idCronog)}` : ""}</span>${esc(a.atividade)}</td>
+      <td class="n">${a.previsto > 0 ? fmtQ(a.previsto, a.un) : "–"}</td><td class="n">${fmtQ(a.realizado, a.un)}</td>
+      <td><span class="pc" style="color:${corSt[sa]}">${p != null ? Math.round(p * 100) + "%" : sa === "ok" ? "extra" : "–"}</span><div class="pbar"><i style="width:${Math.min(100, (p ?? (sa === "ok" ? 1 : 0)) * 100)}%;background:${corSt[sa]}"></i></div></td>
+      <td>${a.causa ? `<div class="causa-t">${esc(a.causa)}</div>` : ""}${a.obs ? `<div class="obs-t">${esc(a.obs)}</div>` : ""}</td></tr>`;
+  };
+  let corpoAtv = ""; prog.forEach(a => corpoAtv += linhaAtv(a));
+  if (adiant.length) { corpoAtv += `<tr><td colspan="5" class="ar">Programadas para outros dias, executadas hoje</td></tr>`; adiant.forEach(a => corpoAtv += linhaAtv(a)); }
+
+  // efetivo previsto x real
+  const envolvidos = c.colabs.filter(p => prevSet.has(p.id) || r.presenca[p.id]);
+  const emps = [...new Set(envolvidos.map(p => p.empresa || "Outra"))].sort((a, b) => EMPRESAS.indexOf(a) - EMPRESAS.indexOf(b));
+  let tPrev = 0, tReal = 0;
+  const linhasEmp = emps.map(emp => {
+    const ps = envolvidos.filter(p => (p.empresa || "Outra") === emp);
+    const nP = ps.filter(p => prevSet.has(p.id)).length, nR = ps.filter(p => r.presenca[p.id]).length; tPrev += nP; tReal += nR;
+    const d = nR - nP;
+    return `<tr><td><b style="color:${EMP_COR[emp] || "#8A968E"}">●</b> ${esc(emp)}</td><td class="n">${nP}</td><td class="n">${nR}</td><td class="n ${d < 0 ? "neg" : d > 0 ? "pos" : ""}">${d > 0 ? "+" : ""}${d}</td></tr>`;
+  }).join("");
+  const dT = tReal - tPrev;
+  const ausentes = c.colabs.filter(p => prevSet.has(p.id) && !r.presenca[p.id]);
+  const extras = presentes.filter(p => !prevSet.has(p.id));
+  const blocoEmp = emps.map(emp => {
+    const ps = presentes.filter(p => (p.empresa || "Outra") === emp); if (!ps.length) return "";
+    const fx = {}; ps.forEach(p => fx[p.funcao] = (fx[p.funcao] || 0) + 1);
+    return `<div class="emp avoid" style="border-left-color:${EMP_COR[emp] || "#8A968E"}"><b>${esc(emp)}: ${ps.length}</b>
+      <div class="fx">${Object.entries(fx).sort((a, b) => b[1] - a[1]).map(([f, n]) => `${esc(f)} ${n}`).join(", ")}</div>
+      <div class="nm">${ps.map(p => esc(p.nome)).join(", ")}</div></div>`;
+  }).join("");
+
+  const eqPor = sq => c.equips.filter(e => r.equipamentos[e.id]?.status === sq);
+  const eqHTML = ["op", "semop", "man"].map(sq => eqPor(sq).map(e => `<span style="background:${EQ_COR[sq]}">${esc(e.codigo)}${e.descricao ? ` ${esc(e.descricao)}` : ""}</span>`).join("")).join("");
+  const clima = r.clima;
+  const chuvaTxt = clima.chuva === "sim" ? `Choveu${clima.periodos.length ? " (" + clima.periodos.join(", ").toLowerCase() + ")" : ""}${clima.mm ? `, ${clima.mm} mm` : ""}` : "Sem chuva";
+  const pratCls = clima.praticabilidade === "Impraticável" ? "ruim" : clima.praticabilidade === "Parcialmente praticável" ? "alerta" : "";
+  const ppcCls = rs.ppc == null ? "" : rs.ppc < 0.6 ? "ruim" : rs.ppc < 0.9 ? "alerta" : "";
+  const efCls = rs.previsto && rs.efetivo / rs.previsto < 0.85 ? "alerta" : "";
+
+  return `<div id="pdf-doc">
+  <div class="p-head"><div class="p-brand"><span>CONSTRUTORA</span><b>Vale Verde</b><em>Rio Tanque</em></div>
+    <div class="p-tit"><h1>Relatório diário de obra</h1><p>${nomeFrente(r.frente)}, ${dataLonga(r.data)} de ${isoToDate(r.data).getFullYear()}</p><span class="p-st ${st === "fechado" ? "" : "rascunho"}">${st === "fechado" ? "VALIDADO" : "EM PREENCHIMENTO"}</span></div></div>
+  <div class="p-body">
+    <div class="p-lid"><div><span>Apontador</span><b>${esc(r.apontador || "–")}</b></div><div><span>Engenheiro responsável</span><b>${esc(r.engenheiro || "–")}</b></div><div><span>Supervisor</span><b>${esc(lid.sup.join(", ") || "–")}</b></div></div>
+    ${encs.length ? `<div class="p-encs">${encs.map(p => `<div class="p-enc" style="border-left-color:${EMP_COR[p.empresa] || "#8A968E"}"><b>${esc(p.nome)}</b><span>Encarregado, ${esc(p.empresa || "")}</span><p>${esc(r.encarregados?.[p.id] || "Frente de serviço não informada")}</p></div>`).join("")}</div>` : ""}
+    <div class="p-kpis">
+      <div class="p-kpi ${efCls}"><b>${rs.efetivo}/${rs.previsto || "–"}</b><span>efetivo real / previsto${rs.previsto ? ` (${Math.round(rs.efetivo / rs.previsto * 100)}%)` : ""}</span></div>
+      <div class="p-kpi ${h.perdas > 90 ? "alerta" : ""}"><b>${fmtH(h.prod)}</b><span>de produção, ${fmtH(h.perdas)} de perda gerencial</span></div>
+      <div class="p-kpi ${ppcCls}"><b>${fmtPct(rs.ppc)}</b><span>PPC do dia (ponderado), ${rs.atvOk} de ${rs.atvProg} atividades 100%</span></div>
+      <div class="p-kpi ${pratCls}"><b style="font-size:14px;padding:6px 0 3px">${esc(clima.praticabilidade || "–")}</b><span>${chuvaTxt}</span></div>
+    </div>
+    <section class="avoid"><h2>Horários</h2>${reguaSVG(j, r.paralisacoes, 740)}${legendaRegua()}
+      <div class="p-horas">${[["Chegada", j.chegada], ["Início das atividades", j.inicio], ["Almoço", j.almocoInicio ? `${j.almocoInicio} às ${j.almocoFim} (${fmtH(h.almoco)})` : ""], ["Fim", j.fim]].map(([l, v]) => `<div>${l}<br><b>${esc(v || "–")}</b></div>`).join("")}</div>
+      <div class="p-perdas"><div>Perda gerencial<br><b>${fmtH(h.perdas)}</b></div><div>Chegada até o início<br><b>${fmtH(h.perdaInicio)}</b></div><div>Almoço acima de 1h<br><b>${h.almocoExc ? "+" + fmtH(h.almocoExc) : "0h00"}</b></div><div>Paralisações<br><b>${fmtH(h.parado)}</b></div></div>
+      ${j.ddsTema ? `<p class="txt" style="margin-top:6px"><b>DDS / ordem unida:</b> ${esc(j.ddsTema)}</p>` : ""}</section>
+    <section><h2>Atividades programadas: previsto e realizado</h2>
+      ${lista.length ? `<table class="p-tab"><thead><tr><th style="width:44%">Atividade</th><th style="text-align:right">Previsto</th><th style="text-align:right">Realizado</th><th>%</th><th>Causa / observação</th></tr></thead><tbody>${corpoAtv}</tbody></table>` : `<p class="txt">Sem atividades programadas para este dia.</p>`}
+      ${r.progNome ? `<p class="obs-t" style="margin-top:4px">Programação de referência: ${esc(r.progNome)}. PPC ponderado = média da aderência de cada atividade (realizado / previsto, limitado a 100%).</p>` : ""}</section>
+    ${r.naoProgramadas.length ? `<section class="avoid"><h2>Atividades não programadas</h2><table class="p-tab"><tbody>${r.naoProgramadas.map(n => `<tr><td>${esc(n.descricao)}</td><td class="n">${n.qtd ? `${esc(n.qtd)} ${esc(n.un)}` : ""}</td></tr>`).join("")}</tbody></table></section>` : ""}
+    <section class="avoid"><h2>Efetivo previsto x real</h2>
+      <div class="dup"><table class="p-tab p-efe"><thead><tr><th>Empresa</th><th class="n">Previsto</th><th class="n">Real</th><th class="n">Diferença</th></tr></thead>
+        <tbody>${linhasEmp}<tr><td><b>Total</b></td><td class="n"><b>${tPrev}</b></td><td class="n"><b>${tReal}</b></td><td class="n ${dT < 0 ? "neg" : dT > 0 ? "pos" : ""}">${dT > 0 ? "+" : ""}${dT}</td></tr></tbody></table>
+      <div>${ausentes.length ? `<p class="txt"><b class="neg">Ausentes (${ausentes.length}):</b> ${ausentes.map(p => esc(p.nome)).join(", ")}</p>` : `<p class="txt">Todo o efetivo previsto compareceu.</p>`}
+        ${extras.length ? `<p class="txt"><b class="pos">Fora do previsto (${extras.length}):</b> ${extras.map(p => esc(p.nome)).join(", ")}</p>` : ""}</div></div></section>
+    <section class="avoid"><h2>Presentes por empresa</h2><div class="emp-grid">${blocoEmp || `<p class="txt">Sem efetivo marcado.</p>`}</div></section>
+    <section class="avoid"><h2>Equipamentos</h2>${eqHTML ? `<div class="eqs">${eqHTML}</div>` : `<p class="txt">Nenhum equipamento na obra.</p>`}
+      <div class="leg" style="margin-top:6px"><span><i style="background:#006838"></i>Operante</span><span><i style="background:#2F6FB0"></i>Sem operador</span><span><i style="background:#C0392B"></i>Manutenção</span></div></section>
+    <section class="avoid"><h2>Clima, paralisações e ocorrências</h2>
+      <div class="dup"><div><p class="txt"><b>Manhã:</b> ${esc(clima.manha || "–")} &nbsp; <b>Tarde:</b> ${esc(clima.tarde || "–")}<br><b>Chuva:</b> ${chuvaTxt}${clima.motivo ? `<br><b>Impedimento:</b> ${esc(clima.motivo)}` : ""}</p>
+        ${r.paralisacoes.length ? `<p class="txt"><b>Paralisações</b><br>${r.paralisacoes.map(p => `${esc(p.inicio)} às ${esc(p.fim)}: ${esc(p.motivo)} (${fmtH(dur(p.inicio, p.fim))})`).join("<br>")}</p>` : ""}</div>
+        <div>${r.ocorrencias ? `<p class="txt"><b>Ocorrências</b><br>${esc(r.ocorrencias)}</p>` : `<p class="txt">Sem ocorrências registradas.</p>`}${r.restricoes ? `<p class="txt"><b>Restrições</b><br>${esc(r.restricoes)}</p>` : ""}</div></div></section>
+    ${c.fotos.length ? `<section><h2>Registro fotográfico</h2><div class="p-fotos">${c.fotos.map(f => `<div class="p-foto avoid"><img src="${f.pdfUrl || f.dataUrl}" alt=""><p>${esc(f.legenda || "")}</p></div>`).join("")}</div></section>` : ""}
+    <div class="p-ass avoid"><div><b>${esc(r.apontador || "")}</b><span>Apontador${st === "fechado" && r.fechadoEm ? `, validado em ${new Date(r.fechadoEm).toLocaleString("pt-BR")}` : ", RDO em preenchimento"}</span></div>
+      <div><b>${esc(r.engenheiro || "")}</b><span>Engenheiro responsável</span></div></div>
+  </div></div>`;
+}
+function recortarFoto(src, W = 900, H = 675) {
+  return new Promise(res => {
+    const img = new Image();
+    img.onload = () => {
+      const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+      const r = Math.max(W / img.width, H / img.height), w = img.width * r, h = img.height * r;
+      cv.getContext("2d").drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
+      res(cv.toDataURL("image/jpeg", 0.8));
+    };
+    img.onerror = () => res(src);
+    img.src = src;
+  });
+}
+const nomePDF = r => `RDO_${nomeFrente(r.frente).replace(/[^\w-]/g, "")}_${r.data}.pdf`;
+async function gerarPDF() {
+  const r = S.rdo; const nome = nomePDF(r);
+  const y0 = window.scrollY;
+  const ov = document.createElement("div"); ov.className = "pdf-overlay";
+  ov.innerHTML = `<div class="pdf-palco"></div><div class="pdf-msg">Montando o PDF…</div>`;
+  try {
+    if (podeEditar() && S.salvo !== "Salvo") await salvar().catch(() => {});
+    await Promise.all([loadScript(H2C_URL), loadScript(JSPDF_URL)]);
+    for (const f of S.ctx.fotos) if (!f.pdfUrl) f.pdfUrl = await recortarFoto(f.dataUrl);
+    await document.fonts.ready;
+    window.scrollTo(0, 0);
+    document.body.appendChild(ov);
+    const palco = ov.querySelector(".pdf-palco"); palco.innerHTML = pdfHTML();
+    const el = palco.firstElementChild;
+    await Promise.all([...el.querySelectorAll("img")].map(im => im.complete ? 0 : new Promise(ok => { im.onload = im.onerror = ok; })));
+    const total = el.scrollHeight, topo = el.getBoundingClientRect().top;
+    // pontos onde a página pode quebrar sem cortar linha, bloco ou foto
+    const quebras = [...new Set([...el.querySelectorAll(".avoid, tr, section, .p-head, .p-lid, .p-kpis")].map(n => Math.round(n.getBoundingClientRect().bottom - topo)))].sort((a, b) => a - b);
+    // escala limitada para não estourar o limite de tamanho de canvas do iPhone
+    const escala = Math.max(1, Math.min(2, Math.sqrt(14e6 / (794 * total))));
+    const canvas = await window.html2canvas(el, { scale: escala, backgroundColor: "#ffffff", useCORS: true, logging: false, scrollX: 0, scrollY: 0, windowWidth: 794, width: 794, height: total });
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait", compress: true });
+    const pxPorMm = 794 / 210;
+    const margemTopo = 8, margemBase = 11;
+    let ini = 0, pag = 0;
+    while (ini < total - 2) {
+      const mTopo = pag === 0 ? 0 : margemTopo;
+      const util = (297 - mTopo - margemBase) * pxPorMm;
+      let fim = ini + util;
+      if (fim >= total) fim = total;
+      else { const q = quebras.filter(b => b > ini + util * 0.35 && b <= fim); if (q.length) fim = q.at(-1); }
+      const hPx = Math.max(1, Math.round((fim - ini) * escala));
+      const pc = document.createElement("canvas"); pc.width = canvas.width; pc.height = hPx;
+      const ctx = pc.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, pc.width, pc.height);
+      ctx.drawImage(canvas, 0, Math.round(ini * escala), canvas.width, hPx, 0, 0, canvas.width, hPx);
+      if (pag > 0) pdf.addPage();
+      pdf.addImage(pc.toDataURL("image/jpeg", 0.9), "JPEG", 0, mTopo, 210, (fim - ini) / pxPorMm);
+      pc.width = pc.height = 0;
+      ini = fim; pag++;
+    }
+    const n = pdf.internal.getNumberOfPages();
+    for (let i = 1; i <= n; i++) { pdf.setPage(i); pdf.setFontSize(7.5); pdf.setTextColor(110, 122, 114); pdf.text(`RDO ${nomeFrente(r.frente)} ${dataBR(r.data)}   |   página ${i} de ${n}`, 105, 292, { align: "center" }); }
+    canvas.width = canvas.height = 0;
+    const blob = pdf.output("blob");
+    ov.remove(); window.scrollTo(0, y0);
+    await entregarArquivo(blob, nome, "application/pdf");
+  } catch (e) {
+    console.error(e); ov.remove(); window.scrollTo(0, y0);
+    const v = await dialogo("Não deu para montar o PDF", `<p>O navegador recusou a geração direta (${esc(e.message || e)}). Dá para salvar pelo modo impressão: na tela que abrir, toque em compartilhar e escolha salvar em Arquivos ou enviar.</p>`, [{ t: "Cancelar", v: "n", sec: true }, { t: "Salvar pela impressão", v: "s" }]);
+    if (v === "s") imprimirPDF();
+  }
+}
+async function entregarArquivo(blob, nome, tipo, info = "") {
+  const file = new File([blob], nome, { type: tipo });
+  const podeCompartilhar = !!(navigator.canShare && navigator.canShare({ files: [file] }));
+  const url = URL.createObjectURL(blob);
+  const v = await dialogo("Arquivo pronto", `<p><b>${esc(nome)}</b></p>${info ? `<p>${esc(info)}</p>` : ""}`, [...(podeCompartilhar ? [{ t: "Compartilhar", v: "share" }] : []), { t: "Baixar", v: "down", sec: podeCompartilhar }, { t: "Fechar", v: "x", sec: true }]);
+  if (v === "share") { try { await navigator.share({ files: [file], title: nome }); } catch (e) { if (e.name !== "AbortError") toast("Não foi possível compartilhar: " + e.message); } }
+  if (v === "down") { const a = document.createElement("a"); a.href = url; a.download = nome; document.body.appendChild(a); a.click(); a.remove(); }
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
+function imprimirPDF() {
+  const box = $("#pdf-print"); box.innerHTML = pdfHTML();
+  const titulo = document.title; document.title = nomePDF(S.rdo).replace(".pdf", "");
+  document.body.classList.add("imprimindo");
+  const limpar = () => { document.body.classList.remove("imprimindo"); box.innerHTML = ""; document.title = titulo; window.removeEventListener("afterprint", limpar); };
+  window.addEventListener("afterprint", limpar);
+  setTimeout(() => window.print(), 300);
+}
+
+/* ================= CADASTROS ================= */
+const gruposPermitidos = () => Object.keys(GRUPOS).filter(g => GRUPOS[g].frentes.some(f => frentesPermitidas().includes(f)));
+async function loadCad() {
+  const g = GRUPOS[S.cadGrupo] && gruposPermitidos().includes(S.cadGrupo) ? S.cadGrupo : gruposPermitidos()[0];
+  S.cadGrupo = g;
+  const ch = GRUPOS[g].chaves;
+  const [c, e, m] = await Promise.all([getDocs(query(collection(db, "colaboradores"), where("frente", "in", ch))), getDocs(query(collection(db, "equipamentos"), where("frente", "in", ch))), getDoc(doc(db, "cargas", g))]);
+  S.cad.colabs = c.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (EMPRESAS.indexOf(a.empresa) - EMPRESAS.indexOf(b.empresa)) || a.nome.localeCompare(b.nome, "pt-BR"));
+  S.cad.equips = e.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => a.codigo.localeCompare(b.codigo));
+  S.cad.carga = m.exists() ? m.data() : null;
+}
+function vCad() {
+  const gs = gruposPermitidos(), t = S.cadTab, g = S.cadGrupo, cg = S.cad.carga;
+  const linhasP = S.cad.colabs.map(p => `<div class="cad-row"><input type="text" aria-label="Nome" data-cad="${p.id}" data-f="nome" value="${esc(p.nome)}"><input type="text" aria-label="Função" list="dl-f" data-cad="${p.id}" data-f="funcao" value="${esc(p.funcao)}">
+      <select aria-label="Empresa" data-cad="${p.id}" data-f="empresa">${[...new Set([...EMPRESAS, p.empresa].filter(Boolean))].map(e => `<option ${p.empresa === e ? "selected" : ""}>${esc(e)}</option>`).join("")}</select>
+      ${isPlan() ? `<button class="lnk perigo" data-act="cad-del" data-id="${p.id}">Remover</button>` : "<span></span>"}</div>`).join("");
+  const linhasE = S.cad.equips.map(e => `<div class="cad-row ${e.ativo === false ? "inativo" : ""}"><input type="text" aria-label="Código" data-cad="${e.id}" data-f="codigo" value="${esc(e.codigo)}"><input type="text" aria-label="Descrição" data-cad="${e.id}" data-f="descricao" value="${esc(e.descricao)}">
+      <label class="at"><input type="checkbox" data-cad="${e.id}" data-f="ativo" ${e.ativo !== false ? "checked" : ""}> ativo</label>
+      ${isPlan() ? `<button class="lnk perigo" data-act="cad-del" data-id="${e.id}">Remover</button>` : "<span></span>"}</div>`).join("");
+  return `<h2>Cadastros</h2>
+    ${gs.length > 1 ? `<div class="field"><span class="lbl">Local</span><div class="seg">${gs.map(x => `<button data-act="cad-grupo" data-g="${x}" class="${g === x ? "on" : ""}">${GRUPOS[x].nome}</button>`).join("")}</div></div>` : ""}
+    <p class="nota">${g === "EEAB0102" ? "EEAB-01 e EEAB-02 usam o mesmo efetivo e os mesmos equipamentos. Quem o apontador de uma frente marcar no dia não aparece como previsto no RDO da outra." : "A EEAB-03 tem efetivo e equipamentos próprios."}</p>
+    ${isPlan() ? vCadImp() : ""}
+    <div class="tabs seg"><button data-act="cad-tab" data-t="colabs" class="${t === "colabs" ? "on" : ""}">Efetivo (${S.cad.colabs.length})</button><button data-act="cad-tab" data-t="equips" class="${t === "equips" ? "on" : ""}">Equipamentos (${S.cad.equips.length})</button></div>
+    ${t === "colabs" ? `<div class="box"><div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap"><div style="margin-right:auto"><b>Efetivo atual: ${S.cad.colabs.length} pessoas</b>
+        <p class="nota" style="margin:2px 0 0">${cg?.arquivo ? `Última carga: ${esc(cg.arquivo)}${cg.em ? `, em ${new Date(cg.em).toLocaleString("pt-BR")}` : ""}${cg.por ? `, por ${esc(cg.por)}` : ""}` : "Nenhuma planilha carregada ainda."}</p></div>
+        ${isPlan() && S.cad.colabs.length ? `<button class="btn perigo" data-act="cad-limpar">Limpar todo o efetivo</button>` : ""}</div>
+      <div style="margin-top:10px">${linhasP || `<p class="nota">Sem efetivo cadastrado. Suba a planilha acima.</p>`}</div></div>`
+    : `<div class="box"><b>Adicionar equipamentos</b><p class="nota">Um por linha: <b>código descrição</b>, por exemplo EH-100 Escavadeira hidráulica. Também entram pela planilha acima.</p>
+      <textarea id="cad-txt" placeholder="EH-100 Escavadeira hidráulica"></textarea><button class="btn sec" data-act="cad-colar" style="margin-top:10px">Adicionar ao cadastro</button></div>
+      <div class="box">${linhasE || `<p class="nota">Nenhum equipamento cadastrado.</p>`}</div>`}
+    <datalist id="dl-f">${FUNCOES.map(f => `<option value="${f}">`).join("")}</datalist>`;
+}
+function cadCampo(el, tipo) {
+  if (tipo !== "change") return;
+  const col = S.cadTab === "colabs" ? "colaboradores" : "equipamentos";
+  const f = el.dataset.f; let v = el.type === "checkbox" ? el.checked : el.value.trim();
+  if (f === "codigo") { v = normCodigo(v); el.value = v; }
+  const item = (S.cadTab === "colabs" ? S.cad.colabs : S.cad.equips).find(x => x.id === el.dataset.cad); if (item) item[f] = v;
+  updateDoc(doc(db, col, el.dataset.cad), { [f]: v }).then(() => { if (f === "ativo") el.closest(".cad-row").classList.toggle("inativo", !v); toast("Salvo."); }).catch(e => toast(msgErro(e)));
+}
+function limpaLinha(l) { return l.replace(/[\u2060\u200b\u00a0]/g, " ").replace(/^[\s*•·\-–—>]+/, "").replace(/\*/g, "").trim(); }
+async function cadColar() {
+  const linhas = $("#cad-txt").value.split(/\r?\n/).map(limpaLinha).filter(Boolean);
+  if (!linhas.length) return toast("Cole ao menos uma linha.");
+  const b = writeBatch(db); let n = 0; const existentes = new Set(S.cad.equips.map(e => e.codigo));
+  linhas.forEach(l => {
+    const m = l.match(/^([A-Za-z]{1,6}\s*-?\s*\d+)\s*[-–—:]?\s*(.*)$/); const codigo = normCodigo(m ? m[1] : l); const descricao = m ? m[2].trim() : "";
+    if (!codigo || existentes.has(codigo)) return;
+    b.set(doc(collection(db, "equipamentos")), { codigo, descricao, frente: S.cadGrupo, ativo: true }); n++; existentes.add(codigo);
+  });
+  if (!n) return toast("Nada novo para adicionar.");
+  try { await b.commit(); toast(`${n} adicionado(s).`); go("cad"); } catch (e) { toast(msgErro(e)); }
+}
+async function cadExcluir(id) {
+  const col = S.cadTab === "colabs" ? "colaboradores" : "equipamentos";
+  try { await deleteDoc(doc(db, col, id)); go("cad"); } catch (e) { toast(msgErro(e)); }
+}
+async function apagarEmLotes(refs) { for (let i = 0; i < refs.length; i += 400) { const b = writeBatch(db); refs.slice(i, i + 400).forEach(r => b.delete(r)); await b.commit(); } }
+async function limparEfetivo() {
+  const g = S.cadGrupo;
+  if (await dialogo("Limpar todo o efetivo?", `<p>Apaga as ${S.cad.colabs.length} pessoas cadastradas em ${GRUPOS[g].nome}. Os RDOs já salvos mantêm os nomes deles. Depois é só subir a planilha nova.</p>`, [{ t: "Cancelar", v: "n", sec: true }, { t: "Limpar", v: "s" }]) !== "s") return;
+  try {
+    await apagarEmLotes(S.cad.colabs.map(p => doc(db, "colaboradores", p.id)));
+    await setDoc(doc(db, "cargas", g), { arquivo: "", em: new Date().toISOString(), por: S.me?.nome || S.user.email, pessoas: 0 }, { merge: true });
+    toast("Efetivo apagado."); go("cad");
+  } catch (e) { toast(msgErro(e)); }
+}
+
+/* ---------- planilha de efetivo e equipamentos (formato livre) ---------- */
+const KW_CAD = {
+  nome: ["NOME", "NOME COMPLETO", "COLABORADOR", "COLABORADORES", "FUNCIONARIO", "FUNCIONARIOS", "EMPREGADO", "TRABALHADOR", "PROFISSIONAL"],
+  funcao: ["FUNCAO", "CARGO", "OCUPACAO", "CATEGORIA"],
+  empresa: ["EMPRESA", "CONTRATADA", "TERCEIRO", "TERCEIRIZADA", "FORNECEDOR", "SUBCONTRATADA", "EMPREITEIRA"],
+  frente: ["FRENTE", "FRENTE DE SERVICO", "LOCAL", "AREA", "SETOR", "OBRA", "ESTRUTURA", "EEAB"],
+  codigo: ["CODIGO", "COD", "TAG", "PREFIXO", "FROTA", "PLACA", "IDENTIFICACAO", "ID"],
+  equip: ["EQUIPAMENTO", "EQUIPAMENTOS", "MAQUINA", "MAQUINAS", "VEICULO", "VEICULOS"],
+  desc: ["DESCRICAO", "TIPO", "MODELO"]
+};
+const kwHit = (cell, k) => { const n = norm(cell).replace(/[.:º°#]/g, "").trim(); return !!n && KW_CAD[k].some(w => n === w || n.startsWith(w + " ") || n.startsWith(w + "/")); };
+const COD_RE = /^([A-Z]{1,6})\s*-?\s*(\d{1,5})\b\s*[-–—:]?\s*(.*)$/i;
+function normFrente(v) { const n = norm(v).replace(/[\s\-_.\/]/g, ""); const m = n.match(/EEAB?0?([123])(?!\d)/) || n.match(/^B?0?([123])$/); return m ? "EEAB0" + m[1] : null; }
+function empresaConhecida(v) { const n = norm(v); if (!n) return null; if (/VALE ?VERDE|\bCVV\b/.test(n)) return "Vale Verde"; if (/\bMOB\b/.test(n)) return "MOB"; if (/AQUASOLIS|\bARN\b|\bARM\b/.test(n)) return "Aquasolis (ARN)"; if (/^MP\b/.test(n)) return "MP"; return null; }
+const tituloCaixa = t => String(t).toLowerCase().replace(/(^|\s)\S/g, x => x.toUpperCase());
+const pareceNome = t => /[A-Za-zÀ-ú]{2,}/.test(t) && !/^(SUB)?TOTAL/i.test(norm(t)) && !/^\d/.test(t);
+function lerAbaCadastro(rows) {
+  const itens = []; let col = null; const ctx = { empresa: null, frente: null, modo: null };
+  const txt = v => String(v ?? "").trim();
+  const ehCabecalho = r => {
+    const cheias = r.map(txt).filter(Boolean); if (!cheias.length) return null;
+    const c = {}; r.forEach((v, j) => { for (const k of Object.keys(KW_CAD)) if (c[k] == null && kwHit(v, k)) { c[k] = j; break; } });
+    const hits = Object.keys(c).length;
+    if ((c.nome != null || c.codigo != null || c.equip != null) && hits >= Math.max(1, Math.ceil(cheias.length * 0.5))) return c;
+    return null;
+  };
+  const addEquip = (texto, desc, frente) => {
+    const m = limpaLinha(texto).match(COD_RE); if (!m) return false;
+    itens.push({ tipo: "equip", codigo: normCodigo(`${m[1]}-${m[2]}`), descricao: (desc || m[3] || "").trim(), frente: frente || ctx.frente });
+    return true;
+  };
+  const addPessoa = (nome, funcao, empresa, frente) => {
+    let n = limpaLinha(nome), f = txt(funcao);
+    if (!f) { const partes = n.split(/\s+[-–—]\s+|\s+-|-\s+/); if (partes.length > 1) { n = partes[0].trim(); f = partes.slice(1).join(" ").trim(); } }
+    if (!pareceNome(n) || (!f && n.split(/\s+/).length < 2)) return;
+    itens.push({ tipo: "pessoa", nome: n, funcao: f ? f.charAt(0).toUpperCase() + f.slice(1) : "", empresa: empresa || ctx.empresa || "", frente: frente || ctx.frente });
+  };
+  rows.forEach(r => {
+    const cheias = r.map(txt).filter(Boolean); if (!cheias.length) return;
+    const h = ehCabecalho(r); if (h) { col = h; return; }
+    if (cheias.length === 1) {
+      const t = limpaLinha(cheias[0]), nt = norm(t);
+      if (t.length <= 24 && normFrente(t)) { ctx.frente = normFrente(t); return; }
+      if (t.length <= 30 && empresaConhecida(t) && !/\s-\s/.test(t)) { ctx.empresa = empresaConhecida(t); return; }
+      if (t.length <= 40 && /EQUIPAMENTO|MAQUINA/.test(nt)) { ctx.modo = "equip"; return; }
+      if (t.length <= 40 && /EFETIVO|COLABORADOR|FUNCIONARIO|MAO DE OBRA/.test(nt)) { ctx.modo = "pessoa"; return; }
+    }
+    if (col) {
+      const g = k => col[k] != null ? txt(r[col[k]]) : "";
+      const frente = normFrente(g("frente")), emp = g("empresa") ? (empresaConhecida(g("empresa")) || tituloCaixa(g("empresa"))) : "";
+      if (col.nome != null && g("nome")) return addPessoa(g("nome"), g("funcao"), emp, frente);
+      if (col.codigo != null && g("codigo")) { if (!addEquip(g("codigo"), g("desc") || (col.equip != null ? g("equip") : ""), frente)) itens.push({ tipo: "equip", codigo: normCodigo(g("codigo")), descricao: g("desc") || g("equip"), frente: frente || ctx.frente }); return; }
+      if (col.equip != null && g("equip")) { addEquip(g("equip"), g("desc"), frente); return; }
+      return;
+    }
+    // sem cabeçalho: decide pela forma da linha
+    const primeiro = limpaLinha(cheias[0]);
+    const frenteLinha = cheias.map(normFrente).find(Boolean);
+    if (COD_RE.test(primeiro) && (ctx.modo === "equip" || !/\s[-–—]\s/.test(primeiro) || /^[A-Z]{1,6}\s*-?\s*\d/.test(primeiro))) { addEquip(primeiro, cheias[1] && !normFrente(cheias[1]) ? cheias[1] : "", frenteLinha); return; }
+    if (ctx.modo === "equip") return;
+    const emp = cheias.slice(1).map(empresaConhecida).find(Boolean);
+    addPessoa(primeiro, cheias[1] && !empresaConhecida(cheias[1]) && !normFrente(cheias[1]) ? cheias[1] : "", emp, frenteLinha);
+  });
+  return itens;
+}
+async function cadImpLer(file) {
+  if (!file) return;
+  try {
+    toast("Lendo a planilha…", 8000);
+    await loadScript(XLSX_URL);
+    const wb = XLSX.read(await file.arrayBuffer(), { type: "array" });
+    const ocultas = new Set((wb.Workbook?.Sheets || []).filter(x => x.Hidden).map(x => x.name));
+    const itens = [];
+    wb.SheetNames.filter(n => !ocultas.has(n)).forEach(n => itens.push(...lerAbaCadastro(XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, raw: false, defval: "" }))));
+    if (!itens.length) throw new Error("Não encontrei nomes nem equipamentos na planilha.");
+    S.impCad = { arquivo: file.name, itens, grupo: S.cadGrupo, empresaPadrao: "Vale Verde" };
+    toast(`${itens.filter(i => i.tipo === "pessoa").length} pessoas e ${itens.filter(i => i.tipo === "equip").length} equipamentos encontrados. Confira antes de confirmar.`, 5000);
+  } catch (e) { console.error(e); S.impCad = { erro: e.message || String(e) }; }
+  render();
+}
+function vCadImp() {
+  const imp = S.impCad, g = S.cadGrupo;
+  const input = `<label class="btn sec upl" style="margin:4px 0 0">Escolher planilha (.xlsx, .xls ou .csv)<input type="file" id="cadimp-file" accept=".xlsx,.xls,.xlsm,.csv"></label>`;
+  const titulo = `<b>Subir planilha de efetivo: ${GRUPOS[g].nome}</b>`;
+  if (!imp) return `<div class="box">${titulo}<p class="nota">A planilha vira o efetivo novo e único de ${GRUPOS[g].nome}: o efetivo anterior é apagado e substituído pela lista. Não precisa de formato fixo; o app procura colunas como nome, função e empresa, ou linhas "Nome - função". Se a planilha tiver equipamentos (código como EH-100), eles também substituem a lista de equipamentos.</p>${input}</div>`;
+  if (imp.erro) return `<div class="box">${titulo}<div class="erro-box" style="margin-top:10px">${esc(imp.erro)}</div>${input}</div>`;
+  const ps = imp.itens.filter(i => i.tipo === "pessoa"), es = imp.itens.filter(i => i.tipo === "equip");
+  const semEmp = ps.some(i => !i.empresa);
+  return `<div class="box"><b>Conferência: ${esc(imp.arquivo)}</b>
+    <div class="kv num"><div><b>${ps.length}</b><span>pessoas</span></div><div><b>${es.length}</b><span>equipamentos</span></div><div><b>${S.cad.colabs.length}</b><span>pessoas no efetivo atual</span></div></div>
+    <div class="aviso-copia" style="margin:0 0 12px">Ao confirmar, as ${S.cad.colabs.length} pessoas atuais de ${GRUPOS[g].nome} são apagadas e o efetivo passa a ser só estas ${ps.length}.${es.length ? ` Os ${S.cad.equips.length} equipamentos atuais também são substituídos por estes ${es.length}.` : " Os equipamentos atuais continuam como estão."}</div>
+    ${semEmp ? `<div class="field" style="max-width:300px"><label for="ci-emp">Empresa de quem veio sem empresa</label><select id="ci-emp">${EMPRESAS.map(e => `<option ${imp.empresaPadrao === e ? "selected" : ""}>${e}</option>`).join("")}</select></div>` : ""}
+    <div class="scroll" style="max-height:340px;overflow:auto"><table class="prev-tab"><thead><tr><th>Tipo</th><th>Nome / código</th><th>Função / descrição</th><th>Empresa</th></tr></thead><tbody>
+      ${imp.itens.slice(0, 300).map(i => `<tr><td>${i.tipo === "pessoa" ? "Pessoa" : "Equip."}</td><td>${esc(i.tipo === "pessoa" ? i.nome : i.codigo)}</td><td>${esc(i.tipo === "pessoa" ? (i.funcao || "–") : (i.descricao || "–"))}</td><td>${esc(i.tipo === "pessoa" ? (i.empresa || imp.empresaPadrao) : "")}</td></tr>`).join("")}
+    </tbody></table></div>${imp.itens.length > 300 ? `<p class="nota">Mostrando 300 de ${imp.itens.length}.</p>` : ""}
+    <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn" data-act="cadimp-conf">Substituir efetivo</button><button class="btn sec" data-act="cadimp-cancel">Cancelar</button></div></div>`;
+}
+async function cadImpAplicar() {
+  const imp = S.impCad; if (!imp?.itens) return;
+  const g = imp.grupo, ch = GRUPOS[g].chaves;
+  try {
+    toast("Substituindo o efetivo…", 10000);
+    const [cs, es] = await Promise.all([getDocs(query(collection(db, "colaboradores"), where("frente", "in", ch))), getDocs(query(collection(db, "equipamentos"), where("frente", "in", ch)))]);
+    const novosP = [], vistos = new Set();
+    imp.itens.filter(i => i.tipo === "pessoa").forEach(i => { const k = norm(i.nome); if (vistos.has(k)) return; vistos.add(k); novosP.push({ nome: i.nome, funcao: i.funcao || "Não informada", empresa: i.empresa || imp.empresaPadrao, frente: g, ativo: true }); });
+    const novosE = [], vistosE = new Set();
+    imp.itens.filter(i => i.tipo === "equip").forEach(i => { if (!i.codigo || vistosE.has(i.codigo)) return; vistosE.add(i.codigo); novosE.push({ codigo: i.codigo, descricao: i.descricao || "", frente: g, ativo: true }); });
+    const ops = [];
+    if (novosP.length) { cs.docs.forEach(d => ops.push(b => b.delete(d.ref))); novosP.forEach(x => ops.push(b => b.set(doc(collection(db, "colaboradores")), x))); }
+    if (novosE.length) { es.docs.forEach(d => ops.push(b => b.delete(d.ref))); novosE.forEach(x => ops.push(b => b.set(doc(collection(db, "equipamentos")), x))); }
+    for (let i = 0; i < ops.length; i += 400) { const b = writeBatch(db); ops.slice(i, i + 400).forEach(op => op(b)); await b.commit(); }
+    await setDoc(doc(db, "cargas", g), { arquivo: imp.arquivo, em: new Date().toISOString(), por: S.me?.nome || S.user.email, pessoas: novosP.length, equipamentos: novosE.length }, { merge: true });
+    S.impCad = null;
+    toast(`Efetivo de ${GRUPOS[g].nome} substituído: ${novosP.length} pessoas${novosE.length ? ` e ${novosE.length} equipamentos` : ""}.`, 6000);
+    go("cad");
+  } catch (e) { toast(msgErro(e)); }
+}
+
+/* ================= PROGRAMAÇÃO ================= */
+function parseProgramacao(XLSX, wb, areasAlvo) {
+  const sheetName = wb.SheetNames.find(n => norm(n) === "PROGRAMACAO SEMANAL");
+  if (!sheetName || !wb.Sheets[sheetName]) throw new Error('Não encontrei a aba "Programação Semanal" no arquivo.');
+  const ws = wb.Sheets[sheetName];
+  const rows = XLSX.utils.sheet_to_json(ws, { header: 1, raw: true, defval: null });
+  const rg = XLSX.utils.decode_range(ws["!ref"]);
+  const linhaExcel = i => i + rg.s.r + 1, colunaExcel = j => XLSX.utils.encode_col(j + rg.s.c);
+  let hRow = -1; const col = {};
+  for (let i = 0; i < Math.min(rows.length, 40); i++) {
+    const r = rows[i] || [];
+    if (r.findIndex(c => norm(c) === "ATIVIDADE DETALHADA") >= 0) {
+      hRow = i;
+      r.forEach((c, j) => { const n = norm(c);
+        if (n === "ITEM") col.item = j; else if (n === "ID CRONOG") col.id = j; else if (n === "AREA") col.area = j;
+        else if (n === "SUBAREA") col.sub = j; else if (n.startsWith("P - PREVISTO")) col.tipo = j;
+        else if (n === "ATIVIDADE DETALHADA") col.atv = j; else if (n === "RESPONSAVEL") col.resp = j;
+        else if (n === "EQUIPE") col.eq = j; else if (n === "PRINCIPAIS RECURSOS") col.rec = j; });
+      break;
+    }
+  }
+  if (hRow < 0) throw new Error('Cabeçalho da programação não encontrado (coluna "Atividade Detalhada").');
+  if (col.area == null) throw new Error('Coluna "Área" não encontrada no cabeçalho.');
+  let dRow = -1, dateCols = [];
+  for (let i = hRow; i < hRow + 6; i++) {
+    const r = rows[i] || []; const dc = [];
+    r.forEach((c, j) => { if (typeof c === "number" && c > 40000 && c < 60000) dc.push(j); });
+    if (dc.length >= 5) { dRow = i; dateCols = dc; r.forEach((c, j) => { const n = norm(c); if (n.startsWith("(P)REV")) col.pr = j; if (["U.N", "U.M", "UN", "UND"].includes(n)) col.un = j; }); break; }
+  }
+  if (dRow < 0) throw new Error("Linha com as datas da programação não encontrada.");
+  const toISO = serial => new Date(Math.round((serial - 25569) * 864e5)).toISOString().slice(0, 10);
+  const dias = dateCols.map(j => toISO(rows[dRow][j]));
+  if (col.pr == null) col.pr = dateCols[0] - 1;
+  if (col.un == null) col.un = col.pr - 1;
+  const alvo = new Set(areasAlvo.map(norm));
+  const atividades = [], avisos = []; let secao = "";
+  const txt = v => { const s = String(v ?? "").trim(); return (s === "-" || /^n\/?a$/i.test(s)) ? "" : s; };
+  for (let i = dRow + 1; i < rows.length; i++) {
+    const r = rows[i] || [];
+    const area = norm(r[col.area]); const atv = String(r[col.atv] ?? "").trim(); const marca = norm(r[col.pr]);
+    if (!area && atv && r[col.item] == null && marca !== "R" && marca !== "P") { secao = atv; continue; }
+    if (marca !== "P" || !alvo.has(area)) continue;
+    const prev = {};
+    dateCols.forEach((j, k) => { const v = r[j]; if (typeof v === "number" && v > 0) prev[dias[k]] = Math.round(v * 1000) / 1000; });
+    const tot = Object.values(prev).reduce((a, b) => a + b, 0);
+    if (!tot) continue;
+    let un = String(r[col.un] ?? "").trim(); if (/^und?\.?$/i.test(un)) un = "un";
+    if (!un) { un = "?"; avisos.push(`Item ${r[col.item]} (${area}): sem unidade.`); }
+    atividades.push({ area, secao, item: String(r[col.item] ?? ""), idCronog: txt(r[col.id]).replace(/\s+/g, " "), subarea: txt(r[col.sub]), tipo: norm(r[col.tipo]) || "P",
+      atividade: atv.replace(/\s+/g, " "), responsavel: txt(r[col.resp]), equipe: txt(r[col.eq]).replace(/\s+/g, " "), recursos: txt(r[col.rec]).replace(/\s+/g, " "),
+      un, prev, totalPrev: Math.round(tot * 1000) / 1000,
+      linhaP: linhaExcel(i), linhaR: norm((rows[i + 1] || [])[col.pr]) === "R" ? linhaExcel(i + 1) : null });
+    if (norm((rows[i + 1] || [])[col.pr]) !== "R") avisos.push(`Item ${r[col.item]} (${area}): sem linha R logo abaixo; o realizado dele não será exportado.`);
+  }
+  const colunas = {}; dateCols.forEach((j, k) => colunas[dias[k]] = colunaExcel(j));
+  return { aba: sheetName, dias, colunas, atividades, avisos };
+}
+async function loadProg() {
+  const qs = await getDocs(collection(db, "programacoes"));
+  S.progs = qs.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.inicio || "").localeCompare(a.inicio || ""));
+}
+async function progLer(file) {
+  if (!file) return;
+  try {
+    toast("Lendo a planilha…", 10000);
+    await loadScript(XLSX_URL);
+    const buf = await file.arrayBuffer();
+    const nomes = XLSX.read(buf, { type: "array", bookSheets: true }).SheetNames;
+    const aba = nomes.find(n => norm(n) === "PROGRAMACAO SEMANAL");
+    if (!aba) throw new Error('Não encontrei a aba "Programação Semanal" no arquivo.');
+    const wb = XLSX.read(buf, { type: "array", sheets: [aba] });
+    const res = parseProgramacao(XLSX, wb, AREAS);
+    const sem = file.name.match(/SEMANA[\s_-]*(\d+)/i);
+    S.imp = { arquivo: file.name, buf, ...res, nome: `${sem ? "Semana " + sem[1] : "Programação"} (${dataCurta(res.dias[0])} a ${dataCurta(res.dias.at(-1))})` };
+    toast(`${res.atividades.length} atividades das EEABs encontradas.`);
+  } catch (e) { console.error(e); S.imp = { erro: e.message || String(e) }; }
+  render();
+}
+function vProg() {
+  const imp = S.imp;
+  let preview = "";
+  if (imp?.erro) preview = `<div class="erro-box">${esc(imp.erro)}</div>`;
+  else if (imp) {
+    const por = {}; imp.atividades.forEach(a => por[a.area] = (por[a.area] || 0) + 1);
+    const conflito = S.progs.filter(p => p.dias?.some(d => imp.dias.includes(d)));
+    preview = `<div class="box"><b>Conferência antes de importar</b>
+      <div class="kv num"><div><b>${imp.atividades.length}</b><span>atividades</span></div>${AREAS.map(a => `<div><b>${por[a] || 0}</b><span>${a}</span></div>`).join("")}<div><b>${dataCurta(imp.dias[0])} a ${dataCurta(imp.dias.at(-1))}</b><span>${imp.dias.length} dias</span></div></div>
+      ${imp.avisos.length ? `<div class="erro-box">${imp.avisos.map(esc).join("<br>")}</div>` : ""}
+      ${conflito.length ? `<p class="nota">Esta programação cobre dias que já estão em ${conflito.map(p => esc(p.nome)).join(", ")}. Para esses dias, os RDOs novos passam a usar a importação mais recente. RDOs já abertos mantêm a programação com que foram criados.</p>` : ""}
+      <div class="field"><label for="prog-nome">Nome da programação</label><input type="text" id="prog-nome" value="${esc(imp.nome)}"></div>
+      <div class="scroll"><table class="prev-tab"><thead><tr><th>Área</th><th>Subárea</th><th>Atividade</th><th>Un.</th><th>Previsto por dia</th></tr></thead><tbody>
+        ${imp.atividades.map(a => `<tr><td>${esc(a.area)}</td><td>${esc(a.subarea)}</td><td>${esc(a.atividade)}</td><td>${esc(a.un)}</td><td class="num">${Object.entries(a.prev).map(([d, v]) => `${dataCurta(d)}: ${fmtQ(v, a.un)}`).join("<br>")}</td></tr>`).join("")}
+      </tbody></table></div>
+      <div style="display:flex;gap:8px;margin-top:14px"><button class="btn" data-act="prog-conf">Importar programação</button><button class="btn sec" data-act="prog-cancel">Cancelar</button></div></div>`;
+  }
+  return `<h2>Programação semanal</h2>
+    <p class="nota">Suba a planilha de programação (aba "Programação Semanal"). O app importa só as atividades das áreas EEAB01, EEAB02 e EEAB03 com quantidade prevista, e cada RDO passa a mostrar o previsto do dia.</p>
+    <label class="btn upl" style="margin:0 0 16px">Escolher arquivo .xlsx<input type="file" id="prog-file" accept=".xlsx,.xlsm"></label>
+    ${preview}
+    <h3>Programações importadas</h3>
+    <ul class="lista">${S.progs.length ? S.progs.map(p => `<li><div style="display:flex;align-items:center;gap:10px;padding:12px 14px"><div style="margin-right:auto"><b>${esc(p.nome)}</b><div class="nota" style="margin:2px 0 0">${p.total} atividades, arquivo ${esc(p.arquivo)}</div></div><button class="lnk perigo" data-act="prog-del" data-id="${p.id}">Excluir</button></div></li>`).join("") : `<li class="vazio">Nenhuma programação importada ainda.</li>`}</ul>`;
+}
+function bufToB64(buf) {
+  const u8 = new Uint8Array(buf); let bin = "";
+  for (let i = 0; i < u8.length; i += 8192) bin += String.fromCharCode.apply(null, u8.subarray(i, i + 8192));
+  return btoa(bin);
+}
+function b64ToU8(b64) { const bin = atob(b64); const u8 = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i); return u8; }
+async function progConfirmar() {
+  const imp = S.imp; if (!imp?.atividades) return;
+  try {
+    toast("Importando…", 15000);
+    const ref = doc(collection(db, "programacoes"));
+    // arquivo original guardado em partes, para devolver a planilha preenchida no mesmo padrão
+    const b64 = bufToB64(imp.buf), TAM = 700000, partes = Math.ceil(b64.length / TAM);
+    for (let n = 0; n < partes; n++) await setDoc(doc(db, "arquivos", `${ref.id}_${n}`), { progId: ref.id, n, partes, b64: b64.slice(n * TAM, (n + 1) * TAM) });
+    const b = writeBatch(db);
+    const porFrente = {}; imp.atividades.forEach(a => { const f = areaToFrente(a.area); porFrente[f] = (porFrente[f] || 0) + 1; });
+    b.set(ref, { nome: imp.nome, arquivo: imp.arquivo, aba: imp.aba, colunas: imp.colunas, partes, inicio: imp.dias[0], fim: imp.dias.at(-1), dias: imp.dias, total: imp.atividades.length, porFrente, importadoEm: serverTimestamp(), importadoPor: S.user.email });
+    imp.atividades.forEach((a, i) => b.set(doc(db, "atividades", `${ref.id}_${String(i).padStart(3, "0")}`), { ...a, progId: ref.id, frente: areaToFrente(a.area) }));
+    await b.commit();
+    S.imp = null; toast("Programação importada."); go("prog");
+  } catch (e) { toast(msgErro(e)); }
+}
+async function progExcluir(id) {
+  if (await dialogo("Excluir programação?", "<p>As atividades dela deixam de aparecer em RDOs novos. RDOs já preenchidos mantêm os dados lançados.</p>", [{ t: "Cancelar", v: "n", sec: true }, { t: "Excluir", v: "s" }]) !== "s") return;
+  try {
+    const qs = await getDocs(query(collection(db, "atividades"), where("progId", "==", id)));
+    const arq = await getDocs(query(collection(db, "arquivos"), where("progId", "==", id)));
+    const b = writeBatch(db); qs.docs.forEach(d => b.delete(d.ref)); arq.docs.forEach(d => b.delete(d.ref)); b.delete(doc(db, "programacoes", id)); await b.commit();
+    toast("Programação excluída."); go("prog");
+  } catch (e) { toast(msgErro(e)); }
+}
+
+/* ================= PROGRAMAÇÃO PREENCHIDA (REAL) ================= */
+async function statusDia(data) {
+  const out = {};
+  await Promise.all(Object.keys(FRENTES).map(async f => { const sn = await getDoc(doc(db, "rdos", `${f}_${data}`)); out[f] = sn.exists() ? sn.data() : null; }));
+  return out;
+}
+const diaCompleto = st => Object.keys(FRENTES).every(f => st[f] && stNorm(st[f].status) === "fechado");
+const colNum = c => c.split("").reduce((n, ch) => n * 26 + ch.charCodeAt(0) - 64, 0);
+function gravaCelula(xml, ref, valor) {
+  const reCel = new RegExp(`<c r="${ref}"([^>]*?)(/>|>[\\s\\S]*?</c>)`);
+  const nova = attrs => `<c r="${ref}"${attrs.replace(/\s+t="[^"]*"/, "")}><v>${valor}</v></c>`;
+  if (reCel.test(xml)) return xml.replace(reCel, (m, attrs) => nova(attrs));
+  const linha = ref.match(/\d+$/)[0], col = colNum(ref.match(/^[A-Z]+/)[0]);
+  const reLinha = new RegExp(`<row r="${linha}"([^>]*?)(/>|>([\\s\\S]*?)</row>)`);
+  const m = xml.match(reLinha);
+  if (!m) return xml; // linha inexistente: não mexe
+  let corpo = m[3] || "", pos = corpo.length;
+  const reC = /<c r="([A-Z]+)\d+"/g; let mc;
+  while ((mc = reC.exec(corpo))) { if (colNum(mc[1]) > col) { pos = mc.index; break; } }
+  corpo = corpo.slice(0, pos) + nova("") + corpo.slice(pos);
+  return xml.replace(reLinha, `<row r="${linha}"${m[1]}>${corpo}</row>`);
+}
+async function baixarProgramacao(dataAlvo) {
+  try {
+    toast("Montando a planilha…", 15000);
+    const pSnap = await getDocs(query(collection(db, "programacoes"), where("dias", "array-contains", dataAlvo)));
+    const prog = pSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.importadoEm?.toMillis?.() || 0) - (a.importadoEm?.toMillis?.() || 0))[0];
+    if (!prog) throw new Error("Nenhuma programação importada cobre este dia.");
+    if (!prog.partes || !prog.colunas) throw new Error(`A programação "${prog.nome}" foi importada antes desta função existir. Importe a planilha de novo em Programação.`);
+    const dias = prog.dias.filter(d => d <= dataAlvo);
+    const status = {}; await Promise.all(dias.map(async d => { status[d] = await statusDia(d); }));
+    if (!diaCompleto(status[dataAlvo])) throw new Error("Os RDOs das três frentes deste dia ainda não estão todos fechados.");
+    const diasOk = dias.filter(d => diaCompleto(status[d]));
+    const aSnap = await getDocs(query(collection(db, "atividades"), where("progId", "==", prog.id)));
+    const atvs = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const porId = new Map(atvs.map(a => [a.id, a])), porChave = new Map(atvs.map(a => [`${a.area}|${a.item}|${norm(a.atividade)}`, a]));
+    const celulas = []; let semLinha = 0;
+    diasOk.forEach(d => Object.keys(FRENTES).forEach(f => {
+      Object.entries(status[d][f].atividades || {}).forEach(([id, x]) => {
+        if (x.realizado == null) return;
+        const a = porId.get(id) || porChave.get(`${x.area}|${x.item}|${norm(x.atividade)}`);
+        if (!a || !a.linhaR || !prog.colunas[d]) { semLinha++; return; }
+        celulas.push({ ref: `${prog.colunas[d]}${a.linhaR}`, v: Math.round(x.realizado * 1e6) / 1e6 });
+      });
+    }));
+    await loadScript(JSZIP_URL);
+    const arq = await getDocs(query(collection(db, "arquivos"), where("progId", "==", prog.id)));
+    const b64 = arq.docs.map(d => d.data()).sort((a, b) => a.n - b.n).map(x => x.b64).join("");
+    const zip = await window.JSZip.loadAsync(b64ToU8(b64), { createFolders: false });
+    const wbXml = await zip.file("xl/workbook.xml").async("string");
+    const desc = t => t.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&apos;/g, "'");
+    const sh = [...wbXml.matchAll(/<sheet [^>]*?name="([^"]*)"[^>]*?r:id="([^"]*)"/g)].find(m => desc(m[1]) === prog.aba);
+    if (!sh) throw new Error(`Aba "${prog.aba}" não encontrada no arquivo original.`);
+    const rels = await zip.file("xl/_rels/workbook.xml.rels").async("string");
+    const alvo = rels.match(new RegExp(`Id="${sh[2]}"[^>]*?Target="([^"]*)"`)) || rels.match(new RegExp(`Target="([^"]*)"[^>]*?Id="${sh[2]}"`));
+    const caminho = "xl/" + alvo[1].replace(/^\/?xl\//, "").replace(/^\//, "");
+    let xml = await zip.file(caminho).async("string");
+    celulas.forEach(c => { xml = gravaCelula(xml, c.ref, c.v); });
+    zip.file(caminho, xml, { createFolders: false });
+    // Excel recalcula aderência e PPC da planilha ao abrir
+    zip.file("xl/workbook.xml", /<calcPr\b/.test(wbXml) ? wbXml.replace(/<calcPr\b(?![^>]*fullCalcOnLoad)/, '<calcPr fullCalcOnLoad="1"') : wbXml.replace("</workbook>", '<calcPr fullCalcOnLoad="1"/></workbook>'), { createFolders: false });
+    const blob = await zip.generateAsync({ type: "blob", compression: "DEFLATE", mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    const nome = prog.arquivo.replace(/\.xls[xm]?$/i, "") + `_REAL_ate_${dataCurta(dataAlvo).replace("/", "-")}.xlsx`;
+    await entregarArquivo(blob, nome, blob.type, `Realizado de ${diasOk.map(dataCurta).join(", ")} lançado nas linhas R (${celulas.length} valores).${semLinha ? ` ${semLinha} lançamento(s) sem linha correspondente na planilha ficaram de fora.` : ""}`);
+  } catch (e) { console.error(e); dialogo("Não deu para gerar a planilha", `<p>${esc(e.message || e)}</p>`); }
+}
+
+/* ================= USUÁRIOS ================= */
+async function loadUsers() { const qs = await getDocs(collection(db, "usuarios")); S.users = qs.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.nome || "").localeCompare(b.nome || "", "pt-BR")); }
+function vUsers() {
+  const P = [["apontador", "Apontador"], ["engenheiro", "Engenheiro / supervisor"], ["planejamento", "Planejamento"]];
+  return `<h2>Usuários</h2>
+    <p class="nota">Apontador preenche o RDO das frentes marcadas. Engenheiro também aprova. Planejamento vê tudo, importa programação e gerencia acessos.</p>
+    <div class="box"><b>Liberar acesso</b>
+      <div class="grid3" style="margin-top:10px"><div class="field"><label for="u-email">E-mail Google</label><input type="email" id="u-email"></div><div class="field"><label for="u-nome">Nome</label><input type="text" id="u-nome"></div>
+      <div class="field"><label for="u-perfil">Perfil</label><select id="u-perfil">${P.map(p => `<option value="${p[0]}">${p[1]}</option>`).join("")}</select></div></div>
+      <div class="seg" style="margin-bottom:12px">${Object.entries(FRENTES).map(([k, f]) => `<label><input type="checkbox" class="u-fr" value="${k}" style="position:static;opacity:1;pointer-events:auto"> ${f.nome}</label>`).join("")}</div>
+      <button class="btn" data-act="user-add">Liberar acesso</button></div>
+    <div class="box">${S.users.map(u => `<div class="cad-row"><div><b>${esc(u.nome)}</b><div class="nota" style="margin:0">${esc(u.id)}</div></div>
+      <select data-user="${esc(u.id)}" data-f="perfil">${P.map(p => `<option value="${p[0]}" ${u.perfil === p[0] ? "selected" : ""}>${p[1]}</option>`).join("")}</select>
+      <div>${Object.entries(FRENTES).map(([k, f]) => `<label class="at"><input type="checkbox" data-user="${esc(u.id)}" data-f="frente" value="${k}" ${u.frentes?.includes(k) ? "checked" : ""}> ${f.nome}</label>`).join("")}</div>
+      <button class="lnk perigo" data-act="user-del" data-id="${esc(u.id)}">Remover</button></div>`).join("") || `<p class="nota">Nenhum usuário.</p>`}</div>`;
+}
+async function userAdd() {
+  const email = $("#u-email").value.trim().toLowerCase(), nome = $("#u-nome").value.trim(), perfilU = $("#u-perfil").value;
+  const frentes = [...document.querySelectorAll(".u-fr:checked")].map(i => i.value);
+  if (!/^\S+@\S+\.\S+$/.test(email) || !nome) return toast("Preencha e-mail e nome.");
+  if (perfilU !== "planejamento" && !frentes.length) return toast("Marque ao menos uma frente.");
+  try { await setDoc(doc(db, "usuarios", email), { email, nome, perfil: perfilU, frentes, criadoEm: serverTimestamp() }); toast("Acesso liberado."); go("users"); } catch (e) { toast(msgErro(e)); }
+}
+function userCampo(el, tipo) {
+  if (tipo !== "change") return;
+  const u = S.users.find(x => x.id === el.dataset.user); if (!u) return;
+  let upd;
+  if (el.dataset.f === "perfil") upd = { perfil: el.value };
+  else { const s = new Set(u.frentes || []); el.checked ? s.add(el.value) : s.delete(el.value); upd = { frentes: [...s] }; }
+  Object.assign(u, upd);
+  updateDoc(doc(db, "usuarios", u.id), upd).then(() => toast("Salvo.")).catch(e => toast(msgErro(e)));
+}
+async function userDel(id) {
+  if (id === S.user.email.toLowerCase()) return toast("Você não pode remover o próprio acesso.");
+  if (await dialogo("Remover acesso?", `<p>${esc(id)} deixa de entrar no app. Os RDOs dessa pessoa continuam salvos.</p>`, [{ t: "Cancelar", v: "n", sec: true }, { t: "Remover", v: "s" }]) !== "s") return;
+  try { await deleteDoc(doc(db, "usuarios", id)); go("users"); } catch (e) { toast(msgErro(e)); }
+}
+
+window.addEventListener("online", () => { if (S.view === "rdo" && S.salvo !== "Salvo") agendarSalvar(); });
+window.addEventListener("beforeunload", e => { if (S.view === "rdo" && S.salvo === "Salvando…") { e.preventDefault(); e.returnValue = ""; } });
+</script>
+</body>
+</html>
