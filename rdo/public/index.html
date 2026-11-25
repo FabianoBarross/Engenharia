@@ -127,6 +127,8 @@ fieldset:disabled input,fieldset:disabled select,fieldset:disabled textarea{back
 .horas b{font-size:20px;font-weight:800;display:block}
 .horas .perda b{color:#B8621B}
 .horas .total{border-left:3px solid #E08A2E;padding-left:10px}
+.horas .par{border-left:3px solid var(--c);padding-left:10px}
+.horas .par b{color:var(--c)}
 .grp-h em{font-style:normal;font-weight:700}.grp-h em.neg{color:var(--verm)}.grp-h em.pos{color:var(--azul)}
 .encs{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
 .enc{border:1.5px solid var(--linha);border-left:6px solid var(--c);border-radius:var(--r-campo);background:#fff;overflow:hidden}
@@ -183,6 +185,8 @@ fieldset:disabled input,fieldset:disabled select,fieldset:disabled textarea{back
 .atv.zero{border-left-color:var(--verm)}
 .atv header{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--suave);font-weight:600}
 .atv .cod{color:#8A968E;font-weight:500}
+.atv .op{background:#EEF3F6;color:#2F6FB0;border-radius:99px;padding:0 8px;font-weight:700}
+.atv .op-chk{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:13px;font-weight:600;color:var(--suave)}
 .atv h4{margin:3px 0 10px;font-size:15px;font-weight:700;line-height:1.3}
 .qtd{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:end}
 .qtd small{display:block;font-size:12px;color:var(--suave);font-weight:600}
@@ -229,8 +233,16 @@ fieldset:disabled input,fieldset:disabled select,fieldset:disabled textarea{back
 .cad-row{display:grid;grid-template-columns:1.6fr 1.2fr 1fr auto;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--linha)}
 .cad-row input,.cad-row select{min-height:40px;padding:7px 9px;font-size:14px}
 .cad-row.inativo{opacity:.5}
+.cad-row[hidden]{display:none}
+.cad-tab{max-height:70vh;overflow:auto;margin-top:8px;border-top:1px solid var(--linha)}
+.cad-head{position:sticky;top:0;z-index:2;background:var(--branco);padding:2px 0}
+.cad-head .lnk{text-align:left;padding:6px 9px;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.cad-filtro{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.cad-filtro input{flex:1 1 220px;min-height:40px;padding:7px 10px;font-size:14px}
+.cad-filtro select{flex:0 1 200px;min-height:40px;padding:7px 9px;font-size:14px}
+.cad-filtro .nota{margin:0 0 0 auto}
 .cad-row .at{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--suave)}
-@media (max-width:620px){.cad-row{grid-template-columns:1fr 1fr}.cad-row>:first-child{grid-column:1/-1}}
+@media (max-width:620px){.cad-row{grid-template-columns:1fr 1fr}.cad-row>:first-child{grid-column:1/-1}.cad-head{display:none}}
 .box{background:var(--branco);border:1px solid var(--linha);border-radius:var(--r-painel);padding:14px 16px;margin:0 0 14px}
 .tabs{display:flex;gap:6px;margin:0 0 14px}
 .prev-tab{width:100%;border-collapse:collapse;font-size:13px;background:var(--branco)}
@@ -325,6 +337,7 @@ dialog li{margin:4px 0}
 #pdf-doc .p-enc p{margin:2px 0 0;font-size:10px;font-weight:600}
 #pdf-doc .p-perdas{display:flex;gap:18px;margin:6px 0 0;padding:6px 9px;background:#FDF1E4;border-left:4px solid #E08A2E;font-size:9.5px}
 #pdf-doc .p-perdas b{font-size:11px}
+#pdf-doc .p-perdas.par{background:#EEF3F6;border-left-color:#2F8FC9;margin-top:4px}
 #pdf-doc .p-efe td.n,#pdf-doc .p-efe th.n{text-align:right}
 #pdf-doc .neg{color:#C0392B;font-weight:800}#pdf-doc .pos{color:#2F6FB0;font-weight:800}
 #pdf-doc .leg{font-size:8.5px;gap:4px 12px}
@@ -375,7 +388,7 @@ const nomeFrente = f => FRENTES[f]?.nome || (f === LEGADO ? "EEA-B01/B02" : f);
 const EMPRESAS = ["Vale Verde", "MOB", "Aquasolis (ARN)", "MP", "Outra"];
 const FUNCOES = ["Engenheiro civil","Supervisor de obras","Encarregado de obras","Encarregado de terraplanagem","Encarregado de andaimes","Apontador","Técnico de segurança","Técnica de enfermagem","Motorista de ambulância","Topógrafo","Auxiliar de topografia","Laboratorista","Almoxarife","Auxiliar de almoxarife","Eletricista","Oficial","Ajudante","Servente","Auxiliar de serviços gerais","Montador","Montador de andaimes","Rigger","Operador de escavadeira","Operador de rolo compactador","Operador de pá-carregadeira","Operador de guindaste","Operador","Motorista de caminhão basculante","Motorista de caminhão-pipa","Sinaleiro","Pedreiro","Auxiliar administrativo"];
 const CAUSAS = ["Chuva / condição climática","Acesso / trafegabilidade","Atraso na atividade predecessora","Falta de material","Falta ou quebra de equipamento","Falta de mão de obra / operador","Projeto ou liberação técnica","Liberação de segurança (PT/APR/rigging)","Interferência com outra atividade","Equipe remanejada para outra prioridade","Fornecedor / terceiro","Produtividade abaixo do planejado","Outros"];
-const MOTIVOS_PAR = ["Chuva","Acesso / estrada","Aguardando liberação","Falta de material","Equipamento","Segurança","Limpeza / higiene","Outros"];
+const MOTIVOS_PAR = ["Chuva","Alerta vermelho","Acesso / estrada","Aguardando liberação","Falta de material","Equipamento","Segurança","Limpeza / higiene","Outros"];
 const EQ_ST = { fora: "Fora da obra", op: "Operante", semop: "Sem operador", man: "Manutenção" };
 const EQ_COR = { op: "#006838", semop: "#2F6FB0", man: "#C0392B", fora: "#6B7770" };
 const STATUS = { rascunho: "Em preenchimento", fechado: "Fechado e validado" };
@@ -633,7 +646,16 @@ async function entrar() {
 }
 
 /* ================= RÉGUA DA JORNADA ================= */
-// Perda gerencial = da chegada ao início das atividades + almoço acima de 1h + paralisações
+// Perda gerencial = da chegada ao início das atividades + almoço acima de 1h.
+// Paralisações ficam à parte, por tipo (pelo motivo): chuva, alerta vermelho e demais
+const TIPOS_PAR = [["chuva", "Paralisação por chuva"], ["alerta", "Alerta vermelho"], ["outras", "Demais paralisações"]];
+const COR_PAR = { chuva: "#2F8FC9", alerta: "#C0392B", outras: "#7A4E2D" };
+function tipoPar(motivo) {
+  const s = norm(motivo);
+  if (/ALERTA|RAIO|DESCARGAS? ATMOSF|TEMPESTADE/.test(s)) return "alerta";
+  if (/CHUVA|PLUVI/.test(s)) return "chuva";
+  return "outras";
+}
 function segmentosJornada(j, pars) {
   const seg = [];
   const addM = (x, y, tipo) => { if (x != null && y != null && y > x) seg.push({ x, y, tipo }); };
@@ -645,7 +667,7 @@ function segmentosJornada(j, pars) {
       addM(i, ai, "prod"); addM(ai, Math.min(af, ai + 60), "almoco"); addM(ai + 60, af, "perda"); addM(af, f, "prod");
     } else addM(i, f, "prod");
   }
-  (pars || []).forEach(p => addM(toMin(p.inicio), toMin(p.fim), "parada"));
+  (pars || []).forEach(p => { const x = toMin(p.inicio), y = toMin(p.fim); if (x != null && y != null && y > x) seg.push({ x, y, tipo: "parada", t: tipoPar(p.motivo) }); });
   return seg;
 }
 const COR_SEG = { prod: "#006838", perda: "#E08A2E", almoco: "#D5DDD8", parada: "#C0392B" };
@@ -659,7 +681,7 @@ function reguaSVG(j, pars, W = 600) {
   let s = `<svg viewBox="0 0 ${W} 72" width="${W}" height="72" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Régua da jornada">`;
   s += `<rect x="${L}" y="${top}" width="${R - L}" height="${H}" rx="5" fill="#F2F5F1" stroke="#D3DDD5"/>`;
   seg.filter(g => g.tipo !== "parada").forEach(g => { s += `<rect x="${X(g.x)}" y="${top}" width="${Math.max(1, X(g.y) - X(g.x))}" height="${H}" fill="${COR_SEG[g.tipo]}"/>`; });
-  seg.filter(g => g.tipo === "parada").forEach(g => { s += `<rect x="${X(g.x)}" y="${top - 3}" width="${Math.max(2, X(g.y) - X(g.x))}" height="${H + 6}" fill="${COR_SEG.parada}" opacity=".9"/>`; });
+  seg.filter(g => g.tipo === "parada").forEach(g => { s += `<rect x="${X(g.x)}" y="${top - 3}" width="${Math.max(2, X(g.y) - X(g.x))}" height="${H + 6}" fill="${COR_PAR[g.t] || COR_SEG.parada}" opacity=".9"/>`; });
   const ai = toMin(j.almocoInicio);
   if (ai != null) { const x = X(ai + 60); s += `<line x1="${x}" x2="${x}" y1="${top - 5}" y2="${top + H + 3}" stroke="#17271E" stroke-width="1.5" stroke-dasharray="3 2"/><text x="${x}" y="${top - 7}" font-size="10" font-family="Montserrat,sans-serif" font-weight="700" fill="#17271E" text-anchor="middle">1h</text>`; }
   for (let m = ini; m <= fim; m += 60) {
@@ -670,20 +692,22 @@ function reguaSVG(j, pars, W = 600) {
   if (!seg.length) s += `<text x="${W / 2}" y="${top + 20}" font-size="12" font-family="Montserrat,sans-serif" fill="#8A968E" text-anchor="middle">Preencha os horários para montar a régua</text>`;
   return s + "</svg>";
 }
-const legendaRegua = () => `<div class="leg">${[["prod", "Produção"], ["perda", "Perda gerencial"], ["almoco", "Almoço (1h prevista)"], ["parada", "Paralisação"]].map(([k, l]) => `<span><i style="background:${COR_SEG[k]}"></i>${l}</span>`).join("")}</div>`;
+const legendaRegua = () => `<div class="leg">${[["prod", "Produção"], ["perda", "Perda gerencial"], ["almoco", "Almoço (1h prevista)"]].map(([k, l]) => `<span><i style="background:${COR_SEG[k]}"></i>${l}</span>`).join("")}${TIPOS_PAR.map(([k, l]) => `<span><i style="background:${COR_PAR[k]}"></i>${l}</span>`).join("")}</div>`;
 
 function horas(r) {
   const j = r.jornada;
   const almoco = dur(j.almocoInicio, j.almocoFim);
   const almocoExc = Math.max(0, almoco - 60);
-  const parado = (r.paralisacoes || []).reduce((a, p) => a + dur(p.inicio, p.fim), 0);
+  const tipos = { chuva: 0, alerta: 0, outras: 0 };
+  (r.paralisacoes || []).forEach(p => { tipos[tipoPar(p.motivo)] += dur(p.inicio, p.fim); });
+  const parado = tipos.chuva + tipos.alerta + tipos.outras;
   let perdaInicio, prod;
   if (j.inicio) {
     perdaInicio = dur(j.chegada, j.inicio);
     prod = j.almocoInicio && j.almocoFim ? dur(j.inicio, j.almocoInicio) + dur(j.almocoFim, j.fim) : dur(j.inicio, j.fim);
   } else { perdaInicio = Math.max(0, dur(j.chegada, j.fim) - almoco); prod = 0; }
   prod = Math.max(0, prod - parado);
-  return { prod, perdaInicio, almoco, almocoExc, parado, perdas: perdaInicio + almocoExc + parado };
+  return { prod, perdaInicio, almoco, almocoExc, parado, paradoChuva: tipos.chuva, paradoAlerta: tipos.alerta, paradoOutras: tipos.outras, perdas: perdaInicio + almocoExc };
 }
 
 /* ================= RESUMO / REGRAS ================= */
@@ -703,18 +727,20 @@ function statusAtv(a) {
   if (a.realizado <= 0) return "zero";
   return a.realizado >= a.previsto - 1e-9 ? "ok" : "abaixo";
 }
-// PPC ponderado do dia: média da aderência de cada atividade programada (realizado / previsto, limitado a 100%)
+// PPC ponderado do dia: média da aderência de cada atividade programada (realizado / previsto, limitado a 100%).
+// As "oportunidades" da programação (sem aderência na planilha, ou marcadas no RDO pelo planejamento) ficam fora.
+const contaPPC = a => a.previsto > 0 && !a.oportunidade;
 function ppcDia(r) {
-  const atvs = atvLista(r).filter(a => a.previsto > 0);
+  const atvs = atvLista(r).filter(contaPPC);
   if (!atvs.length) return null;
   return atvs.reduce((s, a) => s + Math.min(1, Math.max(0, (a.realizado || 0) / a.previsto)), 0) / atvs.length;
 }
 const fmtPct = v => v == null ? "–" : `${Math.round(v * 100)}%`;
 function resumo(r) {
-  const atvs = atvLista(r).filter(a => a.previsto > 0);
+  const atvs = atvLista(r).filter(contaPPC);
   const ok = atvs.filter(a => statusAtv(a) === "ok").length;
   const h = horas(r), ef = efetivoResumo(r);
-  return { efetivo: ef.real, previsto: ef.previsto, ppc: ppcDia(r), atvProg: atvs.length, atvOk: ok, horasProd: h.prod, perdas: h.perdas, praticabilidade: r.clima?.praticabilidade || "" };
+  return { efetivo: ef.real, previsto: ef.previsto, ppc: ppcDia(r), atvProg: atvs.length, atvOk: ok, horasProd: h.prod, perdas: h.perdas, parado: h.parado, praticabilidade: r.clima?.praticabilidade || "" };
 }
 function papel(funcao) {
   const f = norm(funcao);
@@ -766,6 +792,7 @@ function render() {
   if (v === "rdo") { APP.innerHTML = vRDO(); pintaSalvo(); return; }
   const corpo = { home: vHome, prog: vProg, cad: vCad, users: vUsers }[v];
   APP.innerHTML = shell(corpo ? corpo() : "");
+  if (v === "cad") filtraCad();
 }
 function shell(conteudo) {
   const tabs = [["home", "Início", true], ["cad", "Cadastros", isEng()], ["prog", "Programação", isPlan()], ["users", "Usuários", isPlan()]].filter(t => t[2]);
@@ -851,8 +878,8 @@ async function abrirRDO(frente, data) {
       if (stNorm(rdo.status) === "rascunho") {
         rdo.progId = prog.id; rdo.progNome = prog.nome;
         atvHoje.forEach(a => {
-          if (!rdo.atividades[a.id]) rdo.atividades[a.id] = { area: a.area, subarea: a.subarea, item: a.item, idCronog: a.idCronog, atividade: a.atividade, un: a.un, previsto: a.prev[data], realizado: null, causa: "", obs: "", origem: "hoje" };
-          else rdo.atividades[a.id].previsto = a.prev[data];
+          if (!rdo.atividades[a.id]) rdo.atividades[a.id] = { area: a.area, subarea: a.subarea, item: a.item, idCronog: a.idCronog, atividade: a.atividade, un: a.un, previsto: a.prev[data], realizado: null, causa: "", obs: "", origem: "hoje", oportunidade: !!a.oportunidade };
+          else { rdo.atividades[a.id].previsto = a.prev[data]; if (rdo.atividades[a.id].oportunidade == null && a.oportunidade) rdo.atividades[a.id].oportunidade = true; }
         });
       }
     }
@@ -980,10 +1007,10 @@ function blocoHoras() {
   return `<div><b>${fmtH(h.prod)}</b>produção</div>
     <div class="perda"><b>${fmtH(h.perdaInicio)}</b>da chegada ao início</div>
     <div class="${h.almocoExc ? "perda" : ""}"><b>${h.almoco ? (h.almocoExc ? "+" + fmtH(h.almocoExc) : "dentro de 1h") : "–"}</b>almoço${h.almoco ? ` de ${fmtH(h.almoco)}` : ""}</div>
-    ${h.parado ? `<div class="perda"><b>${fmtH(h.parado)}</b>paralisações</div>` : ""}
-    <div class="perda total"><b>${fmtH(h.perdas)}</b>perda gerencial total</div>`;
+    <div class="perda total"><b>${fmtH(h.perdas)}</b>perda gerencial total</div>
+    ${h.parado ? TIPOS_PAR.map(([k, l]) => { const v = h["parado" + k[0].toUpperCase() + k.slice(1)]; return v ? `<div class="par" style="--c:${COR_PAR[k]}"><b>${fmtH(v)}</b>${l.toLowerCase()}</div>` : ""; }).join("") : ""}`;
 }
-function resumoJornada() { const j = S.rdo.jornada; const h = horas(S.rdo); return j.chegada || j.fim ? `${fmtH(h.prod)} produção, ${fmtH(h.perdas)} perda` : "preencher"; }
+function resumoJornada() { const j = S.rdo.jornada; const h = horas(S.rdo); return j.chegada || j.fim ? `${fmtH(h.prod)} produção, ${fmtH(h.perdas)} perda${h.parado ? `, ${fmtH(h.parado)} parado` : ""}` : "preencher"; }
 function atualizaJornada() {
   $("#regua") && ($("#regua").innerHTML = reguaSVG(S.rdo.jornada, S.rdo.paralisacoes, 380));
   $("#horas") && ($("#horas").innerHTML = blocoHoras());
@@ -1072,7 +1099,7 @@ function cardAtv(a) {
   const st = statusAtv(a);
   const pct = a.previsto > 0 && a.realizado != null ? `${Math.round(a.realizado / a.previsto * 100)}%` : "";
   return `<article class="atv ${st}" id="atv-${a.id}">
-    <header><span>${esc(a.subarea || a.area)}</span>${a.idCronog ? `<span class="cod">${esc(a.idCronog)}</span>` : ""}</header>
+    <header><span>${esc(a.subarea || a.area)}</span>${a.idCronog ? `<span class="cod">${esc(a.idCronog)}</span>` : ""}${a.oportunidade ? `<span class="op">Oportunidade, fora do PPC</span>` : ""}</header>
     <h4>${esc(a.atividade)}</h4>
     <div class="qtd"><div class="prev"><small>Previsto hoje</small><b class="num">${a.previsto > 0 ? fmtQ(a.previsto, a.un) : "Adiantada"}</b></div>
       <label><small>Realizado</small><span class="inp"><input type="number" inputmode="decimal" step="any" min="0" data-atv="${a.id}" data-f="realizado" value="${dispVal(a.realizado, a.un)}"><em>${a.un === "%" ? "%" : esc(a.un)}</em></span></label>
@@ -1080,6 +1107,7 @@ function cardAtv(a) {
     <div class="rapidos">${a.previsto > 0 ? `<button type="button" class="lnk" data-act="atv-tudo" data-id="${a.id}">Fez o previsto</button>` : ""}<button type="button" class="lnk" data-act="atv-nada" data-id="${a.id}">Não executou</button>${a.origem === "semana" ? `<button type="button" class="lnk perigo" data-act="atv-rem" data-id="${a.id}">Remover</button>` : ""}</div>
     <div class="causa"><label for="cz-${a.id}">Por que ficou abaixo do previsto?</label><select id="cz-${a.id}" data-atv="${a.id}" data-f="causa"><option value="">Escolha a causa</option>${CAUSAS.map(c => `<option ${a.causa === c ? "selected" : ""}>${c}</option>`).join("")}</select></div>
     <input type="text" class="obs" placeholder="Observação (opcional)" data-atv="${a.id}" data-f="obs" value="${esc(a.obs)}">
+    ${a.previsto > 0 && isPlan() ? `<label class="op-chk"><input type="checkbox" data-atv="${a.id}" data-f="oportunidade" ${a.oportunidade ? "checked" : ""}> Oportunidade (não entra no PPC)</label>` : ""}
   </article>`;
 }
 function secAtv() {
@@ -1224,7 +1252,7 @@ const ACT = {
   "atv-rem": b => { delete S.rdo.atividades[b.dataset.id]; $("#sec-atividades").innerHTML = secAtv(); $("#sum-atividades").textContent = resumoAtv(); agendarSalvar(); },
   adiantar: () => {
     const id = $("#sel-adiantar").value; const a = S.ctx.atvSemana.find(x => x.id === id); if (!a) return;
-    S.rdo.atividades[id] = { area: a.area, subarea: a.subarea, item: a.item, idCronog: a.idCronog, atividade: a.atividade, un: a.un, previsto: 0, realizado: null, causa: "", obs: `Programada para ${Object.keys(a.prev || {}).map(dataCurta).join(", ")}`, origem: "semana" };
+    S.rdo.atividades[id] = { area: a.area, subarea: a.subarea, item: a.item, idCronog: a.idCronog, atividade: a.atividade, un: a.un, previsto: 0, realizado: null, causa: "", obs: `Programada para ${Object.keys(a.prev || {}).map(dataCurta).join(", ")}`, origem: "semana", oportunidade: !!a.oportunidade };
     $("#sec-atividades").innerHTML = secAtv(); agendarSalvar();
   },
   "np-add": () => { S.rdo.naoProgramadas.push({ descricao: "", qtd: "", un: "", obs: "" }); refazSec("np", secNP, () => `${S.rdo.naoProgramadas.length}`); },
@@ -1252,6 +1280,9 @@ const ACT = {
   "cad-del": b => cadExcluir(b.dataset.id),
   "cad-limpar": () => limparEfetivo(),
   "cad-tab": b => { S.cadTab = b.dataset.t; render(); },
+  "cad-ord": b => { const F = filtroCad(), k = b.dataset.k; if (F.ord === k) { if (F.desc) { F.ord = ""; F.desc = false; } else F.desc = true; } else { F.ord = k; F.desc = false; } render(); },
+  "cad-limpa-f": () => { const F = filtroCad(); Object.assign(F, { q: "", fn: "", emp: "", ativo: "" }); render(); },
+  "cad-excel": () => cadExcel(),
   "cad-colar": () => cadColar(),
   // Programação
   "prog-conf": () => progConfirmar(),
@@ -1283,6 +1314,7 @@ function onCampo(e) {
   if (el.id === "busca") { S.busca = el.value; $("#lista-ef").innerHTML = listaEfetivo(); return; }
   if (el.id === "cadimp-file" && e.type === "change") return cadImpLer(el.files[0]);
   if (S.impCad && e.type === "change" && el.id === "ci-emp") { S.impCad.empresaPadrao = el.value; return render(); }
+  if (S.view === "cad" && el.dataset.cadf) { filtroCad()[el.dataset.cadf] = el.value; return filtraCad(); }
   if (S.view === "cad" && el.dataset.cad) return cadCampo(el, e.type);
   if (S.view === "users" && el.dataset.user) return userCampo(el, e.type);
   if (el.id === "prog-file" && e.type === "change") return progLer(el.files[0]);
@@ -1308,6 +1340,11 @@ function onCampo(e) {
   }
   if (el.dataset.atv) {
     const a = S.rdo.atividades[el.dataset.atv]; const f = el.dataset.f;
+    if (f === "oportunidade") {
+      if (e.type !== "change" || !isPlan()) return;
+      a.oportunidade = el.checked; $("#sec-atividades").innerHTML = secAtv(); $("#sum-atividades").textContent = resumoAtv();
+      return agendarSalvar();
+    }
     a[f] = f === "realizado" ? readVal(el.value, a.un) : el.value;
     if (f === "realizado") atualizaAtv(el.dataset.atv);
     return agendarSalvar();
@@ -1342,7 +1379,7 @@ function pdfHTML() {
   const encs = presentes.filter(p => papel(p.funcao) === "enc");
   const prevSet = new Set(r.previstoIds || []);
   const lista = atvLista(r);
-  const prog = lista.filter(a => a.previsto > 0), adiant = lista.filter(a => !(a.previsto > 0));
+  const prog = lista.filter(contaPPC), oport = lista.filter(a => a.previsto > 0 && a.oportunidade), adiant = lista.filter(a => !(a.previsto > 0));
   const corSt = { ok: "#39B54A", abaixo: "#C98A00", zero: "#C0392B", pend: "#AAB7AE" };
   const linhaAtv = a => {
     const sa = statusAtv(a); const p = a.previsto > 0 && a.realizado != null ? a.realizado / a.previsto : null;
@@ -1352,6 +1389,7 @@ function pdfHTML() {
       <td>${a.causa ? `<div class="causa-t">${esc(a.causa)}</div>` : ""}${a.obs ? `<div class="obs-t">${esc(a.obs)}</div>` : ""}</td></tr>`;
   };
   let corpoAtv = ""; prog.forEach(a => corpoAtv += linhaAtv(a));
+  if (oport.length) { corpoAtv += `<tr><td colspan="5" class="ar">Oportunidades (fora do PPC)</td></tr>`; oport.forEach(a => corpoAtv += linhaAtv(a)); }
   if (adiant.length) { corpoAtv += `<tr><td colspan="5" class="ar">Programadas para outros dias, executadas hoje</td></tr>`; adiant.forEach(a => corpoAtv += linhaAtv(a)); }
 
   // efetivo previsto x real
@@ -1391,17 +1429,18 @@ function pdfHTML() {
     ${encs.length ? `<div class="p-encs">${encs.map(p => `<div class="p-enc" style="border-left-color:${EMP_COR[p.empresa] || "#8A968E"}"><b>${esc(p.nome)}</b><span>Encarregado, ${esc(p.empresa || "")}</span><p>${esc(r.encarregados?.[p.id] || "Frente de serviço não informada")}</p></div>`).join("")}</div>` : ""}
     <div class="p-kpis">
       <div class="p-kpi ${efCls}"><b>${rs.efetivo}/${rs.previsto || "–"}</b><span>efetivo real / previsto${rs.previsto ? ` (${Math.round(rs.efetivo / rs.previsto * 100)}%)` : ""}</span></div>
-      <div class="p-kpi ${h.perdas > 90 ? "alerta" : ""}"><b>${fmtH(h.prod)}</b><span>de produção, ${fmtH(h.perdas)} de perda gerencial</span></div>
+      <div class="p-kpi ${h.perdas > 90 ? "alerta" : ""}"><b>${fmtH(h.prod)}</b><span>de produção, ${fmtH(h.perdas)} de perda gerencial${h.parado ? `, ${fmtH(h.parado)} de paralisações` : ""}</span></div>
       <div class="p-kpi ${ppcCls}"><b>${fmtPct(rs.ppc)}</b><span>PPC do dia (ponderado), ${rs.atvOk} de ${rs.atvProg} atividades 100%</span></div>
       <div class="p-kpi ${pratCls}"><b style="font-size:14px;padding:6px 0 3px">${esc(clima.praticabilidade || "–")}</b><span>${chuvaTxt}</span></div>
     </div>
     <section class="avoid"><h2>Horários</h2>${reguaSVG(j, r.paralisacoes, 740)}${legendaRegua()}
       <div class="p-horas">${[["Chegada", j.chegada], ["Início das atividades", j.inicio], ["Almoço", j.almocoInicio ? `${j.almocoInicio} às ${j.almocoFim} (${fmtH(h.almoco)})` : ""], ["Fim", j.fim]].map(([l, v]) => `<div>${l}<br><b>${esc(v || "–")}</b></div>`).join("")}</div>
-      <div class="p-perdas"><div>Perda gerencial<br><b>${fmtH(h.perdas)}</b></div><div>Chegada até o início<br><b>${fmtH(h.perdaInicio)}</b></div><div>Almoço acima de 1h<br><b>${h.almocoExc ? "+" + fmtH(h.almocoExc) : "0h00"}</b></div><div>Paralisações<br><b>${fmtH(h.parado)}</b></div></div>
+      <div class="p-perdas"><div>Perda gerencial<br><b>${fmtH(h.perdas)}</b></div><div>Chegada até o início<br><b>${fmtH(h.perdaInicio)}</b></div><div>Almoço acima de 1h<br><b>${h.almocoExc ? "+" + fmtH(h.almocoExc) : "0h00"}</b></div></div>
+      <div class="p-perdas par">${TIPOS_PAR.map(([k, l]) => `<div>${l}<br><b style="color:${COR_PAR[k]}">${fmtH(h["parado" + k[0].toUpperCase() + k.slice(1)])}</b></div>`).join("")}<div>Total de paralisações<br><b>${fmtH(h.parado)}</b></div></div>
       ${j.ddsTema ? `<p class="txt" style="margin-top:6px"><b>DDS / ordem unida:</b> ${esc(j.ddsTema)}</p>` : ""}</section>
     <section><h2>Atividades programadas: previsto e realizado</h2>
       ${lista.length ? `<table class="p-tab"><thead><tr><th style="width:44%">Atividade</th><th style="text-align:right">Previsto</th><th style="text-align:right">Realizado</th><th>%</th><th>Causa / observação</th></tr></thead><tbody>${corpoAtv}</tbody></table>` : `<p class="txt">Sem atividades programadas para este dia.</p>`}
-      ${r.progNome ? `<p class="obs-t" style="margin-top:4px">Programação de referência: ${esc(r.progNome)}. PPC ponderado = média da aderência de cada atividade (realizado / previsto, limitado a 100%).</p>` : ""}</section>
+      ${r.progNome ? `<p class="obs-t" style="margin-top:4px">Programação de referência: ${esc(r.progNome)}. PPC ponderado = média da aderência de cada atividade (realizado / previsto, limitado a 100%); as oportunidades ficam fora.</p>` : ""}</section>
     ${r.naoProgramadas.length ? `<section class="avoid"><h2>Atividades não programadas</h2><table class="p-tab"><tbody>${r.naoProgramadas.map(n => `<tr><td>${esc(n.descricao)}</td><td class="n">${n.qtd ? `${esc(n.qtd)} ${esc(n.un)}` : ""}</td></tr>`).join("")}</tbody></table></section>` : ""}
     <section class="avoid"><h2>Efetivo previsto x real</h2>
       <div class="dup"><table class="p-tab p-efe"><thead><tr><th>Empresa</th><th class="n">Previsto</th><th class="n">Real</th><th class="n">Diferença</th></tr></thead>
@@ -1413,7 +1452,7 @@ function pdfHTML() {
       <div class="leg" style="margin-top:6px"><span><i style="background:#006838"></i>Operante</span><span><i style="background:#2F6FB0"></i>Sem operador</span><span><i style="background:#C0392B"></i>Manutenção</span></div></section>
     <section class="avoid"><h2>Clima, paralisações e ocorrências</h2>
       <div class="dup"><div><p class="txt"><b>Manhã:</b> ${esc(clima.manha || "–")} &nbsp; <b>Tarde:</b> ${esc(clima.tarde || "–")}<br><b>Chuva:</b> ${chuvaTxt}${clima.motivo ? `<br><b>Impedimento:</b> ${esc(clima.motivo)}` : ""}</p>
-        ${r.paralisacoes.length ? `<p class="txt"><b>Paralisações</b><br>${r.paralisacoes.map(p => `${esc(p.inicio)} às ${esc(p.fim)}: ${esc(p.motivo)} (${fmtH(dur(p.inicio, p.fim))})`).join("<br>")}</p>` : ""}</div>
+        ${r.paralisacoes.length ? `<p class="txt"><b>Paralisações</b><br>${r.paralisacoes.map(p => `${esc(p.inicio)} às ${esc(p.fim)}: ${esc(p.motivo)} (${fmtH(dur(p.inicio, p.fim))}, ${TIPOS_PAR.find(([k]) => k === tipoPar(p.motivo))[1].toLowerCase()})`).join("<br>")}</p>` : ""}</div>
         <div>${r.ocorrencias ? `<p class="txt"><b>Ocorrências</b><br>${esc(r.ocorrencias)}</p>` : `<p class="txt">Sem ocorrências registradas.</p>`}${r.restricoes ? `<p class="txt"><b>Restrições</b><br>${esc(r.restricoes)}</p>` : ""}</div></div></section>
     ${c.fotos.length ? `<section><h2>Registro fotográfico</h2><div class="p-fotos">${c.fotos.map(f => `<div class="p-foto avoid"><img src="${f.pdfUrl || f.dataUrl}" alt=""><p>${esc(f.legenda || "")}</p></div>`).join("")}</div></section>` : ""}
     <div class="p-ass avoid"><div><b>${esc(r.apontador || "")}</b><span>Apontador${st === "fechado" && r.fechadoEm ? `, validado em ${new Date(r.fechadoEm).toLocaleString("pt-BR")}` : ", RDO em preenchimento"}</span></div>
@@ -1518,10 +1557,11 @@ async function loadCad() {
 }
 function vCad() {
   const gs = gruposPermitidos(), t = S.cadTab, g = S.cadGrupo, cg = S.cad.carga;
-  const linhasP = S.cad.colabs.map(p => `<div class="cad-row"><input type="text" aria-label="Nome" data-cad="${p.id}" data-f="nome" value="${esc(p.nome)}"><input type="text" aria-label="Função" list="dl-f" data-cad="${p.id}" data-f="funcao" value="${esc(p.funcao)}">
+  const F = filtroCad(), ordenar = arr => !F.ord ? arr : [...arr].sort((a, b) => { const x = F.ord === "ativo" ? String(a.ativo !== false) : String(a[F.ord] || ""), y = F.ord === "ativo" ? String(b.ativo !== false) : String(b[F.ord] || ""); const c = x.localeCompare(y, "pt-BR", { numeric: true, sensitivity: "base" }); return F.desc ? -c : c; });
+  const linhasP = ordenar(S.cad.colabs).map(p => `<div class="cad-row" data-id="${p.id}" data-busca="${esc(norm(`${p.nome} ${p.funcao}`))}" data-fn="${esc(p.funcao || "")}" data-emp="${esc(p.empresa || "")}"><input type="text" aria-label="Nome" data-cad="${p.id}" data-f="nome" value="${esc(p.nome)}"><input type="text" aria-label="Função" list="dl-f" data-cad="${p.id}" data-f="funcao" value="${esc(p.funcao)}">
       <select aria-label="Empresa" data-cad="${p.id}" data-f="empresa">${[...new Set([...EMPRESAS, p.empresa].filter(Boolean))].map(e => `<option ${p.empresa === e ? "selected" : ""}>${esc(e)}</option>`).join("")}</select>
       ${isPlan() ? `<button class="lnk perigo" data-act="cad-del" data-id="${p.id}">Remover</button>` : "<span></span>"}</div>`).join("");
-  const linhasE = S.cad.equips.map(e => `<div class="cad-row ${e.ativo === false ? "inativo" : ""}"><input type="text" aria-label="Código" data-cad="${e.id}" data-f="codigo" value="${esc(e.codigo)}"><input type="text" aria-label="Descrição" data-cad="${e.id}" data-f="descricao" value="${esc(e.descricao)}">
+  const linhasE = ordenar(S.cad.equips).map(e => `<div class="cad-row ${e.ativo === false ? "inativo" : ""}" data-id="${e.id}" data-busca="${esc(norm(`${e.codigo} ${e.descricao}`))}" data-ativo="${e.ativo !== false ? "sim" : "nao"}"><input type="text" aria-label="Código" data-cad="${e.id}" data-f="codigo" value="${esc(e.codigo)}"><input type="text" aria-label="Descrição" data-cad="${e.id}" data-f="descricao" value="${esc(e.descricao)}">
       <label class="at"><input type="checkbox" data-cad="${e.id}" data-f="ativo" ${e.ativo !== false ? "checked" : ""}> ativo</label>
       ${isPlan() ? `<button class="lnk perigo" data-act="cad-del" data-id="${e.id}">Remover</button>` : "<span></span>"}</div>`).join("");
   return `<h2>Cadastros</h2>
@@ -1532,11 +1572,51 @@ function vCad() {
     ${t === "colabs" ? `<div class="box"><div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap"><div style="margin-right:auto"><b>Efetivo atual: ${S.cad.colabs.length} pessoas</b>
         <p class="nota" style="margin:2px 0 0">${cg?.arquivo ? `Última carga: ${esc(cg.arquivo)}${cg.em ? `, em ${new Date(cg.em).toLocaleString("pt-BR")}` : ""}${cg.por ? `, por ${esc(cg.por)}` : ""}` : "Nenhuma planilha carregada ainda."}</p></div>
         ${isPlan() && S.cad.colabs.length ? `<button class="btn perigo" data-act="cad-limpar">Limpar todo o efetivo</button>` : ""}</div>
-      <div style="margin-top:10px">${linhasP || `<p class="nota">Sem efetivo cadastrado. Suba a planilha acima.</p>`}</div></div>`
+      ${linhasP ? `${barraFiltroCad("colabs")}<div class="cad-tab" id="cad-lista">${cabCad([["nome", "Nome"], ["funcao", "Função"], ["empresa", "Empresa"]])}${linhasP}</div>` : `<div style="margin-top:10px"><p class="nota">Sem efetivo cadastrado. Suba a planilha acima.</p></div>`}</div>`
     : `<div class="box"><b>Adicionar equipamentos</b><p class="nota">Um por linha: <b>código descrição</b>, por exemplo EH-100 Escavadeira hidráulica. Também entram pela planilha acima.</p>
       <textarea id="cad-txt" placeholder="EH-100 Escavadeira hidráulica"></textarea><button class="btn sec" data-act="cad-colar" style="margin-top:10px">Adicionar ao cadastro</button></div>
-      <div class="box">${linhasE || `<p class="nota">Nenhum equipamento cadastrado.</p>`}</div>`}
+      <div class="box">${linhasE ? `${barraFiltroCad("equips")}<div class="cad-tab" id="cad-lista">${cabCad([["codigo", "Código"], ["descricao", "Descrição"], ["ativo", "Situação"]])}${linhasE}</div>` : `<p class="nota">Nenhum equipamento cadastrado.</p>`}</div>`}
     <datalist id="dl-f">${FUNCOES.map(f => `<option value="${f}">`).join("")}</datalist>`;
+}
+/* ---------- cadastro como planilha: busca, filtros, ordenação e Excel ---------- */
+function filtroCad() {
+  S.cadF = S.cadF || {};
+  return S.cadF[S.cadTab] || (S.cadF[S.cadTab] = { q: "", fn: "", emp: "", ativo: "", ord: "", desc: false });
+}
+function cabCad(cols) {
+  const F = filtroCad();
+  return `<div class="cad-row cad-head">${cols.map(([k, l]) => `<button type="button" class="lnk" data-act="cad-ord" data-k="${k}">${l}${F.ord === k ? (F.desc ? " ▼" : " ▲") : ""}</button>`).join("")}<span></span></div>`;
+}
+function barraFiltroCad(tab) {
+  const F = filtroCad(), opc = (vals, sel) => [...new Set(vals.filter(Boolean))].sort((a, b) => a.localeCompare(b, "pt-BR")).map(v => `<option ${sel === v ? "selected" : ""}>${esc(v)}</option>`).join("");
+  const sel = tab === "colabs"
+    ? `<select data-cadf="fn" aria-label="Função"><option value="">Todas as funções</option>${opc(S.cad.colabs.map(p => p.funcao), F.fn)}</select>
+       <select data-cadf="emp" aria-label="Empresa"><option value="">Todas as empresas</option>${opc(S.cad.colabs.map(p => p.empresa), F.emp)}</select>`
+    : `<select data-cadf="ativo" aria-label="Situação"><option value="">Ativos e inativos</option><option value="sim" ${F.ativo === "sim" ? "selected" : ""}>Só ativos</option><option value="nao" ${F.ativo === "nao" ? "selected" : ""}>Só inativos</option></select>`;
+  return `<div class="cad-filtro"><input type="search" data-cadf="q" value="${esc(F.q)}" placeholder="${tab === "colabs" ? "Buscar nome ou função" : "Buscar código ou descrição"}" aria-label="Buscar">${sel}
+    <button type="button" class="lnk" data-act="cad-limpa-f">Limpar filtros</button><button type="button" class="lnk" data-act="cad-excel">Baixar Excel</button><span class="nota" id="cad-cont"></span></div>`;
+}
+function filtraCad() {
+  const F = filtroCad(), q = norm(F.q).split(" ").filter(Boolean);
+  let n = 0, tot = 0;
+  document.querySelectorAll("#cad-lista .cad-row:not(.cad-head)").forEach(row => {
+    tot++;
+    const d = row.dataset;
+    const ok = q.every(t => d.busca.includes(t)) && (!F.fn || d.fn === F.fn) && (!F.emp || d.emp === F.emp) && (!F.ativo || d.ativo === F.ativo);
+    row.hidden = !ok; if (ok) n++;
+  });
+  const c = $("#cad-cont"); if (c) c.textContent = n === tot ? `${tot} ${S.cadTab === "colabs" ? "pessoas" : "equipamentos"}` : `mostrando ${n} de ${tot}`;
+}
+async function cadExcel() {
+  try {
+    await loadScript(XLSX_URL);
+    const vis = new Set([...document.querySelectorAll("#cad-lista .cad-row:not(.cad-head)")].filter(r => !r.hidden).map(r => r.dataset.id));
+    const colabs = S.cadTab === "colabs";
+    const linhas = (colabs ? S.cad.colabs : S.cad.equips).filter(x => vis.has(x.id))
+      .map(x => colabs ? { Nome: x.nome, "Função": x.funcao || "", Empresa: x.empresa || "" } : { "Código": x.codigo, "Descrição": x.descricao || "", "Situação": x.ativo === false ? "Inativo" : "Ativo" });
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(linhas), colabs ? "Efetivo" : "Equipamentos");
+    XLSX.writeFile(wb, `${colabs ? "Efetivo" : "Equipamentos"} - ${GRUPOS[S.cadGrupo].nome}.xlsx`);
+  } catch (e) { toast(msgErro(e)); }
 }
 function cadCampo(el, tipo) {
   if (tipo !== "change") return;
@@ -1544,6 +1624,8 @@ function cadCampo(el, tipo) {
   const f = el.dataset.f; let v = el.type === "checkbox" ? el.checked : el.value.trim();
   if (f === "codigo") { v = normCodigo(v); el.value = v; }
   const item = (S.cadTab === "colabs" ? S.cad.colabs : S.cad.equips).find(x => x.id === el.dataset.cad); if (item) item[f] = v;
+  const row = el.closest(".cad-row");
+  if (item && row) { const d = row.dataset; if (S.cadTab === "colabs") { d.busca = norm(`${item.nome} ${item.funcao}`); d.fn = item.funcao || ""; d.emp = item.empresa || ""; } else { d.busca = norm(`${item.codigo} ${item.descricao}`); d.ativo = item.ativo !== false ? "sim" : "nao"; } }
   updateDoc(doc(db, col, el.dataset.cad), { [f]: v }).then(() => { if (f === "ativo") el.closest(".cad-row").classList.toggle("inativo", !v); toast("Salvo."); }).catch(e => toast(msgErro(e)));
 }
 function limpaLinha(l) { return l.replace(/[\u2060\u200b\u00a0]/g, " ").replace(/^[\s*•·\-–—>]+/, "").replace(/\*/g, "").trim(); }
@@ -1701,6 +1783,8 @@ function parseProgramacao(XLSX, wb, areasAlvo) {
   const rg = XLSX.utils.decode_range(ws["!ref"]);
   const linhaExcel = i => i + rg.s.r + 1, colunaExcel = j => XLSX.utils.encode_col(j + rg.s.c);
   let hRow = -1; const col = {};
+  // colunas que dizem se a atividade é "oportunidade": Aderência (vazia) e textos de status/comentário/observação
+  const colExtra = (n, j) => { if (n.startsWith("ADERENCIA") && col.ader == null) col.ader = j; else if (n.startsWith("COMENTARIO") && col.coment == null) col.coment = j; else if (n === "STATUS" && col.status == null) col.status = j; else if (n.startsWith("OBSERVAC") && col.obs == null) col.obs = j; };
   for (let i = 0; i < Math.min(rows.length, 40); i++) {
     const r = rows[i] || [];
     if (r.findIndex(c => norm(c) === "ATIVIDADE DETALHADA") >= 0) {
@@ -1709,7 +1793,7 @@ function parseProgramacao(XLSX, wb, areasAlvo) {
         if (n === "ITEM") col.item = j; else if (n === "ID CRONOG") col.id = j; else if (n === "AREA") col.area = j;
         else if (n === "SUBAREA") col.sub = j; else if (n.startsWith("P - PREVISTO")) col.tipo = j;
         else if (n === "ATIVIDADE DETALHADA") col.atv = j; else if (n === "RESPONSAVEL") col.resp = j;
-        else if (n === "EQUIPE") col.eq = j; else if (n === "PRINCIPAIS RECURSOS") col.rec = j; });
+        else if (n === "EQUIPE") col.eq = j; else if (n === "PRINCIPAIS RECURSOS") col.rec = j; colExtra(n, j); });
       break;
     }
   }
@@ -1719,7 +1803,7 @@ function parseProgramacao(XLSX, wb, areasAlvo) {
   for (let i = hRow; i < hRow + 6; i++) {
     const r = rows[i] || []; const dc = [];
     r.forEach((c, j) => { if (typeof c === "number" && c > 40000 && c < 60000) dc.push(j); });
-    if (dc.length >= 5) { dRow = i; dateCols = dc; r.forEach((c, j) => { const n = norm(c); if (n.startsWith("(P)REV")) col.pr = j; if (["U.N", "U.M", "UN", "UND"].includes(n)) col.un = j; }); break; }
+    if (dc.length >= 5) { dRow = i; dateCols = dc; r.forEach((c, j) => { const n = norm(c); if (n.startsWith("(P)REV")) col.pr = j; if (["U.N", "U.M", "UN", "UND"].includes(n)) col.un = j; colExtra(n, j); }); break; }
   }
   if (dRow < 0) throw new Error("Linha com as datas da programação não encontrada.");
   const toISO = serial => new Date(Math.round((serial - 25569) * 864e5)).toISOString().slice(0, 10);
@@ -1743,9 +1827,14 @@ function parseProgramacao(XLSX, wb, areasAlvo) {
     atividades.push({ area, secao, item: String(r[col.item] ?? ""), idCronog: txt(r[col.id]).replace(/\s+/g, " "), subarea: txt(r[col.sub]), tipo: norm(r[col.tipo]) || "P",
       atividade: atv.replace(/\s+/g, " "), responsavel: txt(r[col.resp]), equipe: txt(r[col.eq]).replace(/\s+/g, " "), recursos: txt(r[col.rec]).replace(/\s+/g, " "),
       un, prev, totalPrev: Math.round(tot * 1000) / 1000,
-      linhaP: linhaExcel(i), linhaR: norm((rows[i + 1] || [])[col.pr]) === "R" ? linhaExcel(i + 1) : null });
+      linhaP: linhaExcel(i), linhaR: norm((rows[i + 1] || [])[col.pr]) === "R" ? linhaExcel(i + 1) : null,
+      aderVazia: col.ader != null && (r[col.ader] == null || String(r[col.ader]).trim() === ""),
+      textoOp: /OPORTUNIDADE/.test(norm([col.status, col.coment, col.obs].map(c => c != null ? r[c] : "").join(" "))) });
     if (norm((rows[i + 1] || [])[col.pr]) !== "R") avisos.push(`Item ${r[col.item]} (${area}): sem linha R logo abaixo; o realizado dele não será exportado.`);
   }
+  // oportunidade: escrita no status/comentário, ou sem aderência quando as outras atividades têm aderência calculada
+  const comAder = atividades.some(a => !a.aderVazia);
+  atividades.forEach(a => { a.oportunidade = a.textoOp || (comAder && a.aderVazia); delete a.aderVazia; delete a.textoOp; });
   const colunas = {}; dateCols.forEach((j, k) => colunas[dias[k]] = colunaExcel(j));
   return { aba: sheetName, dias, colunas, atividades, avisos };
 }
@@ -1778,12 +1867,12 @@ function vProg() {
     const por = {}; imp.atividades.forEach(a => por[a.area] = (por[a.area] || 0) + 1);
     const conflito = S.progs.filter(p => p.dias?.some(d => imp.dias.includes(d)));
     preview = `<div class="box"><b>Conferência antes de importar</b>
-      <div class="kv num"><div><b>${imp.atividades.length}</b><span>atividades</span></div>${AREAS.map(a => `<div><b>${por[a] || 0}</b><span>${a}</span></div>`).join("")}<div><b>${dataCurta(imp.dias[0])} a ${dataCurta(imp.dias.at(-1))}</b><span>${imp.dias.length} dias</span></div></div>
+      <div class="kv num"><div><b>${imp.atividades.length}</b><span>atividades</span></div>${AREAS.map(a => `<div><b>${por[a] || 0}</b><span>${a}</span></div>`).join("")}<div><b>${imp.atividades.filter(a => a.oportunidade).length}</b><span>oportunidades (fora do PPC)</span></div><div><b>${dataCurta(imp.dias[0])} a ${dataCurta(imp.dias.at(-1))}</b><span>${imp.dias.length} dias</span></div></div>
       ${imp.avisos.length ? `<div class="erro-box">${imp.avisos.map(esc).join("<br>")}</div>` : ""}
       ${conflito.length ? `<p class="nota">Esta programação cobre dias que já estão em ${conflito.map(p => esc(p.nome)).join(", ")}. Para esses dias, os RDOs novos passam a usar a importação mais recente. RDOs já abertos mantêm a programação com que foram criados.</p>` : ""}
       <div class="field"><label for="prog-nome">Nome da programação</label><input type="text" id="prog-nome" value="${esc(imp.nome)}"></div>
       <div class="scroll"><table class="prev-tab"><thead><tr><th>Área</th><th>Subárea</th><th>Atividade</th><th>Un.</th><th>Previsto por dia</th></tr></thead><tbody>
-        ${imp.atividades.map(a => `<tr><td>${esc(a.area)}</td><td>${esc(a.subarea)}</td><td>${esc(a.atividade)}</td><td>${esc(a.un)}</td><td class="num">${Object.entries(a.prev).map(([d, v]) => `${dataCurta(d)}: ${fmtQ(v, a.un)}`).join("<br>")}</td></tr>`).join("")}
+        ${imp.atividades.map(a => `<tr><td>${esc(a.area)}</td><td>${esc(a.subarea)}</td><td>${esc(a.atividade)}${a.oportunidade ? ` <b style="color:#2F6FB0">(oportunidade)</b>` : ""}</td><td>${esc(a.un)}</td><td class="num">${Object.entries(a.prev).map(([d, v]) => `${dataCurta(d)}: ${fmtQ(v, a.un)}`).join("<br>")}</td></tr>`).join("")}
       </tbody></table></div>
       <div style="display:flex;gap:8px;margin-top:14px"><button class="btn" data-act="prog-conf">Importar programação</button><button class="btn sec" data-act="prog-cancel">Cancelar</button></div></div>`;
   }
