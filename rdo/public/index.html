@@ -233,16 +233,28 @@ fieldset:disabled input,fieldset:disabled select,fieldset:disabled textarea{back
 .cad-row{display:grid;grid-template-columns:1.6fr 1.2fr 1fr auto;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--linha)}
 .cad-row input,.cad-row select{min-height:40px;padding:7px 9px;font-size:14px}
 .cad-row.inativo{opacity:.5}
-.cad-row[hidden]{display:none}
-.cad-tab{max-height:70vh;overflow:auto;margin-top:8px;border-top:1px solid var(--linha)}
-.cad-head{position:sticky;top:0;z-index:2;background:var(--branco);padding:2px 0}
-.cad-head .lnk{text-align:left;padding:6px 9px;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
-.cad-filtro{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
-.cad-filtro input{flex:1 1 220px;min-height:40px;padding:7px 10px;font-size:14px}
-.cad-filtro select{flex:0 1 200px;min-height:40px;padding:7px 9px;font-size:14px}
-.cad-filtro .nota{margin:0 0 0 auto}
+/* efetivo em grade (tipo planilha) */
+.ef-barra{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0 8px}
+.ef-barra #ef-q{flex:1 1 240px;min-height:40px}
+.ef-barra .nota{margin:0}
+.ef-wrap{overflow:auto;max-height:70vh;border:1px solid var(--linha);border-radius:var(--r-campo);background:var(--branco)}
+.ef-grade{border-collapse:collapse;width:100%;min-width:620px;font-size:14px}
+.ef-grade th,.ef-grade td{border:1px solid var(--linha);padding:0;text-align:left;vertical-align:middle}
+.ef-grade thead th{position:sticky;background:var(--vv-palido);z-index:2}
+.ef-grade thead tr.tit th{top:0}
+.ef-grade thead tr.fil th{top:var(--ef-h1,37px);background:#F7FAF7;padding:4px}
+.ef-grade thead tr.tit th button{all:unset;cursor:pointer;display:flex;justify-content:space-between;gap:6px;width:100%;box-sizing:border-box;padding:9px 8px;font-weight:700;font-size:13px;color:var(--vv-sombra)}
+.ef-grade thead tr.tit th button:focus-visible{outline:2px solid var(--vv)}
+.ef-grade thead tr.fil input,.ef-grade thead tr.fil select{min-height:32px;padding:4px 6px;font-size:13px;border-radius:6px}
+.ef-grade td.n{width:44px;text-align:right;padding:0 6px;color:var(--suave);font-size:12px;background:#F7FAF7}
+.ef-grade td input,.ef-grade td select{border:0;border-radius:0;min-height:36px;padding:6px 8px;font-size:14px;background:transparent;width:100%}
+.ef-grade td input:focus,.ef-grade td select:focus{outline:2px solid var(--vv2);outline-offset:-2px;background:#fff}
+.ef-grade tbody tr:nth-child(even){background:#FAFCFA}
+.ef-grade tbody tr:hover{background:var(--vv-palido)}
+.ef-grade td.acao{width:1%;white-space:nowrap;padding:0 4px}
+.ef-grade mark{background:none}
 .cad-row .at{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--suave)}
-@media (max-width:620px){.cad-row{grid-template-columns:1fr 1fr}.cad-row>:first-child{grid-column:1/-1}.cad-head{display:none}}
+@media (max-width:620px){.cad-row{grid-template-columns:1fr 1fr}.cad-row>:first-child{grid-column:1/-1}}
 .box{background:var(--branco);border:1px solid var(--linha);border-radius:var(--r-painel);padding:14px 16px;margin:0 0 14px}
 .tabs{display:flex;gap:6px;margin:0 0 14px}
 .prev-tab{width:100%;border-collapse:collapse;font-size:13px;background:var(--branco)}
@@ -329,6 +341,22 @@ dialog li{margin:4px 0}
 #pdf-doc .p-ass div{border-top:1px solid #17271E;padding-top:5px;font-size:9.5px}
 #pdf-doc .p-ass span{display:block;color:#5E6E63;font-size:8.5px}
 #pdf-doc .avoid{page-break-inside:avoid}
+#pdf-doc .s-grid{width:100%;border-collapse:collapse;font-size:9.5px}
+#pdf-doc .s-grid th{background:#006838;color:#fff;font-weight:700;padding:5px 4px;font-size:9px}
+#pdf-doc .s-grid td{border:1px solid #E1E8E2;padding:4px;text-align:center;vertical-align:middle}
+#pdf-doc .s-grid td.l{text-align:left;font-weight:700;background:#F2F5F1}
+#pdf-doc .s-cel b{display:block;font-size:11px}
+#pdf-doc .s-cel span{font-size:8px;color:#5E6E63}
+#pdf-doc .s-vazio{background:#F7F9F7;color:#AAB7AE;font-size:8.5px}
+#pdf-doc .s-rasc{outline:2px dashed #C98A00;outline-offset:-2px}
+#pdf-doc .hbar{display:flex;align-items:center;gap:8px;margin:3px 0;font-size:9.5px}
+#pdf-doc .hbar span{width:210px;flex:none}
+#pdf-doc .hbar i{display:block;height:10px;border-radius:3px;background:#C98A00}
+#pdf-doc .hbar b{font-size:9.5px}
+#pdf-doc .s-frente{border-top:3px solid #006838;margin-top:12px;padding-top:4px}
+#pdf-doc .s-frente h3{font-size:12px;margin:0 0 6px;color:#006838}
+#pdf-doc .s-oc{font-size:9.5px;margin:0 0 4px}
+#pdf-doc .s-oc b{color:#006838}
 #pdf-doc .p-lid{grid-template-columns:repeat(3,1fr)}
 #pdf-doc .p-encs{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 12px;margin:0 0 12px}
 #pdf-doc .p-enc{border-left:4px solid #006838;background:#F2F5F1;border-radius:0 5px 5px 0;padding:5px 9px}
@@ -359,14 +387,14 @@ import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager
 /* ================= CONFIGURAÇÃO ================= */
 const firebaseConfig = {
   apiKey: "AIzaSyC5TpjbdcLBqOJ94Zt9AK5DIdE7n2UfTeo",
-  // fora do Firebase Hosting o login abre no próprio site (functions/__ repassa para o rdo-cvv)
-  authDomain: /(^|\.)(web\.app|firebaseapp\.com)$|^localhost$/.test(location.hostname) ? "rdo-cvv.firebaseapp.com" : location.host,
+  authDomain: "rdo-cvv.firebaseapp.com",
   projectId: "rdo-cvv",
   storageBucket: "rdo-cvv.firebasestorage.app",
   messagingSenderId: "510402451763",
   appId: "1:510402451763:web:959ac4cdcdf416fdca0646"
 };
 // E-mail(s) com acesso total desde o primeiro login. Use o mesmo e-mail em firestore.rules.
+const VERSAO = "27/11/2026";
 const ADMINS = ["lukasbarross@gmail.com"].map(e => e.toLowerCase());
 
 const FRENTES = {
@@ -609,6 +637,7 @@ const S = {
 };
 const perfil = () => ADMINS.includes(S.user?.email?.toLowerCase()) ? "planejamento" : (S.me?.perfil || "");
 const isPlan = () => perfil() === "planejamento";
+const isAdmin = () => ADMINS.includes(S.user?.email?.toLowerCase());
 const isEng = () => ["planejamento", "engenheiro"].includes(perfil());
 const frentesPermitidas = () => {
   if (isPlan()) return Object.keys(FRENTES);
@@ -792,7 +821,7 @@ function render() {
   if (v === "rdo") { APP.innerHTML = vRDO(); pintaSalvo(); return; }
   const corpo = { home: vHome, prog: vProg, cad: vCad, users: vUsers }[v];
   APP.innerHTML = shell(corpo ? corpo() : "");
-  if (v === "cad") filtraCad();
+  if (v === "cad") efAplica();
 }
 function shell(conteudo) {
   const tabs = [["home", "Início", true], ["cad", "Cadastros", isEng()], ["prog", "Programação", isPlan()], ["users", "Usuários", isPlan()]].filter(t => t[2]);
@@ -828,20 +857,17 @@ function vHome() {
     const rs = r.resumo || {};
     const ader = rs.atvProg ? `PPC ${fmtPct(rs.ppc)}` : "sem atividades programadas";
     const st = stNorm(r.status);
-    return `<li><button data-act="abrir" data-d="${r.data}"><span class="d num">${dataCurta(r.data)}</span><span class="w">${diaSemana(r.data)}</span><span class="k">${rs.efetivo ?? 0}${rs.previsto ? ` de ${rs.previsto}` : ""} pessoas, ${ader}</span><span class="chip st-${st}">${STATUS_CURTO[st]}</span></button></li>`;
+    return `<li><button data-act="abrir" data-d="${r.data}"><span class="d num">${dataCurta(r.data)}</span><span class="w">${diaSemana(r.data)}</span><span class="k">${rs.efetivo ?? 0} pessoas, ${ader}</span><span class="chip st-${st}">${STATUS_CURTO[st]}</span></button></li>`;
   };
   return `<h2>Olá, ${esc(primeiroNome(S.me?.nome))}</h2>
     ${fr.length > 1 ? `<div class="field"><span class="lbl">Frente</span><div class="seg">${fr.map(f => `<button data-act="set-frente" data-f="${f}" class="${S.frente === f ? "on" : ""}">${nomeFrente(f)}</button>`).join("")}</div></div>` : `<p class="nota">Frente ${FRENTES[fr[0]].nome}</p>`}
     <div class="field"><label for="h-data">Data do RDO</label><input type="date" id="h-data" value="${S.data}" max="${hoje()}"></div>
     <button class="btn big" data-act="abrir" data-d="">Abrir RDO de ${diaSemana(S.data)}, ${dataCurta(S.data)}</button>
     ${S.diaStatus ? cartaoDia() : ""}
-    ${S.frente ? `<div class="box" style="margin-top:18px"><b>RDO compilado</b>
-      <p class="nota" style="margin:4px 0 10px">Um PDF só com os RDOs de ${nomeFrente(S.frente)} no período: resumo do período na primeira página e, depois, o RDO completo de cada dia (com as fotos).</p>
-      <div class="grid2"><div class="field"><label for="cmp-de">De</label><input type="date" id="cmp-de" value="${S.cmpDe || addDias(hoje(), -6)}" max="${hoje()}"></div>
-        <div class="field"><label for="cmp-ate">Até</label><input type="date" id="cmp-ate" value="${S.cmpAte || hoje()}" max="${hoje()}"></div></div>
-      <button class="btn sec" data-act="compilado">Gerar RDO compilado (PDF)</button></div>` : ""}
+    ${isPlan() || isAdmin() ? cartaoSemana() : ""}
     <h3>RDOs da frente</h3>
-    <ul class="lista">${S.lista.length ? S.lista.map(row).join("") : `<li class="vazio">Nenhum RDO desta frente ainda. Abra o de hoje para começar.</li>`}</ul>`;
+    <ul class="lista">${S.lista.length ? S.lista.map(row).join("") : `<li class="vazio">Nenhum RDO desta frente ainda. Abra o de hoje para começar.</li>`}</ul>
+    <p class="nota" style="text-align:center;margin-top:28px">Versão do app: ${VERSAO}</p>`;
 }
 
 function cartaoDia() {
@@ -851,6 +877,15 @@ function cartaoDia() {
     <button class="btn ${ok ? "" : "sec"}" data-act="baixar-prog" ${ok ? "" : "disabled"}>Baixar programação preenchida</button>
     <p class="nota" style="margin:8px 0 0">${ok ? "Sai no mesmo arquivo que foi importado, com o realizado nas linhas R de todos os dias da semana que já têm os três RDOs validados." : "Libera quando os RDOs de EEAB-01, EEAB-02 e EEAB-03 deste dia estiverem fechados."}</p></div>`;
 }
+
+// só os 7 primeiros dias de cada programação valem (sexta a quinta)
+const periodo = p => (p?.dias || []).slice(0, 7);
+const chaveAtv = a => `${a.area}|${norm(a.subarea)}|${norm(a.atividade)}`;
+function progDoDia(progs, data) {
+  return progs.filter(p => periodo(p).includes(data)).sort((a, b) => (b.importadoEm?.toMillis?.() || 0) - (a.importadoEm?.toMillis?.() || 0))[0] || null;
+}
+
+const porId = (lst, id) => lst.find(a => a.id === id);
 
 /* ================= ABRIR RDO ================= */
 async function abrirRDO(frente, data) {
@@ -872,22 +907,53 @@ async function abrirRDO(frente, data) {
     if (!rdo.engenheiro) rdo.engenheiro = base.engenheiro;
     rdo.encarregados = rdo.encarregados || {};
 
-    const progs = pSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.importadoEm?.toMillis?.() || 0) - (a.importadoEm?.toMillis?.() || 0));
-    const prog = (rdo.progId && progs.find(p => p.id === rdo.progId)) || progs[0] || null;
+    const progs = pSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const aberto0 = stNorm(rdo.status) === "rascunho";
+    // RDO em preenchimento usa sempre a programação mais recente do período; fechado mantém a dele
+    const prog = aberto0 ? progDoDia(progs, data) : (progs.find(p => p.id === rdo.progId) || progDoDia(progs, data));
     let atvHoje = [], atvSemana = [];
     if (prog) {
       const aSnap = await getDocs(query(collection(db, "atividades"), where("progId", "==", prog.id), where("area", "==", FRENTES[frente].areas[0])));
       const todas = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-      atvHoje = todas.filter(a => (a.prev?.[data] || 0) > 0);
-      atvSemana = todas.filter(a => !((a.prev?.[data] || 0) > 0));
-      if (stNorm(rdo.status) === "rascunho") {
+      const per = new Set(periodo(prog));
+      todas.forEach(a => { a.prev = Object.fromEntries(Object.entries(a.prev || {}).filter(([d]) => per.has(d))); });
+      atvHoje = todas.filter(a => (a.prev[data] || 0) > 0);
+      atvSemana = todas.filter(a => !((a.prev[data] || 0) > 0) && Object.keys(a.prev).length);
+      if (aberto0) {
+        // tira do RDO o que veio de outra programação (evita atividade repetida) e aproveita o que já foi lançado
+        const porChave = new Map(todas.map(a => [chaveAtv(a), a]));
+        const lancado = new Map();
+        Object.entries(rdo.atividades || {}).forEach(([id, x]) => {
+          if (id.startsWith(prog.id + "_")) return;
+          const novo = porChave.get(chaveAtv(x));
+          const temDado = x.realizado != null || x.causa || x.obs;
+          if (novo) { delete rdo.atividades[id]; if (temDado) lancado.set(novo.id, x); }
+          else if (!temDado) delete rdo.atividades[id];
+        });
         rdo.progId = prog.id; rdo.progNome = prog.nome;
         atvHoje.forEach(a => {
           if (!rdo.atividades[a.id]) rdo.atividades[a.id] = { area: a.area, subarea: a.subarea, item: a.item, idCronog: a.idCronog, atividade: a.atividade, un: a.un, previsto: a.prev[data], realizado: null, causa: "", obs: "", origem: "hoje", oportunidade: !!a.oportunidade };
-          else { rdo.atividades[a.id].previsto = a.prev[data]; if (rdo.atividades[a.id].oportunidade == null && a.oportunidade) rdo.atividades[a.id].oportunidade = true; }
+          else { rdo.atividades[a.id].previsto = a.prev[data]; rdo.atividades[a.id].origem = "hoje"; if (rdo.atividades[a.id].oportunidade == null && a.oportunidade) rdo.atividades[a.id].oportunidade = true; }
         });
+        lancado.forEach((x, idNovo) => {
+          const a = porId(todas, idNovo);
+          const alvo = rdo.atividades[idNovo] || (rdo.atividades[idNovo] = { area: a.area, subarea: a.subarea, item: a.item, idCronog: a.idCronog, atividade: a.atividade, un: a.un, previsto: 0, origem: "semana", oportunidade: !!a.oportunidade });
+          if (alvo.realizado == null) { alvo.realizado = x.realizado ?? null; alvo.causa = alvo.causa || x.causa || ""; alvo.obs = alvo.obs || x.obs || ""; }
+        });
+        // trava final: nunca duas atividades iguais no mesmo RDO
+        const grupos = new Map();
+        Object.entries(rdo.atividades).forEach(([id, x]) => { const k = chaveAtv(x); (grupos.get(k) || grupos.set(k, []).get(k)).push(id); });
+        grupos.forEach(ids => {
+          if (ids.length < 2) return;
+          ids.sort((a, b) => (b.startsWith(prog.id + "_") - a.startsWith(prog.id + "_")) || ((rdo.atividades[b].realizado != null) - (rdo.atividades[a].realizado != null)));
+          const fica = rdo.atividades[ids[0]];
+          ids.slice(1).forEach(id => { const x = rdo.atividades[id]; if (fica.realizado == null && x.realizado != null) fica.realizado = x.realizado; fica.causa = fica.causa || x.causa || ""; fica.obs = fica.obs || x.obs || ""; delete rdo.atividades[id]; });
+        });
+        // atividade de outro dia que deixou de ser programada para hoje e está sem lançamento sai do RDO
+        Object.entries(rdo.atividades).forEach(([id, x]) => { if (id.startsWith(prog.id + "_") && x.origem === "hoje" && !atvHoje.some(a => a.id === id) && x.realizado == null) delete rdo.atividades[id]; });
       }
     }
+    if (!prog && aberto0) Object.entries(rdo.atividades || {}).forEach(([k, x]) => { if (x.realizado == null && !x.causa && !x.obs) delete rdo.atividades[k]; });
     S.rdo = rdo; S.rdoId = id; S.novo = !rSnap.exists(); S.busca = "";
     S.ctx = {
       colabs: cSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR")),
@@ -914,7 +980,15 @@ async function abrirRDO(frente, data) {
     S.ctx.irmao = null;
     const ir = irmaoDe(frente);
     if (ir) {
-      try { const sn = await getDoc(doc(db, "rdos", `${ir}_${data}`)); const pr = sn.exists() ? sn.data().presenca || {} : {}; S.ctx.irmao = { frente: ir, pres: new Set(Object.keys(pr).filter(k => pr[k])) }; } catch (e) { }
+      try {
+        const sn = await getDoc(doc(db, "rdos", `${ir}_${data}`)); const dd = sn.exists() ? sn.data() : {};
+        const pr = dd.presenca || {}, pes = dd.pessoas || {};
+        // o RDO da outra frente pode ter códigos antigos (planilha de efetivo trocada depois): casa também pelo nome
+        const porNomeIr = new Map(S.ctx.colabs.map(p => [norm(p.nome), p.id]));
+        const set = new Set();
+        Object.keys(pr).filter(k => pr[k]).forEach(k => { set.add(k); const n = pes[k]?.nome; const novo = n && porNomeIr.get(norm(n)); if (novo) set.add(novo); });
+        S.ctx.irmao = { frente: ir, pres: set };
+      } catch (e) { }
     }
     const naOutra = id => S.ctx.irmao?.pres.has(id) && !rdo.presenca[id];
     // efetivo previsto = cadastro do grupo (congelado quando o RDO é fechado)
@@ -972,7 +1046,7 @@ function vRDO() {
       ${painel("lider", "Liderança", secLideranca(), resumoLider())}
       ${painel("jornada", "Horários", secJornada(), resumoJornada())}
       ${painel("clima", "Clima e praticabilidade", secClima(), resumoClima())}
-      ${painel("efetivo", "Efetivo previsto x real", secEfetivo(), resumoEfetivo())}
+      ${painel("efetivo", "Efetivo presente", secEfetivo(), resumoEfetivo())}
       ${painel("equip", "Equipamentos", secEquip(), resumoEquip())}
       ${painel("atividades", "Atividades programadas", secAtv(), resumoAtv())}
       ${painel("np", "Atividades não programadas", secNP(), `${r.naoProgramadas.length || "nenhuma"}`)}
@@ -1062,15 +1136,14 @@ function listaEfetivo() {
     if (!todos.length) return "";
     const vis = q ? todos.filter(p => norm(p.nome + " " + p.funcao).includes(q)) : todos;
     if (!vis.length) return "";
-    const nPrev = todos.filter(p => prev.has(p.id)).length, pres = todos.filter(p => r.presenca[p.id]).length, outra = todos.filter(p => naOutraFrente(p.id)).length;
-    const dif = pres - nPrev;
-    return `<div class="grp"><div class="grp-h"><b>${esc(emp)}</b><span class="num">real ${pres} de ${nPrev} previstos${dif ? ` <em class="${dif < 0 ? "neg" : "pos"}">(${dif > 0 ? "+" : ""}${dif})</em>` : ""}${outra ? `, ${outra} na outra frente` : ""}</span><button class="lnk" type="button" data-act="pres-todos" data-emp="${esc(emp)}">${pres === todos.length ? "Desmarcar todos" : "Marcar todos"}</button></div>
+    const pres = todos.filter(p => r.presenca[p.id]).length, outra = todos.filter(p => naOutraFrente(p.id)).length;
+    return `<div class="grp"><div class="grp-h"><b>${esc(emp)}</b><span class="num">${pres} presente${pres === 1 ? "" : "s"}${outra ? `, ${outra} na outra frente` : ""}</span><button class="lnk" type="button" data-act="pres-todos" data-emp="${esc(emp)}">${pres === todos.length ? "Desmarcar todos" : "Marcar todos"}</button></div>
       <div class="pessoas">${vis.map(p => naOutraFrente(p.id)
         ? `<button type="button" class="pessoa outra" data-act="pres" data-id="${p.id}"><i></i><span>${esc(p.nome)}</span><small>${esc(p.funcao)}, marcado na ${nomeFrente(S.ctx.irmao.frente)}</small></button>`
-        : `<button type="button" class="pessoa ${r.presenca[p.id] ? "on" : ""}" data-act="pres" data-id="${p.id}" aria-pressed="${!!r.presenca[p.id]}"><i></i><span>${esc(p.nome)}</span><small>${esc(p.funcao)}${prev.has(p.id) ? "" : ", fora do previsto"}</small></button>`).join("")}</div></div>`;
+        : `<button type="button" class="pessoa ${r.presenca[p.id] ? "on" : ""}" data-act="pres" data-id="${p.id}" aria-pressed="${!!r.presenca[p.id]}"><i></i><span>${esc(p.nome)}</span><small>${esc(p.funcao)}</small></button>`).join("")}</div></div>`;
   }).join("");
 }
-function resumoEfetivo() { const ef = efetivoResumo(S.rdo); return `${ef.real} de ${ef.previsto} previstos`; }
+function resumoEfetivo() { const n = efetivoTotal(S.rdo); return `${n} presente${n === 1 ? "" : "s"}`; }
 function atualizaEfetivo() {
   $("#lista-ef") && ($("#lista-ef").innerHTML = listaEfetivo());
   $("#sum-efetivo") && ($("#sum-efetivo").textContent = resumoEfetivo());
@@ -1280,21 +1353,21 @@ const ACT = {
   },
   reabrir: async () => { S.rdo.status = "rascunho"; try { await salvar(); toast("RDO reaberto."); } catch (e) { } render(); },
   pdf: () => gerarPDF(),
-  compilado: () => gerarCompilado(),
   // Cadastros
-  "cad-grupo": b => { S.cadGrupo = b.dataset.g; S.impCad = null; go("cad"); },
+  "cad-grupo": b => { S.cadGrupo = b.dataset.g; S.impCad = null; S.efF = null; go("cad"); },
   "cad-del": b => cadExcluir(b.dataset.id),
   "cad-limpar": () => limparEfetivo(),
   "cad-tab": b => { S.cadTab = b.dataset.t; render(); },
-  "cad-ord": b => { const F = filtroCad(), k = b.dataset.k; if (F.ord === k) { if (F.desc) { F.ord = ""; F.desc = false; } else F.desc = true; } else { F.ord = k; F.desc = false; } render(); },
-  "cad-limpa-f": () => { const F = filtroCad(); Object.assign(F, { q: "", fn: "", emp: "", ativo: "" }); render(); },
-  "cad-excel": () => cadExcel(),
   "cad-colar": () => cadColar(),
+  "ef-ord": b => { const f = efF(), k = b.dataset.k; f.dir = f.ord === k ? -f.dir : 1; f.ord = k; render(); },
+  "ef-limpa": () => { Object.assign(efF(), { q: "", nome: "", funcao: "", empresa: "" }); render(); },
+  "ef-xlsx": () => efBaixar(),
   // Programação
   "prog-conf": () => progConfirmar(),
   "prog-cancel": () => { S.imp = null; render(); },
   "prog-del": b => progExcluir(b.dataset.id),
   "baixar-prog": () => baixarProgramacao(S.data),
+  "rdo-semanal": () => { const [a, b] = periodoCompilado(); gerarSemanal(a, b); },
   "cadimp-conf": () => cadImpAplicar(),
   "cadimp-cancel": () => { S.impCad = null; render(); },
   // Usuários
@@ -1316,12 +1389,14 @@ document.addEventListener("toggle", e => { const p = e.target.dataset?.panel; if
 function setPath(o, path, v) { const k = path.split("."); let x = o; for (let i = 0; i < k.length - 1; i++) x = x[k[i]]; x[k.at(-1)] = v; }
 function onCampo(e) {
   const el = e.target;
-  if (el.id === "h-data") { S.data = el.value || hoje(); if (e.type === "change") { if (isPlan()) go("home"); else render(); } return; }
-  if (el.id === "cmp-de" || el.id === "cmp-ate") { S[el.id === "cmp-de" ? "cmpDe" : "cmpAte"] = el.value; return; }
+  if (el.id === "h-data") { S.data = el.value || hoje(); if (e.type === "change") { S.compIni = S.compFim = null; if (isPlan()) go("home"); else render(); } return; }
+  if (el.id === "comp-completo") { S.compCompleto = el.checked; return; }
+  if (el.id === "comp-ini" || el.id === "comp-fim") { if (el.value) S[el.id === "comp-ini" ? "compIni" : "compFim"] = el.value; return; }
   if (el.id === "busca") { S.busca = el.value; $("#lista-ef").innerHTML = listaEfetivo(); return; }
   if (el.id === "cadimp-file" && e.type === "change") return cadImpLer(el.files[0]);
   if (S.impCad && e.type === "change" && el.id === "ci-emp") { S.impCad.empresaPadrao = el.value; return render(); }
-  if (S.view === "cad" && el.dataset.cadf) { filtroCad()[el.dataset.cadf] = el.value; return filtraCad(); }
+  if (el.id === "ef-q" || el.id === "ef-fnome") { efF()[el.id === "ef-q" ? "q" : "nome"] = el.value; return efAplica(); }
+  if (el.id === "ef-ffun" || el.id === "ef-femp") { efF()[el.id === "ef-ffun" ? "funcao" : "empresa"] = el.value; return efAplica(); }
   if (S.view === "cad" && el.dataset.cad) return cadCampo(el, e.type);
   if (S.view === "users" && el.dataset.user) return userCampo(el, e.type);
   if (el.id === "prog-file" && e.type === "change") return progLer(el.files[0]);
@@ -1384,7 +1459,6 @@ function pdfHTML(r = S.rdo, c = S.ctx) {
   const presentes = c.colabs.filter(p => r.presenca[p.id]);
   const lid = lideranca(presentes);
   const encs = presentes.filter(p => papel(p.funcao) === "enc");
-  const prevSet = new Set(r.previstoIds || []);
   const lista = atvLista(r);
   const prog = lista.filter(contaPPC), oport = lista.filter(a => a.previsto > 0 && a.oportunidade), adiant = lista.filter(a => !(a.previsto > 0));
   const corSt = { ok: "#39B54A", abaixo: "#C98A00", zero: "#C0392B", pend: "#AAB7AE" };
@@ -1399,19 +1473,8 @@ function pdfHTML(r = S.rdo, c = S.ctx) {
   if (oport.length) { corpoAtv += `<tr><td colspan="5" class="ar">Oportunidades (fora do PPC)</td></tr>`; oport.forEach(a => corpoAtv += linhaAtv(a)); }
   if (adiant.length) { corpoAtv += `<tr><td colspan="5" class="ar">Programadas para outros dias, executadas hoje</td></tr>`; adiant.forEach(a => corpoAtv += linhaAtv(a)); }
 
-  // efetivo previsto x real
-  const envolvidos = c.colabs.filter(p => prevSet.has(p.id) || r.presenca[p.id]);
-  const emps = [...new Set(envolvidos.map(p => p.empresa || "Outra"))].sort((a, b) => EMPRESAS.indexOf(a) - EMPRESAS.indexOf(b));
-  let tPrev = 0, tReal = 0;
-  const linhasEmp = emps.map(emp => {
-    const ps = envolvidos.filter(p => (p.empresa || "Outra") === emp);
-    const nP = ps.filter(p => prevSet.has(p.id)).length, nR = ps.filter(p => r.presenca[p.id]).length; tPrev += nP; tReal += nR;
-    const d = nR - nP;
-    return `<tr><td><b style="color:${EMP_COR[emp] || "#8A968E"}">●</b> ${esc(emp)}</td><td class="n">${nP}</td><td class="n">${nR}</td><td class="n ${d < 0 ? "neg" : d > 0 ? "pos" : ""}">${d > 0 ? "+" : ""}${d}</td></tr>`;
-  }).join("");
-  const dT = tReal - tPrev;
-  const ausentes = c.colabs.filter(p => prevSet.has(p.id) && !r.presenca[p.id]);
-  const extras = presentes.filter(p => !prevSet.has(p.id));
+  // presentes por empresa
+  const emps = [...new Set(presentes.map(p => p.empresa || "Outra"))].sort((a, b) => EMPRESAS.indexOf(a) - EMPRESAS.indexOf(b));
   const blocoEmp = emps.map(emp => {
     const ps = presentes.filter(p => (p.empresa || "Outra") === emp); if (!ps.length) return "";
     const fx = {}; ps.forEach(p => fx[p.funcao] = (fx[p.funcao] || 0) + 1);
@@ -1426,7 +1489,6 @@ function pdfHTML(r = S.rdo, c = S.ctx) {
   const chuvaTxt = clima.chuva === "sim" ? `Choveu${clima.periodos.length ? " (" + clima.periodos.join(", ").toLowerCase() + ")" : ""}${clima.mm ? `, ${clima.mm} mm` : ""}` : "Sem chuva";
   const pratCls = clima.praticabilidade === "Impraticável" ? "ruim" : clima.praticabilidade === "Parcialmente praticável" ? "alerta" : "";
   const ppcCls = rs.ppc == null ? "" : rs.ppc < 0.6 ? "ruim" : rs.ppc < 0.9 ? "alerta" : "";
-  const efCls = rs.previsto && rs.efetivo / rs.previsto < 0.85 ? "alerta" : "";
 
   return `<div id="pdf-doc">
   <div class="p-head"><div class="p-brand"><span>CONSTRUTORA</span><b>Vale Verde</b><em>Rio Tanque</em></div>
@@ -1435,7 +1497,7 @@ function pdfHTML(r = S.rdo, c = S.ctx) {
     <div class="p-lid"><div><span>Apontador</span><b>${esc(r.apontador || "–")}</b></div><div><span>Engenheiro responsável</span><b>${esc(r.engenheiro || "–")}</b></div><div><span>Supervisor</span><b>${esc(lid.sup.join(", ") || "–")}</b></div></div>
     ${encs.length ? `<div class="p-encs">${encs.map(p => `<div class="p-enc" style="border-left-color:${EMP_COR[p.empresa] || "#8A968E"}"><b>${esc(p.nome)}</b><span>Encarregado, ${esc(p.empresa || "")}</span><p>${esc(r.encarregados?.[p.id] || "Frente de serviço não informada")}</p></div>`).join("")}</div>` : ""}
     <div class="p-kpis">
-      <div class="p-kpi ${efCls}"><b>${rs.efetivo}/${rs.previsto || "–"}</b><span>efetivo real / previsto${rs.previsto ? ` (${Math.round(rs.efetivo / rs.previsto * 100)}%)` : ""}</span></div>
+      <div class="p-kpi"><b>${rs.efetivo}</b><span>pessoas presentes na frente</span></div>
       <div class="p-kpi ${h.perdas > 90 ? "alerta" : ""}"><b>${fmtH(h.prod)}</b><span>de produção, ${fmtH(h.perdas)} de perda gerencial${h.parado ? `, ${fmtH(h.parado)} de paralisações` : ""}</span></div>
       <div class="p-kpi ${ppcCls}"><b>${fmtPct(rs.ppc)}</b><span>PPC do dia (ponderado), ${rs.atvOk} de ${rs.atvProg} atividades 100%</span></div>
       <div class="p-kpi ${pratCls}"><b style="font-size:14px;padding:6px 0 3px">${esc(clima.praticabilidade || "–")}</b><span>${chuvaTxt}</span></div>
@@ -1449,12 +1511,7 @@ function pdfHTML(r = S.rdo, c = S.ctx) {
       ${lista.length ? `<table class="p-tab"><thead><tr><th style="width:44%">Atividade</th><th style="text-align:right">Previsto</th><th style="text-align:right">Realizado</th><th>%</th><th>Causa / observação</th></tr></thead><tbody>${corpoAtv}</tbody></table>` : `<p class="txt">Sem atividades programadas para este dia.</p>`}
       ${r.progNome ? `<p class="obs-t" style="margin-top:4px">Programação de referência: ${esc(r.progNome)}. PPC ponderado = média da aderência de cada atividade (realizado / previsto, limitado a 100%); as oportunidades ficam fora.</p>` : ""}</section>
     ${r.naoProgramadas.length ? `<section class="avoid"><h2>Atividades não programadas</h2><table class="p-tab"><tbody>${r.naoProgramadas.map(n => `<tr><td>${esc(n.descricao)}</td><td class="n">${n.qtd ? `${esc(n.qtd)} ${esc(n.un)}` : ""}</td></tr>`).join("")}</tbody></table></section>` : ""}
-    <section class="avoid"><h2>Efetivo previsto x real</h2>
-      <div class="dup"><table class="p-tab p-efe"><thead><tr><th>Empresa</th><th class="n">Previsto</th><th class="n">Real</th><th class="n">Diferença</th></tr></thead>
-        <tbody>${linhasEmp}<tr><td><b>Total</b></td><td class="n"><b>${tPrev}</b></td><td class="n"><b>${tReal}</b></td><td class="n ${dT < 0 ? "neg" : dT > 0 ? "pos" : ""}">${dT > 0 ? "+" : ""}${dT}</td></tr></tbody></table>
-      <div>${ausentes.length ? `<p class="txt"><b class="neg">Ausentes (${ausentes.length}):</b> ${ausentes.map(p => esc(p.nome)).join(", ")}</p>` : `<p class="txt">Todo o efetivo previsto compareceu.</p>`}
-        ${extras.length ? `<p class="txt"><b class="pos">Fora do previsto (${extras.length}):</b> ${extras.map(p => esc(p.nome)).join(", ")}</p>` : ""}</div></div></section>
-    <section class="avoid"><h2>Presentes por empresa</h2><div class="emp-grid">${blocoEmp || `<p class="txt">Sem efetivo marcado.</p>`}</div></section>
+    <section class="avoid"><h2>Efetivo presente: ${presentes.length} pessoas</h2><div class="emp-grid">${blocoEmp || `<p class="txt">Sem efetivo marcado.</p>`}</div></section>
     <section class="avoid"><h2>Equipamentos</h2>${eqHTML ? `<div class="eqs">${eqHTML}</div>` : `<p class="txt">Nenhum equipamento na obra.</p>`}
       <div class="leg" style="margin-top:6px"><span><i style="background:#006838"></i>Operante</span><span><i style="background:#2F6FB0"></i>Sem operador</span><span><i style="background:#C0392B"></i>Manutenção</span></div></section>
     <section class="avoid"><h2>Clima, paralisações e ocorrências</h2>
@@ -1480,6 +1537,14 @@ function recortarFoto(src, W = 900, H = 675) {
   });
 }
 const nomePDF = r => `RDO_${nomeFrente(r.frente).replace(/[^\w-]/g, "")}_${r.data}.pdf`;
+async function gerarPDF() {
+  const r = S.rdo;
+  try {
+    if (podeEditar() && S.salvo !== "Salvo") await salvar().catch(() => {});
+    for (const f of S.ctx.fotos) if (!f.pdfUrl) f.pdfUrl = await recortarFoto(f.dataUrl);
+  } catch (e) { }
+  return renderPDF(pdfHTML(), nomePDF(r), `RDO ${nomeFrente(r.frente)} ${dataBR(r.data)}`, imprimirPDF);
+}
 // desenha um bloco HTML (um #pdf-doc) em páginas A4 do jsPDF, quebrando entre linhas/blocos; cada bloco começa numa página nova
 async function htmlNoPDF(pdf, palco, html, est) {
   palco.innerHTML = html;
@@ -1516,138 +1581,34 @@ function rodapePDF(pdf, texto) {
   const n = pdf.internal.getNumberOfPages();
   for (let i = 1; i <= n; i++) { pdf.setPage(i); pdf.setFontSize(7.5); pdf.setTextColor(110, 122, 114); pdf.text(`${texto}   |   página ${i} de ${n}`, 105, 292, { align: "center" }); }
 }
-async function gerarPDF() {
-  const r = S.rdo; const nome = nomePDF(r);
+// htmls: um bloco ou uma função async (msg) => [blocos] gerados aos poucos (o compilado), cada bloco em página nova
+async function renderPDF(html, nome, rodape, alternativa, info = "") {
   const y0 = window.scrollY;
   const ov = document.createElement("div"); ov.className = "pdf-overlay";
   ov.innerHTML = `<div class="pdf-palco"></div><div class="pdf-msg">Montando o PDF…</div>`;
+  const msg = t => { ov.querySelector(".pdf-msg").textContent = t; };
   try {
-    if (podeEditar() && S.salvo !== "Salvo") await salvar().catch(() => {});
     await Promise.all([loadScript(H2C_URL), loadScript(JSPDF_URL)]);
-    for (const f of S.ctx.fotos) if (!f.pdfUrl) f.pdfUrl = await recortarFoto(f.dataUrl);
     await document.fonts.ready;
     window.scrollTo(0, 0);
     document.body.appendChild(ov);
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait", compress: true });
-    await htmlNoPDF(pdf, ov.querySelector(".pdf-palco"), pdfHTML(), { paginas: 0 });
-    rodapePDF(pdf, `RDO ${nomeFrente(r.frente)} ${dataBR(r.data)}`);
-    const blob = pdf.output("blob");
-    ov.remove(); window.scrollTo(0, y0);
-    await entregarArquivo(blob, nome, "application/pdf");
-  } catch (e) {
-    console.error(e); ov.remove(); window.scrollTo(0, y0);
-    const v = await dialogo("Não deu para montar o PDF", `<p>O navegador recusou a geração direta (${esc(e.message || e)}). Dá para salvar pelo modo impressão: na tela que abrir, toque em compartilhar e escolha salvar em Arquivos ou enviar.</p>`, [{ t: "Cancelar", v: "n", sec: true }, { t: "Salvar pela impressão", v: "s" }]);
-    if (v === "s") imprimirPDF();
-  }
-}
-
-/* ================= RDO COMPILADO (vários dias num PDF só) ================= */
-// contexto de um RDO já gravado, só para o PDF: cadastro do grupo + quem saiu do cadastro mas está no RDO
-function ctxDoRDO(r, colabs, equips, fotos) {
-  const c = { colabs: colabs.map(p => ({ ...p })), equips: equips.map(e => ({ ...e })), fotos };
-  const ids = new Set(c.colabs.map(p => p.id)), eqIds = new Set(c.equips.map(e => e.id));
-  Object.entries(r.pessoas || {}).forEach(([id, p]) => { if (!ids.has(id) && (r.presenca[id] || (r.previstoIds || []).includes(id))) c.colabs.push({ id, ...p, antigo: true }); });
-  Object.entries(r.equipInfo || {}).forEach(([id, e]) => { if (!eqIds.has(id) && r.equipamentos[id]) c.equips.push({ id, ...e, antigo: true }); });
-  c.colabs.sort((a, b) => String(a.nome).localeCompare(String(b.nome), "pt-BR"));
-  return c;
-}
-const numBR = v => { const n = parseFloat(String(v ?? "").replace(",", ".")); return isFinite(n) ? n : 0; };
-function compiladoHTML(frente, de, ate, itens, semRDO) {
-  const dias = itens.map(({ r }) => {
-    const rs = resumo(r), h = horas(r), cl = r.clima || {};
-    return { r, rs, h, st: stNorm(r.status), chuva: cl.chuva === "sim", mm: numBR(cl.mm), prat: cl.praticabilidade || "" };
-  });
-  const soma = f => dias.reduce((a, d) => a + (f(d) || 0), 0);
-  const n = dias.length, atvProg = soma(d => d.rs.atvProg), ppc = atvProg ? soma(d => (d.rs.ppc || 0) * d.rs.atvProg) / atvProg : null;
-  const efMed = n ? soma(d => d.rs.efetivo) / n : 0, prevMed = n ? soma(d => d.rs.previsto) / n : 0;
-  const tot = { prod: soma(d => d.h.prod), perdas: soma(d => d.h.perdas), perdaInicio: soma(d => d.h.perdaInicio), almocoExc: soma(d => d.h.almocoExc), parado: soma(d => d.h.parado), paradoChuva: soma(d => d.h.paradoChuva), paradoAlerta: soma(d => d.h.paradoAlerta), paradoOutras: soma(d => d.h.paradoOutras) };
-  const imprat = dias.filter(d => d.prat === "Impraticável").length, parcial = dias.filter(d => d.prat === "Parcialmente praticável").length;
-  const ppcCls = ppc == null ? "" : ppc < 0.6 ? "ruim" : ppc < 0.9 ? "alerta" : "";
-  const fmtN = v => (Math.round(v * 10) / 10).toLocaleString("pt-BR");
-  const causas = {};
-  dias.forEach(({ r }) => atvLista(r).filter(contaPPC).forEach(a => { if (statusAtv(a) === "abaixo" || statusAtv(a) === "zero") { const k = a.causa || "Sem causa informada"; causas[k] = (causas[k] || 0) + 1; } }));
-  const linhas = dias.map(d => `<tr class="avoid"><td><b>${dataCurta(d.r.data)}</b> <span class="sub" style="display:inline">${diaSemana(d.r.data).slice(0, 3)}</span></td><td>${d.st === "fechado" ? "Validado" : "Em preenchimento"}</td>
-      <td class="n">${d.rs.efetivo}/${d.rs.previsto || "–"}</td><td class="n">${fmtH(d.h.prod)}</td><td class="n">${fmtH(d.h.perdas)}</td>
-      <td class="n">${d.h.paradoChuva ? fmtH(d.h.paradoChuva) : "–"}</td><td class="n">${d.h.paradoAlerta ? fmtH(d.h.paradoAlerta) : "–"}</td><td class="n">${d.h.paradoOutras ? fmtH(d.h.paradoOutras) : "–"}</td>
-      <td class="n">${fmtPct(d.rs.ppc)}</td><td>${esc(d.prat || "–")}${d.chuva ? `, chuva${d.mm ? ` ${fmtN(d.mm)} mm` : ""}` : ""}</td></tr>`).join("");
-  const ocorr = dias.filter(({ r }) => r.ocorrencias || r.restricoes || (r.paralisacoes || []).length || (r.clima?.motivo));
-  return `<div id="pdf-doc">
-  <div class="p-head"><div class="p-brand"><span>CONSTRUTORA</span><b>Vale Verde</b><em>Rio Tanque</em></div>
-    <div class="p-tit"><h1>RDO compilado</h1><p>${nomeFrente(frente)}, ${dataBR(de)} a ${dataBR(ate)}</p><span class="p-st">${n} RDO${n === 1 ? "" : "s"} no período</span></div></div>
-  <div class="p-body">
-    <div class="p-kpis">
-      <div class="p-kpi"><b>${fmtN(efMed)}/${prevMed ? fmtN(prevMed) : "–"}</b><span>efetivo médio por dia, real / previsto</span></div>
-      <div class="p-kpi"><b>${fmtH(tot.prod)}</b><span>de produção, ${fmtH(tot.perdas)} de perda gerencial, ${fmtH(tot.parado)} de paralisações</span></div>
-      <div class="p-kpi ${ppcCls}"><b>${fmtPct(ppc)}</b><span>PPC do período (ponderado), ${soma(d => d.rs.atvOk)} de ${atvProg} atividades 100%</span></div>
-      <div class="p-kpi ${imprat ? "ruim" : parcial ? "alerta" : ""}"><b style="font-size:14px;padding:6px 0 3px">${n - imprat - parcial} de ${n} praticáveis</b><span>${dias.filter(d => d.chuva).length} dia(s) com chuva${soma(d => d.mm) ? `, ${fmtN(soma(d => d.mm))} mm` : ""}${imprat ? `, ${imprat} impraticável(is)` : ""}${parcial ? `, ${parcial} parcial(is)` : ""}</span></div>
-    </div>
-    <div class="p-perdas"><div>Perda gerencial<br><b>${fmtH(tot.perdas)}</b></div><div>Chegada até o início<br><b>${fmtH(tot.perdaInicio)}</b></div><div>Almoço acima de 1h<br><b>${fmtH(tot.almocoExc)}</b></div></div>
-    <div class="p-perdas par">${TIPOS_PAR.map(([k, l]) => `<div>${l}<br><b style="color:${COR_PAR[k]}">${fmtH(tot["parado" + k[0].toUpperCase() + k.slice(1)])}</b></div>`).join("")}<div>Total de paralisações<br><b>${fmtH(tot.parado)}</b></div></div>
-    <section><h2>Dia a dia</h2>
-      <table class="p-tab"><thead><tr><th>Dia</th><th>Status</th><th style="text-align:right">Efetivo</th><th style="text-align:right">Produção</th><th style="text-align:right">Perda ger.</th><th style="text-align:right">Chuva</th><th style="text-align:right">Alerta</th><th style="text-align:right">Demais</th><th style="text-align:right">PPC</th><th>Praticabilidade</th></tr></thead><tbody>${linhas}</tbody></table>
-      ${semRDO.length ? `<p class="obs-t" style="margin-top:4px">Sem RDO no período: ${semRDO.map(d => `${dataCurta(d)} (${diaSemana(d).slice(0, 3)})`).join(", ")}.</p>` : ""}</section>
-    ${Object.keys(causas).length ? `<section class="avoid"><h2>Causas das atividades abaixo do previsto</h2><table class="p-tab"><tbody>${Object.entries(causas).sort((a, b) => b[1] - a[1]).map(([c, k]) => `<tr><td>${esc(c)}</td><td class="n">${k} atividade${k === 1 ? "" : "s"}</td></tr>`).join("")}</tbody></table></section>` : ""}
-    ${ocorr.length ? `<section><h2>Paralisações, ocorrências e restrições</h2><table class="p-tab"><tbody>${ocorr.map(({ r }) => `<tr class="avoid"><td style="width:11%"><b>${dataCurta(r.data)}</b></td><td>${[
-      ...(r.paralisacoes || []).map(p => `${esc(p.inicio)} às ${esc(p.fim)}: ${esc(p.motivo)} (${fmtH(dur(p.inicio, p.fim))})`),
-      r.clima?.motivo ? `<b>Impedimento:</b> ${esc(r.clima.motivo)}` : "",
-      r.ocorrencias ? `<b>Ocorrências:</b> ${esc(r.ocorrencias)}` : "", r.restricoes ? `<b>Restrições:</b> ${esc(r.restricoes)}` : ""].filter(Boolean).join("<br>")}</td></tr>`).join("")}</tbody></table></section>` : ""}
-    <p class="obs-t">Nas páginas seguintes, o RDO completo de cada dia, na ordem das datas.</p>
-  </div></div>`;
-}
-async function gerarCompilado() {
-  const frente = S.frente, de = S.cmpDe || addDias(hoje(), -6), ate = S.cmpAte || hoje();
-  if (!frente) return toast("Escolha a frente.");
-  if (!de || !ate || de > ate) return toast("Confira as datas: o início tem que ser antes do fim.");
-  const y0 = window.scrollY;
-  const ov = document.createElement("div"); ov.className = "pdf-overlay";
-  ov.innerHTML = `<div class="pdf-palco"></div><div class="pdf-msg">Lendo os RDOs…</div>`;
-  const msg = t => { ov.querySelector(".pdf-msg").textContent = t; };
-  window.scrollTo(0, 0); document.body.appendChild(ov);
-  try {
-    const g = GRUPOS[grupoDe(frente)].chaves;
-    const [qs, cSnap, eSnap] = await Promise.all([
-      getDocs(query(collection(db, "rdos"), where(documentId(), ">=", `${frente}_${de}`), where(documentId(), "<=", `${frente}_${ate}`))),
-      getDocs(query(collection(db, "colaboradores"), where("frente", "in", g))),
-      getDocs(query(collection(db, "equipamentos"), where("frente", "in", g)))
-    ]);
-    const rdos = qs.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.frente === frente && r.data >= de && r.data <= ate).sort((a, b) => a.data.localeCompare(b.data));
-    if (!rdos.length) { ov.remove(); window.scrollTo(0, y0); return toast(`Nenhum RDO de ${nomeFrente(frente)} entre ${dataCurta(de)} e ${dataCurta(ate)}.`); }
-    const colabs = cSnap.docs.map(d => ({ id: d.id, ...d.data() })), equips = eSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => a.codigo.localeCompare(b.codigo));
-    await Promise.all([loadScript(H2C_URL), loadScript(JSPDF_URL)]);
-    const itens = [];
-    for (const r0 of rdos) {
-      msg(`Preparando ${dataCurta(r0.data)} (${itens.length + 1} de ${rdos.length})…`);
-      const base = novoRDO(frente, r0.data), r = { ...base, ...r0 };
-      r.clima = { ...base.clima, ...r0.clima }; r.jornada = { ...base.jornada, ...r0.jornada }; r.encarregados = r0.encarregados || {};
-      const fSnap = await getDocs(query(collection(db, "fotos"), where("rdoId", "==", r0.id)));
-      const fotos = fSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
-      for (const f of fotos) f.pdfUrl = await recortarFoto(f.dataUrl);
-      itens.push({ r, c: ctxDoRDO(r, colabs, equips, fotos) });
-    }
-    const comRDO = new Set(rdos.map(r => r.data)), semRDO = [];
-    for (let d = de; d <= ate; d = addDias(d, 1)) if (!comRDO.has(d)) semRDO.push(d);
-    await document.fonts.ready;
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait", compress: true });
     const palco = ov.querySelector(".pdf-palco"), est = { paginas: 0 };
-    msg("Montando o resumo do período…");
-    await htmlNoPDF(pdf, palco, compiladoHTML(frente, de, ate, itens, semRDO), est);
-    for (let i = 0; i < itens.length; i++) {
-      msg(`Montando o PDF: ${dataCurta(itens[i].r.data)} (${i + 1} de ${itens.length})…`);
-      await htmlNoPDF(pdf, palco, pdfHTML(itens[i].r, itens[i].c), est);
-    }
-    rodapePDF(pdf, `RDO compilado ${nomeFrente(frente)} ${dataBR(de)} a ${dataBR(ate)}`);
+    if (typeof html === "function") await html(async (h, t) => { if (t) msg(t); await htmlNoPDF(pdf, palco, h, est); });
+    else await htmlNoPDF(pdf, palco, html, est);
+    rodapePDF(pdf, rodape);
     msg("Gerando o arquivo…");
     const blob = pdf.output("blob");
     ov.remove(); window.scrollTo(0, y0);
-    await entregarArquivo(blob, `RDO_compilado_${nomeFrente(frente).replace(/[^\w-]/g, "")}_${de}_a_${ate}.pdf`, "application/pdf", `${rdos.length} RDO(s), ${est.paginas} páginas, ${(blob.size / 1048576).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} MB`);
+    await entregarArquivo(blob, nome, "application/pdf", info ? `${info}, ${est.paginas} páginas, ${(blob.size / 1048576).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} MB` : "");
   } catch (e) {
     console.error(e); ov.remove(); window.scrollTo(0, y0);
-    dialogo("Não deu para montar o RDO compilado", `<p>${esc(msgErro(e))}</p><p>Com muitos dias e fotos o navegador pode ficar sem memória: tente um período menor.</p>`);
+    if (!alternativa) return dialogo("Não deu para montar o PDF", `<p>${esc(e.message || e)}</p><p>Com muitos dias e fotos o navegador pode ficar sem memória: tente um período menor ou sem o RDO completo de cada dia.</p>`);
+    const v = await dialogo("Não deu para montar o PDF", `<p>O navegador recusou a geração direta (${esc(e.message || e)}). Dá para salvar pelo modo impressão: na tela que abrir, toque em compartilhar e escolha salvar em Arquivos ou enviar.</p>`, [{ t: "Cancelar", v: "n", sec: true }, { t: "Salvar pela impressão", v: "s" }]);
+    if (v === "s") alternativa();
   }
 }
-
 async function entregarArquivo(blob, nome, tipo, info = "") {
   const file = new File([blob], nome, { type: tipo });
   const podeCompartilhar = !!(navigator.canShare && navigator.canShare({ files: [file] }));
@@ -1666,6 +1627,183 @@ function imprimirPDF() {
   setTimeout(() => window.print(), 300);
 }
 
+/* ================= RDO SEMANAL (sexta a quinta) ================= */
+function inicioSemana(iso) { const d = isoToDate(iso); const volta = (d.getDay() - 5 + 7) % 7; return addDias(iso, -volta); }
+const MAX_DIAS_COMPILADO = 62;
+function periodoCompilado() {
+  if (!S.compIni || !S.compFim) { S.compIni = inicioSemana(S.data); S.compFim = addDias(S.compIni, 6); }
+  return [S.compIni, S.compFim];
+}
+function cartaoSemana() {
+  const [ini, fim] = periodoCompilado();
+  return `<div class="box" style="margin-top:14px"><b>RDO compilado</b>
+    <p class="nota" style="margin:4px 0 10px">Junta os RDOs das três frentes no período escolhido: horários, PPC, produção, causas, efetivo, equipamentos e ocorrências. Vem marcada a semana de sexta a quinta da data acima.</p>
+    <div class="grid2"><div class="field"><label for="comp-ini">De</label><input type="date" id="comp-ini" value="${ini}"></div><div class="field"><label for="comp-fim">Até</label><input type="date" id="comp-fim" value="${fim}"></div></div>
+    <label class="op-chk" style="margin:0 0 12px"><input type="checkbox" id="comp-completo" ${S.compCompleto !== false ? "checked" : ""}> Incluir o RDO completo de cada dia, com as fotos (arquivo maior)</label>
+    <button class="btn" data-act="rdo-semanal">Gerar RDO compilado</button></div>`;
+}
+const FR3 = () => Object.keys(FRENTES);
+// contexto de um RDO já gravado, só para o PDF: cadastro do grupo + quem saiu do cadastro mas está no RDO
+function ctxDoRDO(r, colabs, equips, fotos) {
+  const c = { colabs: colabs.map(p => ({ ...p })), equips: equips.map(e => ({ ...e })), fotos };
+  const ids = new Set(c.colabs.map(p => p.id)), eqIds = new Set(c.equips.map(e => e.id));
+  Object.entries(r.pessoas || {}).forEach(([id, p]) => { if (!ids.has(id) && (r.presenca[id] || (r.previstoIds || []).includes(id))) c.colabs.push({ id, ...p, antigo: true }); });
+  Object.entries(r.equipInfo || {}).forEach(([id, e]) => { if (!eqIds.has(id) && r.equipamentos[id]) c.equips.push({ id, ...e, antigo: true }); });
+  c.colabs.sort((a, b) => String(a.nome).localeCompare(String(b.nome), "pt-BR"));
+  return c;
+}
+async function gerarSemanal(ini, fim) {
+  if (!isPlan() && !isAdmin()) return;
+  if (!ini || !fim || fim < ini) return dialogo("Período inválido", "<p>A data final tem que ser igual ou depois da data inicial.</p>");
+  const n = Math.round((isoToDate(fim) - isoToDate(ini)) / 864e5) + 1;
+  if (n > MAX_DIAS_COMPILADO) return dialogo("Período muito longo", `<p>O compilado aceita até ${MAX_DIAS_COMPILADO} dias por vez. Escolha um período menor.</p>`);
+  try {
+    toast("Juntando os RDOs do período…", 8000);
+    const dias = Array.from({ length: n }, (_, i) => addDias(ini, i));
+    const rdos = {};
+    await Promise.all(FR3().flatMap(f => dias.map(async d => { const sn = await getDoc(doc(db, "rdos", `${f}_${d}`)); if (sn.exists()) (rdos[f] ||= {})[d] = sn.data(); })));
+    const total = Object.values(rdos).reduce((a, x) => a + Object.keys(x).length, 0);
+    if (!total) return dialogo("Sem RDOs no período", `<p>Não há RDO de nenhuma frente entre ${dataCurta(ini)} e ${dataCurta(fim)}.</p>`);
+    // nomes para RDOs antigos que não guardavam a lista de pessoas
+    const cad = {};
+    const [cs, es] = await Promise.all([getDocs(collection(db, "colaboradores")), getDocs(collection(db, "equipamentos"))]);
+    cs.docs.forEach(d => cad[d.id] = d.data()); const eqc = {}; es.docs.forEach(d => eqc[d.id] = d.data());
+    const completo = S.compCompleto !== false;
+    const blocos = async add => {
+      await add(semanalHTML(ini, dias, rdos, cad, eqc), "Montando o resumo do período…");
+      if (!completo) return;
+      // depois do resumo, o RDO completo de cada dia (data, depois frente), igual ao PDF do dia
+      const lista = dias.flatMap(d => FR3().filter(f => rdos[f]?.[d]).map(f => ({ f, d })));
+      const colabs = Object.entries(cad).map(([id, p]) => ({ id, ...p })), equips = Object.entries(eqc).map(([id, e]) => ({ id, ...e }));
+      for (let i = 0; i < lista.length; i++) {
+        const { f, d } = lista[i], r0 = rdos[f][d], base = novoRDO(f, d), r = { ...base, ...r0 };
+        r.clima = { ...base.clima, ...r0.clima }; r.jornada = { ...base.jornada, ...r0.jornada }; r.encarregados = r0.encarregados || {};
+        const g = GRUPOS[grupoDe(f)].chaves;
+        const fSnap = await getDocs(query(collection(db, "fotos"), where("rdoId", "==", `${f}_${d}`)));
+        const fotos = fSnap.docs.map(x => ({ id: x.id, ...x.data() })).sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
+        for (const ft of fotos) ft.pdfUrl = await recortarFoto(ft.dataUrl);
+        await add(pdfHTML(r, ctxDoRDO(r, colabs.filter(p => g.includes(p.frente)), equips.filter(e => g.includes(e.frente)).sort((a, b) => String(a.codigo).localeCompare(String(b.codigo))), fotos)), `RDO ${nomeFrente(f)} ${dataCurta(d)} (${i + 1} de ${lista.length})…`);
+      }
+    };
+    await renderPDF(blocos, `RDO_compilado_${ini}_a_${fim}.pdf`, `RDO compilado ${dataBR(ini)} a ${dataBR(fim)}`, null, `${total} RDO(s)`);
+  } catch (e) { console.error(e); toast(msgErro(e)); }
+}
+function semanalHTML(ini, dias, rdos, cad, eqc) {
+  const lst = []; FR3().forEach(f => dias.forEach(d => { const r = rdos[f]?.[d]; if (r) lst.push({ f, d, r }); }));
+  const pessoa = (r, id) => r.pessoas?.[id] || cad[id] || { nome: "(sem nome)", funcao: "", empresa: "Outra" };
+  const presentes = r => Object.keys(r.presenca || {}).filter(k => r.presenca[k]);
+  const total = lst.length, fechados = lst.filter(x => stNorm(x.r.status) === "fechado").length;
+  // efetivo
+  const efDia = d => FR3().reduce((a, f) => a + (rdos[f]?.[d] ? presentes(rdos[f][d]).length : 0), 0);
+  const diasComRdo = dias.filter(d => FR3().some(f => rdos[f]?.[d]));
+  const efMedio = diasComRdo.length ? diasComRdo.reduce((a, d) => a + efDia(d), 0) / diasComRdo.length : 0;
+  const hh = lst.reduce((a, x) => a + presentes(x.r).length * horas(x.r).prod / 60, 0);
+  // PPC semanal ponderado: todas as atividade-dia programadas
+  const atvs = lst.flatMap(x => atvLista(x.r).filter(contaPPC).map(a => ({ ...a, f: x.f, d: x.d })));
+  const ppc = atvs.length ? atvs.reduce((s, a) => s + Math.min(1, Math.max(0, (a.realizado || 0) / a.previsto)), 0) / atvs.length : null;
+  const ppcF = f => { const a = atvs.filter(x => x.f === f); return a.length ? a.reduce((s, x) => s + Math.min(1, Math.max(0, (x.realizado || 0) / x.previsto)), 0) / a.length : null; };
+  // horas
+  const H = lst.map(x => ({ ...x, h: horas(x.r) }));
+  const soma = (arr, k) => arr.reduce((a, x) => a + x.h[k], 0);
+  const perdas = soma(H, "perdas"), prod = soma(H, "prod"), parado = soma(H, "parado");
+  const impr = lst.filter(x => x.r.clima?.praticabilidade && x.r.clima.praticabilidade !== "Praticável");
+  const chuva = new Set(lst.filter(x => x.r.clima?.chuva === "sim").map(x => x.d)).size;
+  const ppcCls = ppc == null ? "" : ppc < 0.6 ? "ruim" : ppc < 0.9 ? "alerta" : "";
+  // grade dia x frente
+  const cel = (f, d) => {
+    const r = rdos[f]?.[d]; if (!r) return `<td class="s-vazio">sem RDO</td>`;
+    const p = ppcDia(r), h = horas(r);
+    const cor = p == null ? "#5E6E63" : p < 0.6 ? "#C0392B" : p < 0.9 ? "#C98A00" : "#006838";
+    return `<td class="s-cel ${stNorm(r.status) === "fechado" ? "" : "s-rasc"}"><b style="color:${cor}">${fmtPct(p)}</b><span>${presentes(r).length} pess. · ${fmtH(h.prod)} prod.</span><br><span>${esc(r.clima?.praticabilidade || "–")}${h.perdas ? ` · perda ${fmtH(h.perdas)}` : ""}</span></td>`;
+  };
+  const diasGrade = dias.length > 7 ? diasComRdo : dias;
+  const grade = `<table class="s-grid"><thead><tr><th style="width:90px">Dia</th>${FR3().map(f => `<th>${nomeFrente(f)}</th>`).join("")}<th style="width:80px">Efetivo total</th></tr></thead><tbody>
+    ${diasGrade.map(d => `<tr class="avoid"><td class="l">${diaSemana(d).slice(0, 3)} ${dataCurta(d)}</td>${FR3().map(f => cel(f, d)).join("")}<td><b>${FR3().some(f => rdos[f]?.[d]) ? efDia(d) : "–"}</b></td></tr>`).join("")}
+    <tr><td class="l">Período</td>${FR3().map(f => `<td class="s-cel"><b>${fmtPct(ppcF(f))}</b><span>PPC</span></td>`).join("")}<td><b>${Math.round(efMedio)}</b><span style="display:block;font-size:8px;color:#5E6E63">média/dia</span></td></tr>
+  </tbody></table>`;
+  // gráfico efetivo por dia (empilhado por frente)
+  const corF = { EEAB01: "#006838", EEAB02: "#39B54A", EEAB03: "#2F6FB0" };
+  const nd = dias.length, passo = (740 - 40) / nd;
+  const maxEf = Math.max(1, ...dias.map(efDia)), W = 740, Hh = 120, bw = Math.min(60, passo * 0.72), gap = passo - bw;
+  const rotulo = (d, i) => nd <= 10 ? `${diaSemana(d).slice(0, 3)} ${dataCurta(d)}` : (i % Math.ceil(nd / 12) === 0 ? dataCurta(d) : "");
+  let svg = `<svg viewBox="0 0 ${W} ${Hh + 30}" width="${W}" height="${Hh + 30}" xmlns="http://www.w3.org/2000/svg">`;
+  dias.forEach((d, i) => {
+    let y = Hh; const x = 20 + i * (bw + gap);
+    FR3().forEach(f => { const n = rdos[f]?.[d] ? presentes(rdos[f][d]).length : 0; if (!n) return; const h = n / maxEf * (Hh - 16); y -= h; svg += `<rect x="${x}" y="${y}" width="${bw}" height="${h}" fill="${corF[f]}"/>`; });
+    const t = efDia(d); svg += `<text x="${x + bw / 2}" y="${y - 4}" font-size="${nd > 20 ? 7 : 11}" font-weight="700" font-family="Montserrat,sans-serif" text-anchor="middle" fill="#17271E">${t || ""}</text>`;
+    svg += `<text x="${x + bw / 2}" y="${Hh + 16}" font-size="10" font-family="Montserrat,sans-serif" text-anchor="middle" fill="#5E6E63">${rotulo(d, i)}</text>`;
+  });
+  svg += `<line x1="10" x2="${W - 10}" y1="${Hh}" y2="${Hh}" stroke="#D3DDD5"/></svg>`;
+  // produção acumulada por atividade
+  const prodPorF = f => {
+    const m = new Map();
+    lst.filter(x => x.f === f).forEach(x => atvLista(x.r).forEach(a => {
+      const k = chaveAtv(a); const g = m.get(k) || { ...a, prev: 0, real: 0, causas: new Set(), dias: 0 };
+      g.prev += a.previsto > 0 ? a.previsto : 0; g.real += a.realizado || 0; if (a.causa) g.causas.add(a.causa); if (a.previsto > 0) g.dias++;
+      m.set(k, g);
+    }));
+    return [...m.values()].sort((a, b) => (a.subarea + a.atividade).localeCompare(b.subarea + b.atividade, "pt-BR"));
+  };
+  const corP = p => p == null ? "#5E6E63" : p >= 1 - 1e-9 ? "#39B54A" : p > 0 ? "#C98A00" : "#C0392B";
+  const tabProd = f => {
+    const g = prodPorF(f); if (!g.length) return `<p class="txt">Sem atividades programadas lançadas.</p>`;
+    return `<table class="p-tab"><thead><tr><th style="width:46%">Atividade</th><th style="text-align:right">Previsto no período</th><th style="text-align:right">Realizado</th><th>%</th><th>Causas</th></tr></thead><tbody>
+      ${g.map(a => { const p = a.prev > 0 ? a.real / a.prev : null; return `<tr class="avoid"><td><span class="sub">${esc(a.subarea)}${a.idCronog ? ` / ${esc(a.idCronog)}` : ""}</span>${esc(a.atividade)}</td><td class="n">${a.prev > 0 ? fmtQ(a.prev, a.un) : "–"}</td><td class="n">${fmtQ(a.real, a.un)}</td><td><span class="pc" style="color:${corP(p)}">${p != null ? Math.round(p * 100) + "%" : "extra"}</span><div class="pbar"><i style="width:${Math.min(100, (p ?? 1) * 100)}%;background:${corP(p)}"></i></div></td><td><div class="causa-t">${[...a.causas].map(esc).join("; ")}</div></td></tr>`; }).join("")}
+    </tbody></table>`;
+  };
+  // Pareto de causas (atividade-dia abaixo do previsto)
+  const causas = {}; atvs.filter(a => ["abaixo", "zero"].includes(statusAtv(a))).forEach(a => { const c = a.causa || "Sem causa informada"; causas[c] = (causas[c] || 0) + 1; });
+  const cOrd = Object.entries(causas).sort((a, b) => b[1] - a[1]); const cMax = cOrd[0]?.[1] || 1;
+  const pareto = cOrd.length ? cOrd.map(([c, n]) => `<div class="hbar"><span>${esc(c)}</span><i style="width:${n / cMax * 360}px"></i><b>${n}</b></div>`).join("") : `<p class="txt">Nenhuma atividade abaixo do previsto.</p>`;
+  // perdas por frente
+  const tabPerdas = `<table class="p-tab"><thead><tr><th>Frente</th><th class="n" style="text-align:right">Produção</th><th style="text-align:right">Chegada até início</th><th style="text-align:right">Almoço acima de 1h</th><th style="text-align:right">Perda gerencial</th>${TIPOS_PAR.map(([, l]) => `<th style="text-align:right">${l}</th>`).join("")}</tr></thead><tbody>
+    ${FR3().map(f => { const a = H.filter(x => x.f === f); return a.length ? `<tr><td><b>${nomeFrente(f)}</b> <span class="sub" style="display:inline">${a.length} dia(s)</span></td><td class="n">${fmtH(soma(a, "prod"))}</td><td class="n">${fmtH(soma(a, "perdaInicio"))}</td><td class="n">${fmtH(soma(a, "almocoExc"))}</td><td class="n"><b>${fmtH(soma(a, "perdas"))}</b></td><td class="n">${fmtH(soma(a, "paradoChuva"))}</td><td class="n">${fmtH(soma(a, "paradoAlerta"))}</td><td class="n">${fmtH(soma(a, "paradoOutras"))}</td></tr>` : ""; }).join("")}
+  </tbody></table>`;
+  // efetivo por empresa e função (média dos dias com RDO, por frente)
+  const blocoEf = f => {
+    const fr = lst.filter(x => x.f === f); if (!fr.length) return "";
+    const cont = {}, fun = {};
+    fr.forEach(x => presentes(x.r).forEach(id => { const p = pessoa(x.r, id); const e = p.empresa || "Outra"; cont[e] = (cont[e] || 0) + 1; const k = `${e}|${p.funcao || "Não informada"}`; fun[k] = (fun[k] || 0) + 1; }));
+    const med = n => (n / fr.length).toLocaleString("pt-BR", { maximumFractionDigits: 1 });
+    return `<div class="emp-grid">${Object.entries(cont).sort((a, b) => b[1] - a[1]).map(([e, n]) => `<div class="emp avoid" style="border-left-color:${EMP_COR[e] || "#8A968E"}"><b>${esc(e)}: média ${med(n)}/dia</b>
+      <div class="fx">${Object.entries(fun).filter(([k]) => k.startsWith(e + "|")).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${esc(k.split("|")[1])} ${med(n)}`).join(", ")}</div></div>`).join("")}</div>`;
+  };
+  // equipamentos
+  const eqStat = {}; lst.forEach(x => Object.entries(x.r.equipamentos || {}).forEach(([id, v]) => { const e = x.r.equipInfo?.[id] || eqc[id] || { codigo: id }; const k = `${x.f}|${e.codigo}`; const g = eqStat[k] ||= { f: x.f, codigo: e.codigo, descricao: e.descricao || "", op: 0, semop: 0, man: 0 }; if (g[v.status] != null) g[v.status]++; }));
+  const eqRows = Object.values(eqStat).sort((a, b) => (a.f + a.codigo).localeCompare(b.f + b.codigo));
+  const tabEq = eqRows.length ? `<table class="p-tab"><thead><tr><th>Frente</th><th>Equipamento</th><th style="text-align:right">Operante</th><th style="text-align:right">Sem operador</th><th style="text-align:right">Manutenção</th></tr></thead><tbody>${eqRows.map(e => `<tr><td>${nomeFrente(e.f)}</td><td><b>${esc(e.codigo)}</b> ${esc(e.descricao)}</td><td class="n">${e.op} d</td><td class="n" style="color:${e.semop ? "#2F6FB0" : ""}">${e.semop} d</td><td class="n" style="color:${e.man ? "#C0392B" : ""}">${e.man} d</td></tr>`).join("")}</tbody></table>` : `<p class="txt">Nenhum equipamento registrado.</p>`;
+  // ocorrências, restrições, não programadas
+  const ocs = lst.filter(x => x.r.ocorrencias || x.r.restricoes || (x.r.paralisacoes || []).length || x.r.clima?.motivo);
+  const blocoOc = ocs.length ? ocs.map(x => `<p class="s-oc avoid"><b>${diaSemana(x.d).slice(0, 3)} ${dataCurta(x.d)}, ${nomeFrente(x.f)}:</b> ${[x.r.clima?.motivo && `Impedimento: ${esc(x.r.clima.motivo)}`, (x.r.paralisacoes || []).length && `Paralisações: ${x.r.paralisacoes.map(p => `${esc(p.inicio)}–${esc(p.fim)} ${esc(p.motivo)}`).join("; ")}`, x.r.ocorrencias && esc(x.r.ocorrencias), x.r.restricoes && `Restrições: ${esc(x.r.restricoes)}`].filter(Boolean).join(" | ")}</p>`).join("") : `<p class="txt">Sem ocorrências registradas no período.</p>`;
+  const nps = lst.flatMap(x => (x.r.naoProgramadas || []).filter(n => n.descricao).map(n => ({ ...n, f: x.f, d: x.d })));
+  const blocoNP = nps.length ? `<table class="p-tab"><tbody>${nps.map(n => `<tr><td style="width:120px">${dataCurta(n.d)}, ${nomeFrente(n.f)}</td><td>${esc(n.descricao)}</td><td class="n">${n.qtd ? `${esc(n.qtd)} ${esc(n.un)}` : ""}</td></tr>`).join("")}</tbody></table>` : `<p class="txt">Nenhuma.</p>`;
+  const esperados = FR3().length * diasComRdo.length, pend = esperados - total;
+
+  return `<div id="pdf-doc">
+  <div class="p-head"><div class="p-brand"><span>CONSTRUTORA</span><b>Vale Verde</b><em>Rio Tanque</em></div>
+    <div class="p-tit"><h1>RDO compilado</h1><p>EEAB-01, EEAB-02 e EEAB-03, ${diaSemana(ini)} ${dataBR(ini)} a ${diaSemana(dias.at(-1))} ${dataBR(dias.at(-1))} (${dias.length} dia${dias.length > 1 ? "s" : ""})</p><span class="p-st ${fechados === esperados ? "" : "rascunho"}">${fechados} DE ${esperados} RDOS VALIDADOS</span></div></div>
+  <div class="p-body">
+    <div class="p-kpis">
+      <div class="p-kpi ${ppcCls}"><b>${fmtPct(ppc)}</b><span>PPC do período (ponderado), ${atvs.filter(a => statusAtv(a) === "ok").length} de ${atvs.length} atividade-dia 100%</span></div>
+      <div class="p-kpi"><b>${Math.round(efMedio)}</b><span>pessoas por dia em média, ${Math.round(hh).toLocaleString("pt-BR")} HH produtivas</span></div>
+      <div class="p-kpi ${perdas > 0.15 * (prod + perdas) ? "alerta" : ""}"><b>${fmtH(prod)}</b><span>de produção somando as frentes, ${fmtH(perdas)} de perda gerencial${parado ? `, ${fmtH(parado)} de paralisações` : ""}</span></div>
+      <div class="p-kpi ${impr.length ? "alerta" : ""}"><b>${impr.length}</b><span>frente-dia com impraticabilidade, ${chuva} dia(s) com chuva</span></div>
+    </div>
+    <section><h2>Resumo dia a dia</h2>${grade}
+      <p class="obs-t" style="margin-top:4px">${dias.length > 7 ? "Mostrando só os dias com RDO. " : ""}Cada célula: PPC do dia, pessoas presentes, horas de produção, praticabilidade e perda gerencial. Contorno tracejado = RDO ainda em preenchimento.${pend ? ` ${pend} RDO(s) faltando nos dias trabalhados.` : ""}</p></section>
+    <section class="avoid"><h2>Efetivo por dia</h2>${svg}
+      <div class="leg">${FR3().map(f => `<span><i style="background:${corF[f]}"></i>${nomeFrente(f)}</span>`).join("")}</div></section>
+    <section class="avoid"><h2>Causas de não cumprimento</h2><p class="obs-t" style="margin:0 0 6px">Número de atividade-dia que ficaram abaixo do previsto, por causa.</p>${pareto}</section>
+    <section class="avoid"><h2>Horas, perda gerencial e paralisações</h2>${tabPerdas}</section>
+    ${FR3().map(f => lst.some(x => x.f === f) ? `<section class="s-frente"><h3>${nomeFrente(f)}: produção do período (PPC ${fmtPct(ppcF(f))})</h3>${tabProd(f)}
+      <h2 style="margin-top:10px">Efetivo médio, ${nomeFrente(f)}</h2>${blocoEf(f)}</section>` : "").join("")}
+    <section><h2>Atividades não programadas</h2>${blocoNP}</section>
+    <section class="avoid"><h2>Equipamentos (dias no período)</h2>${tabEq}</section>
+    <section><h2>Ocorrências, paralisações e restrições</h2>${blocoOc}</section>
+    <p class="obs-t" style="margin-top:14px">Gerado em ${new Date().toLocaleString("pt-BR")} por ${esc(S.me?.nome || S.user?.email || "")}. PPC ponderado = média de min(realizado/previsto, 100%) de cada atividade programada em cada dia.</p>
+  </div></div>`;
+}
+
 /* ================= CADASTROS ================= */
 const gruposPermitidos = () => Object.keys(GRUPOS).filter(g => GRUPOS[g].frentes.some(f => frentesPermitidas().includes(f)));
 async function loadCad() {
@@ -1679,66 +1817,79 @@ async function loadCad() {
 }
 function vCad() {
   const gs = gruposPermitidos(), t = S.cadTab, g = S.cadGrupo, cg = S.cad.carga;
-  const F = filtroCad(), ordenar = arr => !F.ord ? arr : [...arr].sort((a, b) => { const x = F.ord === "ativo" ? String(a.ativo !== false) : String(a[F.ord] || ""), y = F.ord === "ativo" ? String(b.ativo !== false) : String(b[F.ord] || ""); const c = x.localeCompare(y, "pt-BR", { numeric: true, sensitivity: "base" }); return F.desc ? -c : c; });
-  const linhasP = ordenar(S.cad.colabs).map(p => `<div class="cad-row" data-id="${p.id}" data-busca="${esc(norm(`${p.nome} ${p.funcao}`))}" data-fn="${esc(p.funcao || "")}" data-emp="${esc(p.empresa || "")}"><input type="text" aria-label="Nome" data-cad="${p.id}" data-f="nome" value="${esc(p.nome)}"><input type="text" aria-label="Função" list="dl-f" data-cad="${p.id}" data-f="funcao" value="${esc(p.funcao)}">
-      <select aria-label="Empresa" data-cad="${p.id}" data-f="empresa">${[...new Set([...EMPRESAS, p.empresa].filter(Boolean))].map(e => `<option ${p.empresa === e ? "selected" : ""}>${esc(e)}</option>`).join("")}</select>
-      ${isPlan() ? `<button class="lnk perigo" data-act="cad-del" data-id="${p.id}">Remover</button>` : "<span></span>"}</div>`).join("");
-  const linhasE = ordenar(S.cad.equips).map(e => `<div class="cad-row ${e.ativo === false ? "inativo" : ""}" data-id="${e.id}" data-busca="${esc(norm(`${e.codigo} ${e.descricao}`))}" data-ativo="${e.ativo !== false ? "sim" : "nao"}"><input type="text" aria-label="Código" data-cad="${e.id}" data-f="codigo" value="${esc(e.codigo)}"><input type="text" aria-label="Descrição" data-cad="${e.id}" data-f="descricao" value="${esc(e.descricao)}">
+  const linhasP = S.cad.colabs.length ? vEfetivoGrade() : "";
+  const linhasE = S.cad.equips.map(e => `<div class="cad-row ${e.ativo === false ? "inativo" : ""}"><input type="text" aria-label="Código" data-cad="${e.id}" data-f="codigo" value="${esc(e.codigo)}"><input type="text" aria-label="Descrição" data-cad="${e.id}" data-f="descricao" value="${esc(e.descricao)}">
       <label class="at"><input type="checkbox" data-cad="${e.id}" data-f="ativo" ${e.ativo !== false ? "checked" : ""}> ativo</label>
       ${isPlan() ? `<button class="lnk perigo" data-act="cad-del" data-id="${e.id}">Remover</button>` : "<span></span>"}</div>`).join("");
   return `<h2>Cadastros</h2>
     ${gs.length > 1 ? `<div class="field"><span class="lbl">Local</span><div class="seg">${gs.map(x => `<button data-act="cad-grupo" data-g="${x}" class="${g === x ? "on" : ""}">${GRUPOS[x].nome}</button>`).join("")}</div></div>` : ""}
-    <p class="nota">${g === "EEAB0102" ? "EEAB-01 e EEAB-02 usam o mesmo efetivo e os mesmos equipamentos. Quem o apontador de uma frente marcar no dia não aparece como previsto no RDO da outra." : "A EEAB-03 tem efetivo e equipamentos próprios."}</p>
+    <p class="nota">${g === "EEAB0102" ? "EEAB-01 e EEAB-02 usam o mesmo efetivo e os mesmos equipamentos. Quem o apontador de uma frente marcar no dia aparece bloqueado no RDO da outra, para ninguém ser contado duas vezes." : "A EEAB-03 tem efetivo e equipamentos próprios."}</p>
     ${isPlan() ? vCadImp() : ""}
     <div class="tabs seg"><button data-act="cad-tab" data-t="colabs" class="${t === "colabs" ? "on" : ""}">Efetivo (${S.cad.colabs.length})</button><button data-act="cad-tab" data-t="equips" class="${t === "equips" ? "on" : ""}">Equipamentos (${S.cad.equips.length})</button></div>
     ${t === "colabs" ? `<div class="box"><div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap"><div style="margin-right:auto"><b>Efetivo atual: ${S.cad.colabs.length} pessoas</b>
         <p class="nota" style="margin:2px 0 0">${cg?.arquivo ? `Última carga: ${esc(cg.arquivo)}${cg.em ? `, em ${new Date(cg.em).toLocaleString("pt-BR")}` : ""}${cg.por ? `, por ${esc(cg.por)}` : ""}` : "Nenhuma planilha carregada ainda."}</p></div>
         ${isPlan() && S.cad.colabs.length ? `<button class="btn perigo" data-act="cad-limpar">Limpar todo o efetivo</button>` : ""}</div>
-      ${linhasP ? `${barraFiltroCad("colabs")}<div class="cad-tab" id="cad-lista">${cabCad([["nome", "Nome"], ["funcao", "Função"], ["empresa", "Empresa"]])}${linhasP}</div>` : `<div style="margin-top:10px"><p class="nota">Sem efetivo cadastrado. Suba a planilha acima.</p></div>`}</div>`
+      <div>${linhasP || `<p class="nota">Sem efetivo cadastrado. Suba a planilha acima.</p>`}</div></div>`
     : `<div class="box"><b>Adicionar equipamentos</b><p class="nota">Um por linha: <b>código descrição</b>, por exemplo EH-100 Escavadeira hidráulica. Também entram pela planilha acima.</p>
       <textarea id="cad-txt" placeholder="EH-100 Escavadeira hidráulica"></textarea><button class="btn sec" data-act="cad-colar" style="margin-top:10px">Adicionar ao cadastro</button></div>
-      <div class="box">${linhasE ? `${barraFiltroCad("equips")}<div class="cad-tab" id="cad-lista">${cabCad([["codigo", "Código"], ["descricao", "Descrição"], ["ativo", "Situação"]])}${linhasE}</div>` : `<p class="nota">Nenhum equipamento cadastrado.</p>`}</div>`}
+      <div class="box">${linhasE || `<p class="nota">Nenhum equipamento cadastrado.</p>`}</div>`}
     <datalist id="dl-f">${FUNCOES.map(f => `<option value="${f}">`).join("")}</datalist>`;
 }
-/* ---------- cadastro como planilha: busca, filtros, ordenação e Excel ---------- */
-function filtroCad() {
-  S.cadF = S.cadF || {};
-  return S.cadF[S.cadTab] || (S.cadF[S.cadTab] = { q: "", fn: "", emp: "", ativo: "", ord: "", desc: false });
+/* ---------- efetivo em grade: busca, filtro por coluna e ordenação ---------- */
+const efF = () => (S.efF ||= { q: "", nome: "", funcao: "", empresa: "", ord: "empresa", dir: 1 });
+function efOrdenados() {
+  const f = efF(), k = f.ord, d = f.dir;
+  const v = p => k === "empresa" ? String(EMPRESAS.indexOf(p.empresa) < 0 ? 99 : EMPRESAS.indexOf(p.empresa)).padStart(2, "0") + " " + norm(p.nome) : norm(p[k]);
+  return [...S.cad.colabs].sort((a, b) => d * (v(a).localeCompare(v(b), "pt-BR") || norm(a.nome).localeCompare(norm(b.nome), "pt-BR")));
 }
-function cabCad(cols) {
-  const F = filtroCad();
-  return `<div class="cad-row cad-head">${cols.map(([k, l]) => `<button type="button" class="lnk" data-act="cad-ord" data-k="${k}">${l}${F.ord === k ? (F.desc ? " ▼" : " ▲") : ""}</button>`).join("")}<span></span></div>`;
+function efPassa(p) {
+  const f = efF(), nome = norm(p.nome), fun = norm(p.funcao);
+  const termos = norm(f.q).split(" ").filter(Boolean);
+  if (termos.length && !termos.every(t => nome.includes(t) || fun.includes(t))) return false;
+  if (f.nome && !nome.includes(norm(f.nome))) return false;
+  if (f.funcao && fun !== f.funcao) return false;
+  if (f.empresa && (p.empresa || "") !== f.empresa) return false;
+  return true;
 }
-function barraFiltroCad(tab) {
-  const F = filtroCad(), opc = (vals, sel) => [...new Set(vals.filter(Boolean))].sort((a, b) => a.localeCompare(b, "pt-BR")).map(v => `<option ${sel === v ? "selected" : ""}>${esc(v)}</option>`).join("");
-  const sel = tab === "colabs"
-    ? `<select data-cadf="fn" aria-label="Função"><option value="">Todas as funções</option>${opc(S.cad.colabs.map(p => p.funcao), F.fn)}</select>
-       <select data-cadf="emp" aria-label="Empresa"><option value="">Todas as empresas</option>${opc(S.cad.colabs.map(p => p.empresa), F.emp)}</select>`
-    : `<select data-cadf="ativo" aria-label="Situação"><option value="">Ativos e inativos</option><option value="sim" ${F.ativo === "sim" ? "selected" : ""}>Só ativos</option><option value="nao" ${F.ativo === "nao" ? "selected" : ""}>Só inativos</option></select>`;
-  return `<div class="cad-filtro"><input type="search" data-cadf="q" value="${esc(F.q)}" placeholder="${tab === "colabs" ? "Buscar nome ou função" : "Buscar código ou descrição"}" aria-label="Buscar">${sel}
-    <button type="button" class="lnk" data-act="cad-limpa-f">Limpar filtros</button><button type="button" class="lnk" data-act="cad-excel">Baixar Excel</button><span class="nota" id="cad-cont"></span></div>`;
+function vEfetivoGrade() {
+  const f = efF(), ps = efOrdenados();
+  const conta = (campo, chave) => { const m = new Map(); S.cad.colabs.forEach(p => { const k = chave(p); if (!k) return; const e = m.get(k) || { t: p[campo], n: 0 }; e.n++; m.set(k, e); }); return [...m.entries()].sort((a, b) => a[0].localeCompare(b[0], "pt-BR")); };
+  const funcs = conta("funcao", p => norm(p.funcao)), emps = conta("empresa", p => p.empresa || "");
+  const seta = k => f.ord === k ? (f.dir > 0 ? "▲" : "▼") : "<span style='opacity:.35'>↕</span>";
+  const tit = (k, t) => `<th><button type="button" data-act="ef-ord" data-k="${k}" title="Ordenar por ${t}">${t}<span>${seta(k)}</span></button></th>`;
+  const linhas = ps.map(p => `<tr data-ef="${p.id}" ${efPassa(p) ? "" : "hidden"}><td class="n"></td>
+      <td><input type="text" aria-label="Nome" data-cad="${p.id}" data-f="nome" value="${esc(p.nome)}"></td>
+      <td><input type="text" aria-label="Função" list="dl-f" data-cad="${p.id}" data-f="funcao" value="${esc(p.funcao)}"></td>
+      <td><select aria-label="Empresa" data-cad="${p.id}" data-f="empresa">${[...new Set([...EMPRESAS, p.empresa].filter(Boolean))].map(e => `<option ${p.empresa === e ? "selected" : ""}>${esc(e)}</option>`).join("")}</select></td>
+      ${isPlan() ? `<td class="acao"><button class="lnk perigo" data-act="cad-del" data-id="${p.id}">Remover</button></td>` : ""}</tr>`).join("");
+  return `<div class="ef-barra"><input type="text" id="ef-q" placeholder="Buscar nome ou função…" value="${esc(f.q)}" aria-label="Buscar no efetivo">
+      <span class="nota" id="ef-conta"></span>
+      <button type="button" class="btn sec" data-act="ef-limpa" style="width:auto;min-height:40px;padding:6px 12px">Limpar filtros</button>
+      <button type="button" class="btn sec" data-act="ef-xlsx" style="width:auto;min-height:40px;padding:6px 12px">Baixar em Excel</button></div>
+    <div class="ef-wrap"><table class="ef-grade"><thead>
+      <tr class="tit"><th style="width:44px"></th>${tit("nome", "Nome")}${tit("funcao", "Função")}${tit("empresa", "Empresa")}${isPlan() ? "<th></th>" : ""}</tr>
+      <tr class="fil"><th></th><th><input type="text" id="ef-fnome" placeholder="Filtrar nome" value="${esc(f.nome)}" aria-label="Filtrar nome"></th>
+        <th><select id="ef-ffun" aria-label="Filtrar função"><option value="">(Todas as funções)</option>${funcs.map(([k, e]) => `<option value="${esc(k)}" ${f.funcao === k ? "selected" : ""}>${esc(e.t)} (${e.n})</option>`).join("")}</select></th>
+        <th><select id="ef-femp" aria-label="Filtrar empresa"><option value="">(Todas)</option>${emps.map(([k, e]) => `<option value="${esc(k)}" ${f.empresa === k ? "selected" : ""}>${esc(k)} (${e.n})</option>`).join("")}</select></th>${isPlan() ? "<th></th>" : ""}</tr>
+    </thead><tbody id="ef-corpo">${linhas}</tbody></table></div>`;
 }
-function filtraCad() {
-  const F = filtroCad(), q = norm(F.q).split(" ").filter(Boolean);
-  let n = 0, tot = 0;
-  document.querySelectorAll("#cad-lista .cad-row:not(.cad-head)").forEach(row => {
-    tot++;
-    const d = row.dataset;
-    const ok = q.every(t => d.busca.includes(t)) && (!F.fn || d.fn === F.fn) && (!F.emp || d.emp === F.emp) && (!F.ativo || d.ativo === F.ativo);
-    row.hidden = !ok; if (ok) n++;
-  });
-  const c = $("#cad-cont"); if (c) c.textContent = n === tot ? `${tot} ${S.cadTab === "colabs" ? "pessoas" : "equipamentos"}` : `mostrando ${n} de ${tot}`;
+function efAplica() {
+  const corpo = $("#ef-corpo"); if (!corpo) return;
+  const porId = new Map(S.cad.colabs.map(p => [p.id, p])); let n = 0;
+  corpo.querySelectorAll("tr[data-ef]").forEach(tr => { const p = porId.get(tr.dataset.ef); const ok = !!p && efPassa(p); tr.hidden = !ok; if (ok) tr.firstElementChild.textContent = ++n; });
+  const c = $("#ef-conta"); if (c) c.textContent = n === S.cad.colabs.length ? `${n} pessoas` : `Mostrando ${n} de ${S.cad.colabs.length}`;
+  const h = document.querySelector(".ef-grade tr.tit"); if (h) document.querySelector(".ef-grade").style.setProperty("--ef-h1", h.offsetHeight + "px");
 }
-async function cadExcel() {
+async function efBaixar() {
+  const ps = efOrdenados().filter(efPassa);
+  if (!ps.length) return toast("Nenhuma pessoa no filtro.");
   try {
     await loadScript(XLSX_URL);
-    const vis = new Set([...document.querySelectorAll("#cad-lista .cad-row:not(.cad-head)")].filter(r => !r.hidden).map(r => r.dataset.id));
-    const colabs = S.cadTab === "colabs";
-    const linhas = (colabs ? S.cad.colabs : S.cad.equips).filter(x => vis.has(x.id))
-      .map(x => colabs ? { Nome: x.nome, "Função": x.funcao || "", Empresa: x.empresa || "" } : { "Código": x.codigo, "Descrição": x.descricao || "", "Situação": x.ativo === false ? "Inativo" : "Ativo" });
-    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(linhas), colabs ? "Efetivo" : "Equipamentos");
-    XLSX.writeFile(wb, `${colabs ? "Efetivo" : "Equipamentos"} - ${GRUPOS[S.cadGrupo].nome}.xlsx`);
-  } catch (e) { toast(msgErro(e)); }
+    const ws = XLSX.utils.aoa_to_sheet([["Nome", "Função", "Empresa"], ...ps.map(p => [p.nome || "", p.funcao || "", p.empresa || ""])]);
+    ws["!cols"] = [{ wch: 38 }, { wch: 30 }, { wch: 18 }];
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Efetivo");
+    XLSX.writeFile(wb, `Efetivo ${GRUPOS[S.cadGrupo]?.nome || ""} ${hoje()}.xlsx`.replace(/[\/\\:*?"<>|]/g, "-"));
+  } catch (e) { toast("Não consegui gerar a planilha. Confira a internet e tente de novo."); }
 }
 function cadCampo(el, tipo) {
   if (tipo !== "change") return;
@@ -1746,8 +1897,6 @@ function cadCampo(el, tipo) {
   const f = el.dataset.f; let v = el.type === "checkbox" ? el.checked : el.value.trim();
   if (f === "codigo") { v = normCodigo(v); el.value = v; }
   const item = (S.cadTab === "colabs" ? S.cad.colabs : S.cad.equips).find(x => x.id === el.dataset.cad); if (item) item[f] = v;
-  const row = el.closest(".cad-row");
-  if (item && row) { const d = row.dataset; if (S.cadTab === "colabs") { d.busca = norm(`${item.nome} ${item.funcao}`); d.fn = item.funcao || ""; d.emp = item.empresa || ""; } else { d.busca = norm(`${item.codigo} ${item.descricao}`); d.ativo = item.ativo !== false ? "sim" : "nao"; } }
   updateDoc(doc(db, col, el.dataset.cad), { [f]: v }).then(() => { if (f === "ativo") el.closest(".cad-row").classList.toggle("inativo", !v); toast("Salvo."); }).catch(e => toast(msgErro(e)));
 }
 function limpaLinha(l) { return l.replace(/[\u2060\u200b\u00a0]/g, " ").replace(/^[\s*•·\-–—>]+/, "").replace(/\*/g, "").trim(); }
@@ -1843,6 +1992,86 @@ function lerAbaCadastro(rows) {
   });
   return itens;
 }
+/* ---------- planilha padrão do RH (coluna Efetivo: CVV/B1 - B2, CVV/B3, CVV/MOB) ---------- */
+const PARTICULAS = new Set(["da", "de", "do", "das", "dos", "e"]);
+const nomeProprio = t => String(t || "").replace(/\s+/g, " ").trim().toLowerCase().split(" ").map((w, i) => i && PARTICULAS.has(w) ? w : w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+const funcaoRH = t => { const x = String(t || "").replace(/\s+/g, " ").trim().toLowerCase(); return x ? x.charAt(0).toUpperCase() + x.slice(1).replace(/\b(i{1,3}|iv|[abc])$/i, m => m.toUpperCase()) : "Não informada"; };
+// para onde vai cada valor da coluna Efetivo
+function destinoRH(v) {
+  const n = norm(v).replace(/\s+/g, "");
+  if (!n) return { motivo: "sem local na coluna Efetivo (tratado como demitido)" };
+  if (n.includes("DEMITID") || n.includes("DESLIG") || n.includes("AFAST")) return { motivo: "demitido / afastado" };
+  if (/B3/.test(n)) return { grupo: "EEAB03", empresa: "Vale Verde" };
+  if (/MOB/.test(n)) return { grupo: "EEAB0102", empresa: "MOB" };
+  if (/B1|B2/.test(n)) return { grupo: "EEAB0102", empresa: "Vale Verde" };
+  return { motivo: `valor "${String(v).trim()}" não reconhecido` };
+}
+function lerPlanilhaRH(wb) {
+  const pessoas = [], ignorados = [], repetidos = [], vistos = new Map(), lidas = [];
+  // a aba "B1 - B2" é a referência (tem B1/B2 e B3 na coluna Efetivo); sem ela, lê todas as abas com a coluna Efetivo
+  const ref = wb.SheetNames.filter(n => norm(n).replace(/\s+/g, "") === "B1-B2");
+  (ref.length ? ref : wb.SheetNames).forEach(nomeAba => {
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[nomeAba], { header: 1, raw: false, defval: "" });
+    const h = rows.slice(0, 30).findIndex(r => r.some(c => norm(c) === "EFETIVO") && r.some(c => ["NOME COMPLETO", "NOME"].includes(norm(c))));
+    if (h < 0) return;
+    const hdr = rows[h].map(norm);
+    const cNome = hdr.indexOf("NOME COMPLETO") >= 0 ? hdr.indexOf("NOME COMPLETO") : hdr.indexOf("NOME");
+    const cEf = hdr.indexOf("EFETIVO"), cFun = hdr.findIndex(c => c === "FUNCAO" || c === "CARGO"), cMat = hdr.findIndex(c => c.startsWith("MATRICULA")), cDem = hdr.findIndex(c => c.startsWith("DATA DEMISSAO"));
+    lidas.push(nomeAba);
+    rows.slice(h + 1).forEach(r => {
+      const nome = nomeProprio(r[cNome]); if (!nome || nome.length < 3) return;
+      const chave = norm(nome);
+      const d = cDem >= 0 && String(r[cDem]).trim() ? { motivo: "com data de demissão" } : destinoRH(r[cEf]);
+      if (vistos.has(chave)) { const a = vistos.get(chave); if (a.aba === nomeAba && norm(a.ef) !== norm(r[cEf])) repetidos.push(`${nome} (${String(a.ef).trim()} e ${String(r[cEf]).trim()})`); return; }
+      vistos.set(chave, { aba: nomeAba, ef: r[cEf] });
+      if (d.motivo) { ignorados.push({ nome, motivo: d.motivo }); return; }
+      pessoas.push({ nome, funcao: funcaoRH(cFun >= 0 ? r[cFun] : ""), empresa: d.empresa, grupo: d.grupo, matricula: cMat >= 0 ? String(r[cMat]).trim() : "" });
+    });
+  });
+  if (!lidas.length) return null;
+  pessoas.sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+  return { pessoas, ignorados, repetidos, abas: lidas };
+}
+function vCadImpRH(imp) {
+  const por = g => imp.pessoas.filter(p => p.grupo === g);
+  const motivos = {}; imp.ignorados.forEach(i => (motivos[i.motivo] ||= []).push(i.nome));
+  return `<div class="box"><b>Conferência: ${esc(imp.arquivo)}</b>
+    <div class="kv num">${Object.keys(GRUPOS).map(g => `<div><b>${por(g).length}</b><span>${GRUPOS[g].nome}${g === "EEAB0102" ? ` (${por(g).filter(p => p.empresa === "MOB").length} MOB)` : ""}</span></div>`).join("")}<div><b>${imp.ignorados.length}</b><span>fora do efetivo</span></div></div>
+    ${imp.abas?.length ? `<p class="nota" style="margin:0 0 8px">Aba lida: ${imp.abas.map(esc).join(", ")}.</p>` : ""}
+    <div class="aviso-copia" style="margin:0 0 12px">Ao confirmar, o cadastro de EEAB-01/02 e da EEAB-03 fica igual a esta lista: quem já está no cadastro é atualizado (nome completo, função, empresa e frente), quem é novo entra e quem não está na lista (demitido ou sem local) sai. Equipamentos não mudam.</div>
+    ${imp.repetidos?.length ? `<div class="erro-box">Nomes que aparecem duas vezes com efetivo diferente; entrou só a primeira linha de cada: ${imp.repetidos.map(esc).join("; ")}. Vale corrigir na planilha do RH.</div>` : ""}
+    ${Object.keys(motivos).length ? `<p class="nota">Não entram: ${Object.entries(motivos).map(([m, ns]) => `<b>${ns.length}</b> ${esc(m)}`).join("; ")}.</p>` : ""}
+    <div class="scroll" style="max-height:360px;overflow:auto"><table class="prev-tab"><thead><tr><th>Nome</th><th>Função</th><th>Empresa</th><th>RDO</th></tr></thead><tbody>
+      ${imp.pessoas.map(p => `<tr><td>${esc(p.nome)}</td><td>${esc(p.funcao)}</td><td>${esc(p.empresa)}</td><td>${p.grupo === "EEAB03" ? "EEAB-03" : "EEAB-01 e 02"}</td></tr>`).join("")}
+    </tbody></table></div>
+    <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn" data-act="cadimp-conf">Atualizar efetivo</button><button class="btn sec" data-act="cadimp-cancel">Cancelar</button></div></div>`;
+}
+// atualiza o cadastro no lugar: a mesma pessoa (pela matrícula ou pelo nome) mantém o id, então os RDOs abertos continuam apontando para ela
+async function cadImpAplicarRH(imp) {
+  try {
+    toast("Atualizando o efetivo…", 10000);
+    const atuais = [];
+    for (const g of Object.keys(GRUPOS)) (await getDocs(query(collection(db, "colaboradores"), where("frente", "in", GRUPOS[g].chaves)))).docs.forEach(d => atuais.push({ ref: d.ref, ...d.data() }));
+    const porMat = new Map(atuais.filter(a => a.matricula).map(a => [String(a.matricula).trim(), a]));
+    const porNome = new Map(atuais.map(a => [norm(a.nome), a]));
+    const usados = new Set(), ops = []; let novos = 0, atualizados = 0;
+    imp.pessoas.forEach(p => {
+      const dados = { nome: p.nome, funcao: p.funcao, empresa: p.empresa, matricula: p.matricula, frente: p.grupo, ativo: true };
+      let a = (p.matricula && porMat.get(p.matricula)) || porNome.get(norm(p.nome));
+      if (a && usados.has(a.ref.id)) a = null;
+      if (a) { usados.add(a.ref.id); atualizados++; ops.push(b => b.set(a.ref, dados, { merge: true })); }
+      else { novos++; ops.push(b => b.set(doc(collection(db, "colaboradores")), dados)); }
+    });
+    const saem = atuais.filter(a => !usados.has(a.ref.id));
+    saem.forEach(a => ops.push(b => b.delete(a.ref)));
+    for (let i = 0; i < ops.length; i += 400) { const b = writeBatch(db); ops.slice(i, i + 400).forEach(op => op(b)); await b.commit(); }
+    const quando = new Date().toISOString(), quem = S.me?.nome || S.user.email;
+    await Promise.all(Object.keys(GRUPOS).map(g => setDoc(doc(db, "cargas", g), { arquivo: imp.arquivo, em: quando, por: quem, pessoas: imp.pessoas.filter(p => p.grupo === g).length }, { merge: true })));
+    S.impCad = null;
+    toast(`Efetivo atualizado: ${imp.pessoas.filter(p => p.grupo === "EEAB0102").length} em EEAB-01/02 e ${imp.pessoas.filter(p => p.grupo === "EEAB03").length} na EEAB-03 (${atualizados} atualizados, ${novos} novos, ${saem.length} retirados).`, 7000);
+    go("cad");
+  } catch (e) { toast(msgErro(e)); }
+}
 async function cadImpLer(file) {
   if (!file) return;
   try {
@@ -1850,6 +2079,12 @@ async function cadImpLer(file) {
     await loadScript(XLSX_URL);
     const wb = XLSX.read(await file.arrayBuffer(), { type: "array" });
     const ocultas = new Set((wb.Workbook?.Sheets || []).filter(x => x.Hidden).map(x => x.name));
+    const rh = lerPlanilhaRH(wb);
+    if (rh) {
+      S.impCad = { modo: "rh", arquivo: file.name, ...rh };
+      toast(`${rh.pessoas.length} pessoas ativas encontradas. Confira antes de confirmar.`, 5000);
+      return render();
+    }
     const itens = [];
     wb.SheetNames.filter(n => !ocultas.has(n)).forEach(n => itens.push(...lerAbaCadastro(XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, raw: false, defval: "" }))));
     if (!itens.length) throw new Error("Não encontrei nomes nem equipamentos na planilha.");
@@ -1861,8 +2096,10 @@ async function cadImpLer(file) {
 function vCadImp() {
   const imp = S.impCad, g = S.cadGrupo;
   const input = `<label class="btn sec upl" style="margin:4px 0 0">Escolher planilha (.xlsx, .xls ou .csv)<input type="file" id="cadimp-file" accept=".xlsx,.xls,.xlsm,.csv"></label>`;
-  const titulo = `<b>Subir planilha de efetivo: ${GRUPOS[g].nome}</b>`;
-  if (!imp) return `<div class="box">${titulo}<p class="nota">A planilha vira o efetivo novo e único de ${GRUPOS[g].nome}: o efetivo anterior é apagado e substituído pela lista. Não precisa de formato fixo; o app procura colunas como nome, função e empresa, ou linhas "Nome - função". Se a planilha tiver equipamentos (código como EH-100), eles também substituem a lista de equipamentos.</p>${input}</div>`;
+  const titulo = `<b>Subir planilha de efetivo do RH</b>`;
+  if (!imp) return `<div class="box">${titulo}<p class="nota">Uma planilha só para as três frentes. O app lê <b>Nome Completo</b>, <b>Função</b> e a coluna <b>Efetivo</b>: CVV/B1 - B2 vai para os RDOs de EEAB-01 e 02, CVV/B3 para o da EEAB-03 e CVV/MOB entra como terceiro MOB em EEAB-01 e 02. Demitidos e linhas sem local ficam de fora. Cada carga substitui o efetivo anterior por completo.</p>${input}
+    <p class="nota" style="margin-top:10px">Planilha em outro formato (sem a coluna Efetivo) atualiza só o local selecionado abaixo: ${GRUPOS[g].nome}.</p></div>`;
+  if (imp.modo === "rh") return vCadImpRH(imp);
   if (imp.erro) return `<div class="box">${titulo}<div class="erro-box" style="margin-top:10px">${esc(imp.erro)}</div>${input}</div>`;
   const ps = imp.itens.filter(i => i.tipo === "pessoa"), es = imp.itens.filter(i => i.tipo === "equip");
   const semEmp = ps.some(i => !i.empresa);
@@ -1876,6 +2113,7 @@ function vCadImp() {
     <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn" data-act="cadimp-conf">Substituir efetivo</button><button class="btn sec" data-act="cadimp-cancel">Cancelar</button></div></div>`;
 }
 async function cadImpAplicar() {
+  if (S.impCad?.modo === "rh") return cadImpAplicarRH(S.impCad);
   const imp = S.impCad; if (!imp?.itens) return;
   const g = imp.grupo, ch = GRUPOS[g].chaves;
   try {
@@ -1921,19 +2159,21 @@ function parseProgramacao(XLSX, wb, areasAlvo) {
   }
   if (hRow < 0) throw new Error('Cabeçalho da programação não encontrado (coluna "Atividade Detalhada").');
   if (col.area == null) throw new Error('Coluna "Área" não encontrada no cabeçalho.');
-  let dRow = -1, dateCols = [];
+  let dRow = -1, dateCols = []; const avisos0 = [];
   for (let i = hRow; i < hRow + 6; i++) {
     const r = rows[i] || []; const dc = [];
     r.forEach((c, j) => { if (typeof c === "number" && c > 40000 && c < 60000) dc.push(j); });
-    if (dc.length >= 5) { dRow = i; dateCols = dc; r.forEach((c, j) => { const n = norm(c); if (n.startsWith("(P)REV")) col.pr = j; if (["U.N", "U.M", "UN", "UND"].includes(n)) col.un = j; colExtra(n, j); }); break; }
+    if (dc.length >= 5) { dRow = i; dateCols = dc.slice(0, 7); r.forEach((c, j) => { const n = norm(c); if (n.startsWith("(P)REV")) col.pr = j; if (["U.N", "U.M", "UN", "UND"].includes(n)) col.un = j; colExtra(n, j); }); break; }
   }
   if (dRow < 0) throw new Error("Linha com as datas da programação não encontrada.");
   const toISO = serial => new Date(Math.round((serial - 25569) * 864e5)).toISOString().slice(0, 10);
   const dias = dateCols.map(j => toISO(rows[dRow][j]));
+  // planilha vem com 15 dias; vale só o primeiro período (sexta a quinta)
+  if (dias.length > 1 && isoToDate(dias[0]).getDay() !== 5) avisos0.push(`A programação começa em ${diaSemana(dias[0])} (${dataCurta(dias[0])}), não numa sexta-feira. Foram lidos os 7 primeiros dias.`);
   if (col.pr == null) col.pr = dateCols[0] - 1;
   if (col.un == null) col.un = col.pr - 1;
   const alvo = new Set(areasAlvo.map(norm));
-  const atividades = [], avisos = []; let secao = "";
+  const atividades = [], avisos = [...avisos0]; let secao = "";
   const txt = v => { const s = String(v ?? "").trim(); return (s === "-" || /^n\/?a$/i.test(s)) ? "" : s; };
   for (let i = dRow + 1; i < rows.length; i++) {
     const r = rows[i] || [];
@@ -1987,11 +2227,12 @@ function vProg() {
   if (imp?.erro) preview = `<div class="erro-box">${esc(imp.erro)}</div>`;
   else if (imp) {
     const por = {}; imp.atividades.forEach(a => por[a.area] = (por[a.area] || 0) + 1);
-    const conflito = S.progs.filter(p => p.dias?.some(d => imp.dias.includes(d)));
+    const conflito = S.progs.filter(p => periodo(p).some(d => imp.dias.includes(d)));
     preview = `<div class="box"><b>Conferência antes de importar</b>
       <div class="kv num"><div><b>${imp.atividades.length}</b><span>atividades</span></div>${AREAS.map(a => `<div><b>${por[a] || 0}</b><span>${a}</span></div>`).join("")}<div><b>${imp.atividades.filter(a => a.oportunidade).length}</b><span>oportunidades (fora do PPC)</span></div><div><b>${dataCurta(imp.dias[0])} a ${dataCurta(imp.dias.at(-1))}</b><span>${imp.dias.length} dias</span></div></div>
       ${imp.avisos.length ? `<div class="erro-box">${imp.avisos.map(esc).join("<br>")}</div>` : ""}
-      ${conflito.length ? `<p class="nota">Esta programação cobre dias que já estão em ${conflito.map(p => esc(p.nome)).join(", ")}. Para esses dias, os RDOs novos passam a usar a importação mais recente. RDOs já abertos mantêm a programação com que foram criados.</p>` : ""}
+      <p class="nota">Lido só o primeiro período da planilha: ${diaSemana(imp.dias[0])} ${dataCurta(imp.dias[0])} a ${diaSemana(imp.dias.at(-1))} ${dataCurta(imp.dias.at(-1))}. A segunda semana é ignorada.</p>
+      ${conflito.length ? `<div class="aviso-copia" style="margin:0 0 12px">Já existe programação neste período: ${conflito.map(p => esc(p.nome)).join(", ")}. Ao importar, ela é substituída por esta. RDOs em preenchimento passam a usar a nova e mantêm o que já foi lançado; RDOs fechados não mudam.</div>` : ""}
       <div class="field"><label for="prog-nome">Nome da programação</label><input type="text" id="prog-nome" value="${esc(imp.nome)}"></div>
       <div class="scroll"><table class="prev-tab"><thead><tr><th>Área</th><th>Subárea</th><th>Atividade</th><th>Un.</th><th>Previsto por dia</th></tr></thead><tbody>
         ${imp.atividades.map(a => `<tr><td>${esc(a.area)}</td><td>${esc(a.subarea)}</td><td>${esc(a.atividade)}${a.oportunidade ? ` <b style="color:#2F6FB0">(oportunidade)</b>` : ""}</td><td>${esc(a.un)}</td><td class="num">${Object.entries(a.prev).map(([d, v]) => `${dataCurta(d)}: ${fmtQ(v, a.un)}`).join("<br>")}</td></tr>`).join("")}
@@ -2024,8 +2265,15 @@ async function progConfirmar() {
     b.set(ref, { nome: imp.nome, arquivo: imp.arquivo, aba: imp.aba, colunas: imp.colunas, partes, inicio: imp.dias[0], fim: imp.dias.at(-1), dias: imp.dias, total: imp.atividades.length, porFrente, importadoEm: serverTimestamp(), importadoPor: S.user.email });
     imp.atividades.forEach((a, i) => b.set(doc(db, "atividades", `${ref.id}_${String(i).padStart(3, "0")}`), { ...a, progId: ref.id, frente: areaToFrente(a.area) }));
     await b.commit();
-    S.imp = null; toast("Programação importada."); go("prog");
+    // remove programações do mesmo período (evita atividades repetidas)
+    const velhas = (S.progs || []).filter(p => periodo(p).some(d => imp.dias.includes(d)));
+    for (const v of velhas) await apagarProg(v.id);
+    S.imp = null; toast(velhas.length ? `Programação importada; ${velhas.length} anterior(es) do mesmo período substituída(s).` : "Programação importada."); go("prog");
   } catch (e) { toast(msgErro(e)); }
+}
+async function apagarProg(id) {
+  const [qs, arq] = await Promise.all([getDocs(query(collection(db, "atividades"), where("progId", "==", id))), getDocs(query(collection(db, "arquivos"), where("progId", "==", id)))]);
+  await apagarEmLotes([...qs.docs.map(d => d.ref), ...arq.docs.map(d => d.ref), doc(db, "programacoes", id)]);
 }
 async function progExcluir(id) {
   if (await dialogo("Excluir programação?", "<p>As atividades dela deixam de aparecer em RDOs novos. RDOs já preenchidos mantêm os dados lançados.</p>", [{ t: "Cancelar", v: "n", sec: true }, { t: "Excluir", v: "s" }]) !== "s") return;
@@ -2063,10 +2311,10 @@ async function baixarProgramacao(dataAlvo) {
   try {
     toast("Montando a planilha…", 15000);
     const pSnap = await getDocs(query(collection(db, "programacoes"), where("dias", "array-contains", dataAlvo)));
-    const prog = pSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.importadoEm?.toMillis?.() || 0) - (a.importadoEm?.toMillis?.() || 0))[0];
+    const prog = progDoDia(pSnap.docs.map(d => ({ id: d.id, ...d.data() })), dataAlvo);
     if (!prog) throw new Error("Nenhuma programação importada cobre este dia.");
     if (!prog.partes || !prog.colunas) throw new Error(`A programação "${prog.nome}" foi importada antes desta função existir. Importe a planilha de novo em Programação.`);
-    const dias = prog.dias.filter(d => d <= dataAlvo);
+    const dias = periodo(prog).filter(d => d <= dataAlvo);
     const status = {}; await Promise.all(dias.map(async d => { status[d] = await statusDia(d); }));
     if (!diaCompleto(status[dataAlvo])) throw new Error("Os RDOs das três frentes deste dia ainda não estão todos fechados.");
     const diasOk = dias.filter(d => diaCompleto(status[d]));
