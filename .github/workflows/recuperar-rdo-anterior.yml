@@ -1,0 +1,55 @@
+# Recupera o RDO que estava no ar antes de 25/11/2026 (antes da primeira publicação por este repositório):
+# acha a versão no histórico do Hosting, publica num canal de prévia temporário (1 dia, não mexe no site no ar),
+# baixa os arquivos e grava no branch "rdo-anterior" deste repositório.
+name: Recuperar RDO anterior
+on:
+  workflow_dispatch:
+    inputs:
+      antes_de:
+        description: "Pegar a última versão publicada antes deste momento (UTC)"
+        default: "2026-11-25T16:20:00Z"
+permissions:
+  contents: write
+jobs:
+  recuperar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_RDO_CVV }}
+      - uses: google-github-actions/setup-gcloud@v2
+      - name: Baixar a versão anterior
+        env:
+          ANTES: ${{ inputs.antes_de }}
+        run: |
+          set -euo pipefail
+          API=https://firebasehosting.googleapis.com/v1beta1
+          T=$(gcloud auth print-access-token)
+          H="Authorization: Bearer $T"
+          curl -sf -H "$H" "$API/sites/rdo-cvv/channels/live/releases?pageSize=50" > rel.json
+          jq -r '.releases[] | "\(.releaseTime)  \(.type)  \(.version.name)"' rel.json | head -20
+          VER=$(jq -r --arg a "$ANTES" '[.releases[] | select(.type == "DEPLOY" and .releaseTime < $a)][0].version.name' rel.json)
+          echo "Versão escolhida: $VER"
+          test "$VER" != "null"
+          curl -s -X DELETE -H "$H" "$API/sites/rdo-cvv/channels/anterior" > /dev/null || true
+          curl -sf -X POST -H "$H" -H "Content-Type: application/json" -d '{"ttl":"86400s"}' "$API/sites/rdo-cvv/channels?channelId=anterior" > canal.json
+          curl -sf -X POST -H "$H" "$API/sites/rdo-cvv/channels/anterior/releases?versionName=$VER" > /dev/null
+          URL=$(jq -r .url canal.json)
+          echo "Prévia: $URL"
+          curl -sf -H "$H" "$API/$VER/files?pageSize=1000" > arquivos.json
+          mkdir -p rdo-anterior
+          for P in $(jq -r '.files[].path' arquivos.json); do
+            mkdir -p "rdo-anterior$(dirname "$P")"
+            curl -sfL "$URL$P" -o "rdo-anterior$P"
+            echo "baixado $P"
+          done
+          jq '{versao: "'"$VER"'", arquivos: [.files[].path]}' arquivos.json > rdo-anterior/versao.json
+      - name: Gravar no branch rdo-anterior
+        run: |
+          git config user.name "github-actions"; git config user.email "github-actions@users.noreply.github.com"
+          git checkout --orphan rdo-anterior
+          git rm -rq --cached . ; mv rdo-anterior /tmp/rdo-anterior; rm -rf ./* .github .gitignore 2>/dev/null || true
+          cp -r /tmp/rdo-anterior/. .
+          git add -A; git commit -qm "RDO que estava no ar antes de ${{ inputs.antes_de }}"
+          git push -f origin rdo-anterior
